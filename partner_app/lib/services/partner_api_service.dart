@@ -149,6 +149,22 @@ class PartnerApiService {
     return [];
   }
 
+  // Fetch Service Categories & Subcategories configured in Admin Categories Management
+  Future<List<dynamic>> fetchCategories() async {
+    try {
+      final res = await http.get(Uri.parse('${PartnerConstants.baseUrl}/categories'));
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+        if (data['success'] == true && data['categories'] is List) {
+          return data['categories'];
+        }
+      }
+    } catch (e) {
+      print('Fetch categories error: $e');
+    }
+    return [];
+  }
+
   // Toggle online status
   Future<bool?> toggleOnline(bool targetStatus) async {
     if (_authToken == null) return null;

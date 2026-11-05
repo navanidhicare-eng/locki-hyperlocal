@@ -133,7 +133,7 @@ exports.updateProfile = (req, res) => {
   }
 
   const allowedFields = [
-    'name', 'email', 'category', 'serviceName', 'experience',
+    'name', 'email', 'category', 'categoryName', 'subCategory', 'subCategoryId', 'subCategoryName', 'childServices', 'selectedChildServices', 'serviceName', 'experience',
     'district', 'mandal', 'village', 'pincode', 'address',
     'aadhaarNumber', 'upiId',
     'fatherName', 'motherName', 'dob', 'age', 'currentAddress',

@@ -49,6 +49,9 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
   // 3. Service & Profession Controllers
   late TextEditingController _serviceNameController;
   String _selectedCategory = 'cat_plumbing';
+  String _selectedSubCategory = 'sub_tap_repair';
+  List<String> _selectedChildServices = [];
+  List<Map<String, dynamic>> _adminCategories = [];
   String _selectedExperience = '3 - 5 Years';
 
   // 4. Working Hours & Service Radius
@@ -90,17 +93,382 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
 
   bool _isLoading = false;
 
-  final List<Map<String, String>> _categories = const [
-    {'id': 'cat_plumbing', 'name': '🔧 Plumbing Services'},
-    {'id': 'cat_electrical', 'name': '⚡ Electrical & Wiring'},
-    {'id': 'cat_cleaning', 'name': '✨ Home Deep Cleaning'},
-    {'id': 'cat_appliances', 'name': '📺 AC & Appliance Repair'},
-    {'id': 'cat_mechanic', 'name': '🚗 Bike & Car Mechanic'},
-    {'id': 'cat_delivery', 'name': '📦 Hyperlocal Delivery'},
-    {'id': 'cat_shops', 'name': '🛍️ Retail Merchant'},
-    {'id': 'cat_carpentry', 'name': '🪵 Carpentry Works'},
-    {'id': 'cat_painting', 'name': '🎨 Painting & Waterproofing'},
+  static const List<Map<String, dynamic>> _defaultCategories = [
+    {
+      'id': 'cat_plumbing',
+      'name': 'Plumbing Services',
+      'icon': 'wrench',
+      'subCategories': [
+        {
+          'id': 'sub_tap_repair',
+          'name': 'Taps, Shower & Valves',
+          'hasChildCategories': false,
+          'childCategories': []
+        },
+        {
+          'id': 'sub_tank_service',
+          'name': 'Water Tank & Pump Motors',
+          'hasChildCategories': true,
+          'childCategories': [
+            {
+              'id': 'ch_tank_clean',
+              'name': 'Overhead Tank 5-Stage Chemical Wash',
+              'basePrice': 699,
+              'duration': '90 mins',
+              'description': 'High pressure mud suction & UV disinfection'
+            },
+            {
+              'id': 'ch_motor_install',
+              'name': 'Submersible Pump Installation',
+              'basePrice': 499,
+              'duration': '60 mins',
+              'description': 'Starter box connection & pipeline wiring'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'id': 'cat_electrical',
+      'name': 'Electricians',
+      'icon': 'zap',
+      'subCategories': [
+        {
+          'id': 'sub_wiring',
+          'name': 'Switchboard & Short Circuits',
+          'hasChildCategories': false,
+          'childCategories': []
+        },
+        {
+          'id': 'sub_fan_inverter',
+          'name': 'Fans & Inverter Setup',
+          'hasChildCategories': true,
+          'childCategories': [
+            {
+              'id': 'ch_ceiling_fan',
+              'name': 'Ceiling Fan Installation / Rewind',
+              'basePrice': 249,
+              'duration': '30 mins',
+              'description': 'Regulator & capacitor replacement'
+            },
+            {
+              'id': 'ch_inverter',
+              'name': 'Heavy Duty Inverter Setup',
+              'basePrice': 599,
+              'duration': '60 mins',
+              'description': 'Dual battery rack wiring & load balance'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      'id': 'cat_delivery',
+      'name': 'Instant Delivery',
+      'icon': 'package',
+      'subCategories': [
+        {
+          'id': 'sub_quick_courier',
+          'name': '30-Min Instant Courier',
+          'hasChildCategories': false,
+          'childCategories': []
+        },
+        {
+          'id': 'sub_heavy_parcel',
+          'name': 'Large Box & Cargo Drop',
+          'hasChildCategories': false,
+          'childCategories': []
+        }
+      ]
+    },
+    {
+      'id': 'cat_mechanic',
+      'name': 'Mechanics (Bike & Car)',
+      'icon': 'tool',
+      'subCategories': [
+        {
+          'id': 'sub_bike_repair',
+          'name': 'Two-Wheeler Breakdown & Service',
+          'hasChildCategories': true,
+          'childCategories': [
+            {
+              'id': 'ch_puncture',
+              'name': 'Doorstep Tubeless Puncture Fix',
+              'basePrice': 99,
+              'duration': '20 mins',
+              'description': 'Includes air top-up & sealant check'
+            },
+            {
+              'id': 'ch_bike_service',
+              'name': 'General Periodic Oil & Brake Service',
+              'basePrice': 399,
+              'duration': '45 mins',
+              'description': 'Chain lubing, spark plug clean, clutch adjust'
+            }
+          ]
+        },
+        {
+          'id': 'sub_car_repair',
+          'name': 'Four-Wheeler Emergency',
+          'hasChildCategories': false,
+          'childCategories': []
+        }
+      ]
+    },
+    {
+      'id': 'cat_shops',
+      'name': 'Local Shops & Kirana',
+      'icon': 'shopping-bag',
+      'subCategories': [
+        {
+          'id': 'sub_kirana',
+          'name': 'Daily Essentials & Groceries',
+          'hasChildCategories': false,
+          'childCategories': []
+        }
+      ]
+    },
+    {
+      'id': 'cat_cleaning',
+      'name': 'Deep Cleaning & Pest Control',
+      'icon': 'sparkles',
+      'subCategories': [
+        {
+          'id': 'sub_home_deep',
+          'name': 'Home Deep Cleaning',
+          'hasChildCategories': true,
+          'childCategories': [
+            {
+              'id': 'ch_1bhk',
+              'name': '1 BHK Complete Home Shine',
+              'basePrice': 1499,
+              'duration': '3-4 hours',
+              'description': 'Floor single-disc machine polish & bathroom descaling'
+            },
+            {
+              'id': 'ch_bath',
+              'name': 'Intense Bathroom Tile Scrub',
+              'basePrice': 499,
+              'duration': '60 mins',
+              'description': 'Hard water stain removal & sanitization'
+            }
+          ]
+        },
+        {
+          'id': 'sub_pest',
+          'name': 'Cockroach & Bug Pest Control',
+          'hasChildCategories': false,
+          'childCategories': []
+        }
+      ]
+    },
+    {
+      'id': 'cat_appliances',
+      'name': 'Appliance Repairs',
+      'icon': 'tv',
+      'subCategories': [
+        {
+          'id': 'sub_ac',
+          'name': 'Air Conditioner (AC)',
+          'hasChildCategories': true,
+          'childCategories': [
+            {
+              'id': 'ch_split_ac',
+              'name': 'Split AC Deep Foam Jet Service',
+              'basePrice': 499,
+              'duration': '45 mins',
+              'description': '2X cooling booster coil pressure wash'
+            },
+            {
+              'id': 'ch_window_ac',
+              'name': 'Window AC Full Servicing',
+              'basePrice': 399,
+              'duration': '30 mins',
+              'description': 'Filter cleaning, chemical spray & coil wash'
+            },
+            {
+              'id': 'ch_gas_refill',
+              'name': 'AC Gas Refill & Leak Fix',
+              'basePrice': 1499,
+              'duration': '60 mins',
+              'description': 'R32/R410 refrigerant filling with pressure test'
+            }
+          ]
+        },
+        {
+          'id': 'sub_fridge',
+          'name': 'Refrigerator Repair',
+          'hasChildCategories': false,
+          'childCategories': []
+        },
+        {
+          'id': 'sub_washing',
+          'name': 'Washing Machine',
+          'hasChildCategories': true,
+          'childCategories': [
+            {
+              'id': 'ch_front_load',
+              'name': 'Front Load Drum & Motor Wash',
+              'basePrice': 449,
+              'duration': '50 mins',
+              'description': 'Deep spin vibration & drum cleaning'
+            },
+            {
+              'id': 'ch_top_load',
+              'name': 'Top Load Pulsator Repair',
+              'basePrice': 349,
+              'duration': '40 mins',
+              'description': 'Drain valve & belt replacement'
+            }
+          ]
+        },
+        {
+          'id': 'sub_f85515b9',
+          'name': 'TV Repair',
+          'hasChildCategories': false,
+          'childCategories': []
+        }
+      ]
+    },
+    {
+      'id': 'cat_ab5c5cd1',
+      'name': 'Lease & Rental',
+      'icon': 'apartment',
+      'subCategories': [
+        {
+          'id': 'sub_res_rent',
+          'name': 'Residential Rental',
+          'hasChildCategories': false,
+          'childCategories': []
+        },
+        {
+          'id': 'sub_comm_lease',
+          'name': 'Commercial Lease',
+          'hasChildCategories': false,
+          'childCategories': []
+        }
+      ]
+    },
+    {
+      'id': 'cat_bd22116b',
+      'name': 'Cable Technicians',
+      'icon': 'wifi',
+      'subCategories': [
+        {
+          'id': 'sub_b3924192',
+          'name': 'DTH Services',
+          'hasChildCategories': false,
+          'childCategories': []
+        },
+        {
+          'id': 'sub_f112ab08',
+          'name': 'Splicing Services',
+          'hasChildCategories': false,
+          'childCategories': []
+        }
+      ]
+    }
   ];
+
+  List<Map<String, dynamic>> get _categoriesList {
+    return _adminCategories.isNotEmpty ? _adminCategories : _defaultCategories;
+  }
+
+  Map<String, dynamic>? get _currentCategory {
+    final list = _categoriesList;
+    try {
+      return list.firstWhere((c) => c['id'] == _selectedCategory);
+    } catch (_) {
+      return list.isNotEmpty ? list.first : null;
+    }
+  }
+
+  List<Map<String, dynamic>> get _currentSubCategories {
+    final cat = _currentCategory;
+    if (cat == null) return [];
+    final subs = cat['subCategories'] as List<dynamic>? ?? [];
+    return subs.map((s) => Map<String, dynamic>.from(s as Map)).toList();
+  }
+
+  Map<String, dynamic>? get _currentSubCategory {
+    final subs = _currentSubCategories;
+    try {
+      return subs.firstWhere((s) => s['id'] == _selectedSubCategory);
+    } catch (_) {
+      return subs.isNotEmpty ? subs.first : null;
+    }
+  }
+
+  List<Map<String, dynamic>> get _currentChildCategories {
+    final sub = _currentSubCategory;
+    if (sub == null) return [];
+    final children = sub['childCategories'] as List<dynamic>? ?? [];
+    return children.map((ch) => Map<String, dynamic>.from(ch as Map)).toList();
+  }
+
+  IconData _getCategoryIcon(String? iconName) {
+    switch (iconName?.toLowerCase()) {
+      case 'wrench':
+      case 'tool':
+      case 'tools':
+        return Icons.build_rounded;
+      case 'zap':
+      case 'bolt':
+      case 'electricity':
+        return Icons.bolt_rounded;
+      case 'truck':
+      case 'delivery':
+      case 'package':
+        return Icons.local_shipping_rounded;
+      case 'car':
+      case 'mechanic':
+        return Icons.directions_car_rounded;
+      case 'shopping-bag':
+      case 'store':
+      case 'shops':
+        return Icons.store_rounded;
+      case 'spray-can':
+      case 'sparkles':
+      case 'cleaning':
+        return Icons.cleaning_services_rounded;
+      case 'tv':
+      case 'appliances':
+        return Icons.tv_rounded;
+      case 'home':
+      case 'apartment':
+      case 'lease':
+        return Icons.house_rounded;
+      case 'wifi':
+      case 'tv-2':
+      case 'cable':
+        return Icons.settings_input_antenna_rounded;
+      default:
+        return Icons.miscellaneous_services_rounded;
+    }
+  }
+
+  // Fetch real-time categories & subcategories configured in Admin Categories Management
+  Future<void> _loadCategoriesFromBackend() async {
+    final list = await _api.fetchCategories();
+    if (list.isNotEmpty && mounted) {
+      setState(() {
+        _adminCategories = list.map((c) => Map<String, dynamic>.from(c as Map)).toList();
+
+        // Ensure _selectedCategory is valid
+        if (!_adminCategories.any((c) => c['id'] == _selectedCategory)) {
+          if (_adminCategories.isNotEmpty) {
+            _selectedCategory = _adminCategories.first['id']?.toString() ?? '';
+          }
+        }
+
+        // Ensure _selectedSubCategory is valid
+        final subs = _currentSubCategories;
+        if (!subs.any((s) => s['id'] == _selectedSubCategory)) {
+          _selectedSubCategory = subs.isNotEmpty ? subs.first['id']?.toString() ?? '' : '';
+        }
+      });
+    }
+  }
 
   // Dynamic Location Hierarchy (Loaded from Admin Location Management API / api/locations)
   Map<String, Map<String, List<String>>> _addressHierarchy = Map.from(kDefaultAddressHierarchy);
@@ -281,8 +649,21 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
 
     // 3. Service Trade & Profession
     _serviceNameController = TextEditingController(text: profile['serviceName'] ?? '');
-    if (profile['category'] != null && _categories.any((c) => c['id'] == profile['category'])) {
-      _selectedCategory = profile['category'];
+    if (profile['category'] != null) {
+      _selectedCategory = profile['category'].toString();
+    }
+    if (profile['subCategoryId'] != null || profile['subCategory'] != null) {
+      _selectedSubCategory = (profile['subCategoryId'] ?? profile['subCategory']).toString();
+    } else {
+      final initialSubs = _currentSubCategories;
+      if (initialSubs.isNotEmpty) {
+        _selectedSubCategory = initialSubs.first['id']?.toString() ?? '';
+      }
+    }
+    if (profile['selectedChildServices'] is List) {
+      _selectedChildServices = (profile['selectedChildServices'] as List).map((e) => e.toString()).toList();
+    } else if (profile['childServices'] is List) {
+      _selectedChildServices = (profile['childServices'] as List).map((e) => e.toString()).toList();
     }
     if (profile['experience'] != null && _experienceOptions.contains(profile['experience'])) {
       _selectedExperience = profile['experience'];
@@ -343,6 +724,7 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
 
     // Load dynamic real-time locations from backend
     _loadLocationsFromBackend();
+    _loadCategoriesFromBackend();
   }
 
   @override
@@ -449,6 +831,12 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
       'shopFrontPhotoUrl': _hasPhysicalShop ? (_shopFrontPhotoBase64 ?? (_shopFrontPhotoUploaded ? 'shop_front_photo.jpg' : null)) : null,
       'shopInsidePhotoUrl': _hasPhysicalShop ? (_shopInsidePhotoBase64 ?? (_shopInsidePhotoUploaded ? 'shop_inside_photo.jpg' : null)) : null,
       'category': _selectedCategory,
+      'categoryName': _currentCategory?['name'] ?? '',
+      'subCategory': _selectedSubCategory,
+      'subCategoryId': _selectedSubCategory,
+      'subCategoryName': _currentSubCategory?['name'] ?? '',
+      'selectedChildServices': _selectedChildServices,
+      'childServices': _selectedChildServices,
       'serviceName': _serviceNameController.text.trim(),
       'experience': _selectedExperience,
       'workingHours': _selectedWorkingHours,
@@ -1303,6 +1691,7 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
               title: '4. Service Profession & Specialty',
               icon: Icons.construction_rounded,
               children: [
+                // 1. PRIMARY SERVICE CATEGORY (Dynamic from Admin)
                 _buildFieldLabel('Primary Service Category *'),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -1313,22 +1702,222 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
-                      value: _selectedCategory,
+                      value: _categoriesList.any((c) => c['id'] == _selectedCategory)
+                          ? _selectedCategory
+                          : (_categoriesList.isNotEmpty ? _categoriesList.first['id'] : null),
                       isExpanded: true,
                       style: const TextStyle(fontSize: 14, color: Color(0xFF192338), fontWeight: FontWeight.w600),
-                      items: _categories.map((c) {
+                      items: _categoriesList.map((c) {
                         return DropdownMenuItem<String>(
-                          value: c['id'],
-                          child: Text(c['name']!),
+                          value: c['id']?.toString(),
+                          child: Row(
+                            children: [
+                              Icon(_getCategoryIcon(c['icon']?.toString()), size: 18, color: const Color(0xFFF97316)),
+                              const SizedBox(width: 10),
+                              Expanded(child: Text(c['name']?.toString() ?? '', overflow: TextOverflow.ellipsis)),
+                            ],
+                          ),
                         );
                       }).toList(),
                       onChanged: (val) {
-                        if (val != null) setState(() => _selectedCategory = val);
+                        if (val != null) {
+                          setState(() {
+                            _selectedCategory = val;
+                            final subs = _currentSubCategories;
+                            _selectedSubCategory = subs.isNotEmpty ? subs.first['id']?.toString() ?? '' : '';
+                            _selectedChildServices.clear();
+                          });
+                        }
                       },
                     ),
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 14),
+
+                // 2. SUB-CATEGORY (Dynamic from Admin)
+                _buildFieldLabel('Sub-Category / Trade Specialty *'),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF8FAFC),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: const Color(0xFFCBD5E1)),
+                  ),
+                  child: _currentSubCategories.isEmpty
+                      ? const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 14),
+                          child: Text('No sub-categories available for this category',
+                              style: TextStyle(fontSize: 13, color: Color(0xFF94A3B8))),
+                        )
+                      : DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: _currentSubCategories.any((s) => s['id'] == _selectedSubCategory)
+                                ? _selectedSubCategory
+                                : (_currentSubCategories.isNotEmpty ? _currentSubCategories.first['id'] : null),
+                            isExpanded: true,
+                            style: const TextStyle(fontSize: 14, color: Color(0xFF192338), fontWeight: FontWeight.w600),
+                            items: _currentSubCategories.map((s) {
+                              return DropdownMenuItem<String>(
+                                value: s['id']?.toString(),
+                                child: Text(s['name']?.toString() ?? '', overflow: TextOverflow.ellipsis),
+                              );
+                            }).toList(),
+                            onChanged: (val) {
+                              if (val != null) {
+                                setState(() {
+                                  _selectedSubCategory = val;
+                                  _selectedChildServices.clear();
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                ),
+
+                // 3. CHILD SERVICES (If any exist, multiple selectable)
+                if (_currentChildCategories.isNotEmpty) ...[
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          _buildFieldLabel('Select Child Services / Tasks *'),
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFF7ED),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: const Color(0xFFFDBA74)),
+                            ),
+                            child: Text(
+                              '${_selectedChildServices.length}/${_currentChildCategories.length} Selected',
+                              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Color(0xFFC2410C)),
+                            ),
+                          ),
+                        ],
+                      ),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            final allIds = _currentChildCategories.map((ch) => ch['id'].toString()).toList();
+                            if (_selectedChildServices.length == allIds.length) {
+                              _selectedChildServices.clear();
+                            } else {
+                              _selectedChildServices = List.from(allIds);
+                            }
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                          child: Text(
+                            _selectedChildServices.length == _currentChildCategories.length ? 'Clear All' : 'Select All',
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFFF97316)),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    'Choose the specific services you provide (Multiple selection enabled):',
+                    style: TextStyle(fontSize: 11, color: Color(0xFF64748B)),
+                  ),
+                  const SizedBox(height: 8),
+                  ..._currentChildCategories.map((ch) {
+                    final chId = ch['id']?.toString() ?? '';
+                    final isSelected = _selectedChildServices.contains(chId);
+                    final price = ch['basePrice'] != null ? '₹${ch['basePrice']}' : null;
+                    final duration = ch['duration']?.toString();
+                    final desc = ch['description']?.toString() ?? '';
+
+                    return InkWell(
+                      onTap: () {
+                        setState(() {
+                          if (isSelected) {
+                            _selectedChildServices.remove(chId);
+                          } else {
+                            _selectedChildServices.add(chId);
+                          }
+                        });
+                      },
+                      borderRadius: BorderRadius.circular(10),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 150),
+                        margin: const EdgeInsets.only(bottom: 8),
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: isSelected ? const Color(0xFFFFF7ED) : const Color(0xFFF8FAFC),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: isSelected ? const Color(0xFFF97316) : const Color(0xFFCBD5E1),
+                            width: isSelected ? 1.5 : 1,
+                          ),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 2),
+                              child: Icon(
+                                isSelected ? Icons.check_circle_rounded : Icons.radio_button_unchecked_rounded,
+                                color: isSelected ? const Color(0xFFEA580C) : const Color(0xFF94A3B8),
+                                size: 20,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          ch['name']?.toString() ?? '',
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
+                                            color: isSelected ? const Color(0xFF9A3412) : const Color(0xFF1E293B),
+                                          ),
+                                        ),
+                                      ),
+                                      if (price != null || duration != null)
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                          decoration: BoxDecoration(
+                                            color: isSelected ? const Color(0xFFFFEDD5) : const Color(0xFFE2E8F0),
+                                            borderRadius: BorderRadius.circular(6),
+                                          ),
+                                          child: Text(
+                                            [if (price != null) price, if (duration != null) duration].join(' • '),
+                                            style: TextStyle(
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.w600,
+                                              color: isSelected ? const Color(0xFFC2410C) : const Color(0xFF475569),
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                  if (desc.isNotEmpty) ...[
+                                    const SizedBox(height: 3),
+                                    Text(
+                                      desc,
+                                      style: const TextStyle(fontSize: 11, color: Color(0xFF64748B)),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ],
+                const SizedBox(height: 14),
 
                 _buildFieldLabel('Specialty Designation / Title *'),
                 _buildTextField(_serviceNameController, 'e.g. Master Plumber / Senior AC Wireman', Icons.work_outline),
