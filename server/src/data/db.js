@@ -401,6 +401,15 @@ class Database {
   save() {
     try {
       fs.writeFileSync(DB_FILE, JSON.stringify(this.data, null, 2), 'utf-8');
+      try {
+        const { getIsConnected } = require('../config/dbConnection');
+        if (getIsConnected()) {
+          const { syncJsonToMongo } = require('./mongoSync');
+          syncJsonToMongo(this.data).catch(() => {});
+        }
+      } catch (e) {
+        // ignore
+      }
     } catch (err) {
       console.error('Error saving DB:', err);
     }

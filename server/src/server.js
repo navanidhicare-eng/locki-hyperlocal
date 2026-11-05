@@ -6,6 +6,7 @@ const rateLimit = require('express-rate-limit');
 const { Server } = require('socket.io');
 
 const config = require('./config');
+const { connectDB } = require('./config/dbConnection');
 const socketHandler = require('./sockets/socketHandler');
 
 // Routes
@@ -80,11 +81,12 @@ app.use((err, req, res, next) => {
 
 // Start Server
 const PORT = config.PORT;
-server.listen(PORT, () => {
+server.listen(PORT, async () => {
   console.log(`=================================================`);
   console.log(`🚀 Loki Hyperlocal Backend Server running on port ${PORT}`);
   console.log(`🔗 REST API: http://localhost:${PORT}/api/health`);
   console.log(`⚡ WebSocket Engine: Active`);
   console.log(`🛡️  Security Shield: Helmet + Rate Limiting Enabled`);
   console.log(`=================================================`);
+  await connectDB();
 });
