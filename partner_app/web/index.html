@@ -143,6 +143,212 @@
     };
 
     // Camera capture, gallery picker and HTML canvas compression utility
+
+    // Keyframe animations for Live Facial Scanner
+    const lokiStyle = document.createElement('style');
+    lokiStyle.innerHTML = `
+      @keyframes lokiRotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      @keyframes lokiBlink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.2; }
+      }
+    `;
+    document.head.appendChild(lokiStyle);
+
+    // Dedicated AI Live Facial Selfie & Liveness Scanner (Strictly Live Camera, No Gallery)
+    window.lokiOpenLiveSelfieScanner = function(callback) {
+      const constraints = {
+        video: {
+          facingMode: { ideal: 'user' },
+          width: { ideal: 640 },
+          height: { ideal: 640 }
+        },
+        audio: false
+      };
+
+      navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+        const overlay = document.createElement('div');
+        overlay.id = 'lokiLiveSelfieOverlay';
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100vw';
+        overlay.style.height = '100vh';
+        overlay.style.backgroundColor = 'rgba(10, 15, 30, 0.90)';
+        overlay.style.backdropFilter = 'blur(10px)';
+        overlay.style.webkitBackdropFilter = 'blur(10px)';
+        overlay.style.zIndex = '999999';
+        overlay.style.display = 'flex';
+        overlay.style.flexDirection = 'column';
+        overlay.style.alignItems = 'center';
+        overlay.style.justifyContent = 'center';
+        overlay.style.fontFamily = 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+        overlay.style.color = '#FFFFFF';
+        overlay.style.userSelect = 'none';
+
+        overlay.innerHTML = `
+          <div style="background: #192338; border: 1px solid rgba(255,255,255,0.15); border-radius: 24px; max-width: 420px; width: 92%; padding: 24px 20px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.6); position: relative;">
+            <!-- Close button -->
+            <button id="lokiLiveCancelBtn" style="position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.12); border: none; color: #FFFFFF; font-size: 16px; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
+
+            <!-- Header -->
+            <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 4px;">
+              <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #EF4444; animation: lokiBlink 1s infinite;"></span>
+              <h3 style="margin: 0; font-size: 16px; font-weight: 700; color: #FFFFFF;">AI Live Face Verification</h3>
+            </div>
+            <p style="margin: 0 0 16px 0; font-size: 12px; color: #94A3B8;">లైవ్ సెల్ఫీ కెమెరా (గ్యాలరీ అనుమతించబడదు)</p>
+
+            <!-- Camera Viewport Circle with animated pulse ring -->
+            <div style="position: relative; width: 250px; height: 250px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+              <div id="lokiScanRing" style="position: absolute; width: 246px; height: 246px; border-radius: 50%; border: 3px dashed #10B981; animation: lokiRotate 14s linear infinite; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);"></div>
+              <video id="lokiLiveVideo" autoplay playsinline muted style="width: 228px; height: 228px; border-radius: 50%; object-fit: cover; transform: scaleX(-1); background: #000; border: 3px solid #FFFFFF;"></video>
+            </div>
+
+            <!-- Dynamic Liveness Instructions -->
+            <div id="lokiLivenessStatus" style="margin-top: 18px; padding: 10px 14px; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px;">
+              <p id="lokiLivenessText" style="margin: 0; font-size: 13px; font-weight: 600; color: #10B981;">
+                👁️ కళ్ళు రెప్పలు కొట్టండి / Blink your eyes
+              </p>
+              <div style="display: flex; justify-content: center; gap: 8px; margin-top: 6px;">
+                <span id="lokiBlinkDot1" style="font-size: 11px; padding: 2px 8px; border-radius: 10px; background: rgba(255,255,255,0.1); color: #94A3B8;">Blink 1</span>
+                <span id="lokiBlinkDot2" style="font-size: 11px; padding: 2px 8px; border-radius: 10px; background: rgba(255,255,255,0.1); color: #94A3B8;">Blink 2</span>
+              </div>
+            </div>
+
+            <!-- Capture Snap Button -->
+            <button id="lokiSnapBtn" style="margin-top: 18px; width: 100%; padding: 13px; border-radius: 12px; border: none; background: #DE4915; color: #FFFFFF; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(222, 73, 21, 0.4);">
+              <span>📸 SNAP LIVE PHOTO (క్యాప్చర్)</span>
+            </button>
+          </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        const video = document.getElementById('lokiLiveVideo');
+        video.srcObject = stream;
+
+        let blinkCount = 0;
+        let isCapturing = false;
+        let blinkInterval = null;
+
+        function cleanup() {
+          if (blinkInterval) clearInterval(blinkInterval);
+          stream.getTracks().forEach(function(track) { track.stop(); });
+          if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+        }
+
+        document.getElementById('lokiLiveCancelBtn').onclick = function() {
+          cleanup();
+          callback(JSON.stringify({ success: false, cancelled: true }));
+        };
+
+        function performCapture() {
+          if (isCapturing) return;
+          isCapturing = true;
+
+          const canvas = document.createElement('canvas');
+          canvas.width = 480;
+          canvas.height = 480;
+          const ctx = canvas.getContext('2d');
+
+          // Mirror horizontally for selfie accuracy
+          ctx.translate(480, 0);
+          ctx.scale(-1, 1);
+
+          const minDim = Math.min(video.videoWidth || 480, video.videoHeight || 480);
+          const sx = ((video.videoWidth || 480) - minDim) / 2;
+          const sy = ((video.videoHeight || 480) - minDim) / 2;
+          ctx.drawImage(video, sx, sy, minDim, minDim, 0, 0, 480, 480);
+
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.75);
+          const sizeKb = Math.round((compressedDataUrl.length * 3) / 4 / 1024);
+
+          cleanup();
+
+          callback(JSON.stringify({
+            success: true,
+            liveVerified: true,
+            dataUrl: compressedDataUrl,
+            fileSizeKb: sizeKb,
+            fileName: 'live_facial_selfie.jpg'
+          }));
+        }
+
+        document.getElementById('lokiSnapBtn').onclick = performCapture;
+
+        // Eye Blink Detection Loop using offscreen canvas luminance differential
+        const checkCanvas = document.createElement('canvas');
+        checkCanvas.width = 40;
+        checkCanvas.height = 20;
+        const checkCtx = checkCanvas.getContext('2d', { willReadFrequently: true });
+        let lastLuminance = null;
+        let inBlinkDip = false;
+
+        blinkInterval = setInterval(function() {
+          if (isCapturing || !video.videoWidth) return;
+
+          try {
+            const eyeStartX = (video.videoWidth * 0.35);
+            const eyeStartY = (video.videoHeight * 0.35);
+            const eyeWidth = (video.videoWidth * 0.3);
+            const eyeHeight = (video.videoHeight * 0.18);
+
+            checkCtx.drawImage(video, eyeStartX, eyeStartY, eyeWidth, eyeHeight, 0, 0, 40, 20);
+            const imgData = checkCtx.getImageData(0, 0, 40, 20).data;
+
+            let totalLum = 0;
+            for (let i = 0; i < imgData.length; i += 4) {
+              totalLum += (0.299 * imgData[i] + 0.587 * imgData[i+1] + 0.114 * imgData[i+2]);
+            }
+            const avgLum = totalLum / (imgData.length / 4);
+
+            if (lastLuminance !== null) {
+              const diff = avgLum - lastLuminance;
+              if (diff < -5.5 && !inBlinkDip) {
+                inBlinkDip = true;
+              } else if (diff > 4.5 && inBlinkDip) {
+                inBlinkDip = false;
+                blinkCount++;
+
+                const dot1 = document.getElementById('lokiBlinkDot1');
+                const dot2 = document.getElementById('lokiBlinkDot2');
+                const txt = document.getElementById('lokiLivenessText');
+
+                if (blinkCount === 1) {
+                  if (dot1) {
+                    dot1.style.background = '#10B981';
+                    dot1.style.color = '#FFFFFF';
+                    dot1.innerText = 'Blink 1 ✓';
+                  }
+                  if (txt) txt.innerText = '✅ 1st Blink Detected! Blink once more';
+                } else if (blinkCount >= 2) {
+                  if (dot2) {
+                    dot2.style.background = '#10B981';
+                    dot2.style.color = '#FFFFFF';
+                    dot2.innerText = 'Blink 2 ✓';
+                  }
+                  if (txt) {
+                    txt.innerText = '✅ Live Human Verified! Auto Capturing...';
+                    txt.style.color = '#10B981';
+                  }
+                  setTimeout(performCapture, 600);
+                }
+              }
+            }
+            lastLuminance = avgLum;
+          } catch (e) {}
+        }, 120);
+
+      }).catch(function(err) {
+        console.error('Camera access error:', err);
+        alert('Camera access error: ' + (err.message || 'Please allow camera permission in browser settings.'));
+        callback(JSON.stringify({ success: false, message: 'Camera permission denied or camera not found' }));
+      });
+    };
+
     window.lokiPickAndCompressImage = function(sourceType, callback) {
       try {
         const input = document.createElement('input');

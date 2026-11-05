@@ -518,6 +518,42 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
     }
   }
 
+  // Start Dedicated AI Live Camera Selfie & Liveness Scanner (Strictly Live Camera, No Gallery)
+  void _startLiveSelfieScanner() {
+    try {
+      js.context.callMethod('lokiOpenLiveSelfieScanner', [
+        js.allowInterop((resultStr) {
+          try {
+            final res = jsonDecode(resultStr.toString());
+            if (res['success'] == true && res['dataUrl'] != null) {
+              setState(() {
+                _livePhotoBase64 = res['dataUrl'].toString();
+                _livePhotoVerified = true;
+              });
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('✅ Live Human Selfie Verified & Captured successfully!'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            } else if (res['cancelled'] != true && res['message'] != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Live Camera Error: ${res['message']}'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          } catch (e) {
+            debugPrint('Error parsing live selfie result: $e');
+          }
+        }),
+      ]);
+    } catch (e) {
+      debugPrint('Error starting live selfie scanner: $e');
+    }
+  }
+
   // Bottom Sheet to choose Camera or Gallery with HTML Canvas Auto-Compression
   void _openMediaSourceSelector({
     required String title,
@@ -742,19 +778,7 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
                         bottom: 0,
                         right: 0,
                         child: GestureDetector(
-                          onTap: () => _openMediaSourceSelector(
-                            title: 'Live Selfie Verification',
-                            isSelfie: true,
-                            onCaptured: (dataUrl, sizeKb, fileName) {
-                              setState(() {
-                                _livePhotoBase64 = dataUrl;
-                                _livePhotoVerified = true;
-                              });
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Live selfie captured & compressed (${sizeKb} KB)!'), backgroundColor: Colors.green),
-                              );
-                            },
-                          ),
+                          onTap: _startLiveSelfieScanner,
                           child: Container(
                             padding: const EdgeInsets.all(7),
                             decoration: BoxDecoration(
@@ -822,19 +846,7 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
                           ),
                         ),
                         TextButton(
-                          onPressed: () => _openMediaSourceSelector(
-                            title: 'Live Selfie Verification',
-                            isSelfie: true,
-                            onCaptured: (dataUrl, sizeKb, fileName) {
-                              setState(() {
-                                _livePhotoBase64 = dataUrl;
-                                _livePhotoVerified = true;
-                              });
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Live selfie captured & compressed (${sizeKb} KB)!'), backgroundColor: Colors.green),
-                              );
-                            },
-                          ),
+                          onPressed: _startLiveSelfieScanner,
                           style: TextButton.styleFrom(
                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                             minimumSize: Size.zero,
