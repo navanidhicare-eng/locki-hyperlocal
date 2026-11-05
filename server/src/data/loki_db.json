@@ -516,43 +516,188 @@
           "name": "Anakapalli",
           "villages": [
             {
-              "id": "vlg_ank_town",
-              "name": "Anakapalli Town",
+              "id": "vlg_anakapalli_allikhanudupalem_1",
+              "name": "Allikhanudupalem",
               "pincode": "531001"
             },
             {
-              "id": "vlg_ank_gavarapalem",
+              "id": "vlg_anakapalli_anakapalle_town_2",
+              "name": "Anakapalle Town",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_bhatlapudi_3",
+              "name": "Bhatlapudi",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_bowluvada_4",
+              "name": "Bowluvada",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_chintanippula_agraharam_5",
+              "name": "Chintanippula Agraharam",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_gavarapalem_6",
               "name": "Gavarapalem",
-              "pincode": "531002"
+              "pincode": "531001"
             },
             {
-              "id": "vlg_ank_thummapala",
-              "name": "Thummapala",
-              "pincode": "531002"
+              "id": "vlg_anakapalli_golagam_7",
+              "name": "Golagam",
+              "pincode": "531001"
             },
             {
-              "id": "vlg_ank_sankaram",
+              "id": "vlg_anakapalli_gopalapuram_8",
+              "name": "Gopalapuram",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_jagannadhapuram_9",
+              "name": "Jagannadhapuram",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_koduru_10",
+              "name": "Koduru",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_kondupalem_11",
+              "name": "Kondupalem",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_koppaka_12",
+              "name": "Koppaka",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_kunchangi_13",
+              "name": "Kunchangi",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_kundram_14",
+              "name": "Kundram",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_makavaram_15",
+              "name": "Makavaram",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_mamidipalem_16",
+              "name": "Mamidipalem",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_maredupudi_17",
+              "name": "Maredupudi",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_maredupudi_agraharam_18",
+              "name": "Maredupudi Agraharam",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_marturu_19",
+              "name": "Marturu",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_mettapalem_20",
+              "name": "Mettapalem",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_papayya_palem_21",
+              "name": "Papayya Palem",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_papayya_santha_palem_22",
+              "name": "Papayya Santha Palem",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_pisinikada_23",
+              "name": "Pisinikada",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_rajupalem_24",
+              "name": "Rajupalem",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_rebaka_25",
+              "name": "Rebaka",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_ring_road_bypass_26",
+              "name": "Ring Road Bypass",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_sampathipuram_27",
+              "name": "Sampathipuram",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_sankaram__bojjannakonda__28",
               "name": "Sankaram (Bojjannakonda)",
               "pincode": "531001"
             },
             {
-              "id": "vlg_ank_rebaka",
-              "name": "Rebaka",
-              "pincode": "531003"
-            },
-            {
-              "id": "vlg_ank_woodpeta",
-              "name": "Woodpeta",
-              "pincode": "531001"
-            },
-            {
-              "id": "vlg_ank_saradanagar",
+              "id": "vlg_anakapalli_sarada_nagar_29",
               "name": "Sarada Nagar",
               "pincode": "531001"
             },
             {
-              "id": "vlg_ank_ringroad",
-              "name": "Anakapalli Bypass & Ring Road",
+              "id": "vlg_anakapalli_seethanagaram_30",
+              "name": "Seethanagaram",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_tagarampudi_31",
+              "name": "Tagarampudi",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_thummapala_32",
+              "name": "Thummapala",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_valluru_33",
+              "name": "Valluru",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_venkupalem_34",
+              "name": "Venkupalem",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_vetajangalapalem_35",
+              "name": "Vetajangalapalem",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_vooderu_36",
+              "name": "Vooderu",
+              "pincode": "531001"
+            },
+            {
+              "id": "vlg_anakapalli_woodpeta_37",
+              "name": "Woodpeta",
               "pincode": "531001"
             }
           ]
@@ -562,33 +707,148 @@
           "name": "Kasimkota",
           "villages": [
             {
-              "id": "vlg_ksm_kasimkota",
-              "name": "Kasimkota",
+              "id": "vlg_kasimkota_addam_1",
+              "name": "Addam",
               "pincode": "531031"
             },
             {
-              "id": "vlg_ksm_bayyavaram",
+              "id": "vlg_kasimkota_ammeensahabpeta_2",
+              "name": "Ammeensahabpeta",
+              "pincode": "531031"
+            },
+            {
+              "id": "vlg_kasimkota_atcherla_3",
+              "name": "Atcherla",
+              "pincode": "531031"
+            },
+            {
+              "id": "vlg_kasimkota_bayyavaram_4",
               "name": "Bayyavaram",
               "pincode": "531031"
             },
             {
-              "id": "vlg_ksm_tallapalem",
-              "name": "Tallapalem",
+              "id": "vlg_kasimkota_charakam_5",
+              "name": "Charakam",
               "pincode": "531031"
             },
             {
-              "id": "vlg_ksm_gobburu",
+              "id": "vlg_kasimkota_chintalapalem_6",
+              "name": "Chintalapalem",
+              "pincode": "531031"
+            },
+            {
+              "id": "vlg_kasimkota_eswarapalle_chowduvada_7",
+              "name": "Eswarapalle Chowduvada",
+              "pincode": "531031"
+            },
+            {
+              "id": "vlg_kasimkota_gobburu_8",
               "name": "Gobburu",
               "pincode": "531031"
             },
             {
-              "id": "vlg_ksm_narasapuram",
+              "id": "vlg_kasimkota_gobburupalem_9",
+              "name": "Gobburupalem",
+              "pincode": "531031"
+            },
+            {
+              "id": "vlg_kasimkota_gurugu_bheemavaram_10",
+              "name": "Gurugu Bheemavaram",
+              "pincode": "531031"
+            },
+            {
+              "id": "vlg_kasimkota_gytulapalem_11",
+              "name": "Gytulapalem",
+              "pincode": "531031"
+            },
+            {
+              "id": "vlg_kasimkota_kasimkota_12",
+              "name": "Kasimkota",
+              "pincode": "531031"
+            },
+            {
+              "id": "vlg_kasimkota_komaralova_13",
+              "name": "Komaralova",
+              "pincode": "531031"
+            },
+            {
+              "id": "vlg_kasimkota_kothapalle_14",
+              "name": "Kothapalle",
+              "pincode": "531031"
+            },
+            {
+              "id": "vlg_kasimkota_narasapuram_15",
               "name": "Narasapuram",
               "pincode": "531031"
             },
             {
-              "id": "vlg_ksm_vedullapalli",
+              "id": "vlg_kasimkota_narasingibilly_16",
+              "name": "Narasingibilly",
+              "pincode": "531031"
+            },
+            {
+              "id": "vlg_kasimkota_nutulaguntla_palem_17",
+              "name": "Nutulaguntla Palem",
+              "pincode": "531031"
+            },
+            {
+              "id": "vlg_kasimkota_perantalapalem_18",
+              "name": "Perantalapalem",
+              "pincode": "531031"
+            },
+            {
+              "id": "vlg_kasimkota_singavaram_19",
+              "name": "Singavaram",
+              "pincode": "531031"
+            },
+            {
+              "id": "vlg_kasimkota_somavaram_20",
+              "name": "Somavaram",
+              "pincode": "531031"
+            },
+            {
+              "id": "vlg_kasimkota_sundarayyapeta_21",
+              "name": "Sundarayyapeta",
+              "pincode": "531031"
+            },
+            {
+              "id": "vlg_kasimkota_tallapalem_22",
+              "name": "Tallapalem",
+              "pincode": "531031"
+            },
+            {
+              "id": "vlg_kasimkota_tegada_23",
+              "name": "Tegada",
+              "pincode": "531031"
+            },
+            {
+              "id": "vlg_kasimkota_theeda_24",
+              "name": "Theeda",
+              "pincode": "531031"
+            },
+            {
+              "id": "vlg_kasimkota_ugginapalem_25",
+              "name": "Ugginapalem",
+              "pincode": "531031"
+            },
+            {
+              "id": "vlg_kasimkota_veduruparthi_26",
+              "name": "Veduruparthi",
+              "pincode": "531031"
+            },
+            {
+              "id": "vlg_kasimkota_vedullapalli_27",
               "name": "Vedullapalli",
+              "pincode": "531031"
+            },
+            {
+              "id": "vlg_kasimkota_yenugutuni_28",
+              "name": "Yenugutuni",
+              "pincode": "531031"
+            },
+            {
+              "id": "vlg_kasimkota_zattapureddituni_29",
+              "name": "Zattapureddituni",
               "pincode": "531031"
             }
           ]
@@ -598,28 +858,148 @@
           "name": "Munagapaka",
           "villages": [
             {
-              "id": "vlg_mng_munagapaka",
+              "id": "vlg_munagapaka_arabupalem_1",
+              "name": "Arabupalem",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_challamalla_2",
+              "name": "Challamalla",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_cherlopalem_3",
+              "name": "Cherlopalem",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_chuchikonda_4",
+              "name": "Chuchikonda",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_ganaparthi_5",
+              "name": "Ganaparthi",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_gantavanipalem_6",
+              "name": "Gantavanipalem",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_jaggayyapeta_agraharam_7",
+              "name": "Jaggayyapeta Agraharam",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_kakarapalle_8",
+              "name": "Kakarapalle",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_kumarapuram_9",
+              "name": "Kumarapuram",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_madakapalem_10",
+              "name": "Madakapalem",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_mallavaram_11",
+              "name": "Mallavaram",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_munagapaka_12",
               "name": "Munagapaka",
               "pincode": "531033"
             },
             {
-              "id": "vlg_mng_nagulapalli",
-              "name": "Nagulapalli",
+              "id": "vlg_munagapaka_nagavaram_13",
+              "name": "Nagavaram",
               "pincode": "531033"
             },
             {
-              "id": "vlg_mng_thimmarajupeta",
+              "id": "vlg_munagapaka_nagulapalle_14",
+              "name": "Nagulapalle",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_narendrapuram_15",
+              "name": "Narendrapuram",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_nelupaka_16",
+              "name": "Nelupaka",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_pallapu_anandapuram_17",
+              "name": "Pallapu Anandapuram",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_patipalle_18",
+              "name": "Patipalle",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_purushottampuram_19",
+              "name": "Purushottampuram",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_rajupeta_agraharam_20",
+              "name": "Rajupeta Agraharam",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_ramabhadrapuram_agrahara_21",
+              "name": "Ramabhadrapuram Agraharam",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_t__sirasapalle_22",
+              "name": "T. Sirasapalle",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_thimmarajupeta_23",
               "name": "Thimmarajupeta",
               "pincode": "531033"
             },
             {
-              "id": "vlg_mng_vadavacheepurupalli",
+              "id": "vlg_munagapaka_thotada_24",
+              "name": "Thotada",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_ummalada_25",
+              "name": "Ummalada",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_vadavacheepurupalli_26",
               "name": "Vadavacheepurupalli",
               "pincode": "531033"
             },
             {
-              "id": "vlg_mng_ganaparthi",
-              "name": "Ganaparthi",
+              "id": "vlg_munagapaka_vadrapalle_27",
+              "name": "Vadrapalle",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_venkatapuram_28",
+              "name": "Venkatapuram",
+              "pincode": "531033"
+            },
+            {
+              "id": "vlg_munagapaka_vompolu_29",
+              "name": "Vompolu",
               "pincode": "531033"
             }
           ]
@@ -629,33 +1009,158 @@
           "name": "Chodavaram",
           "villages": [
             {
-              "id": "vlg_chd_chodavaram",
-              "name": "Chodavaram",
+              "id": "vlg_chodavaram_adduru_1",
+              "name": "Adduru",
               "pincode": "531036"
             },
             {
-              "id": "vlg_chd_govada",
-              "name": "Govada (Sugar Factory)",
-              "pincode": "531023"
-            },
-            {
-              "id": "vlg_chd_gajapathinagaram",
-              "name": "Gajapathinagaram",
+              "id": "vlg_chodavaram_amberupuram_2",
+              "name": "Amberupuram",
               "pincode": "531036"
             },
             {
-              "id": "vlg_chd_bennavolu",
+              "id": "vlg_chodavaram_ankupalem_3",
+              "name": "Ankupalem",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_annavaram_4",
+              "name": "Annavaram",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_bennavolu_5",
               "name": "Bennavolu",
               "pincode": "531036"
             },
             {
-              "id": "vlg_chd_lakshmipuram",
-              "name": "Lakshmipuram",
+              "id": "vlg_chodavaram_bhogapuram_6",
+              "name": "Bhogapuram",
               "pincode": "531036"
             },
             {
-              "id": "vlg_chd_rayapurajupeta",
-              "name": "Rayapuraju Peta",
+              "id": "vlg_chodavaram_chakipalle_7",
+              "name": "Chakipalle",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_chodavaram_town_8",
+              "name": "Chodavaram Town",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_damunapalle_9",
+              "name": "Damunapalle",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_duddupalem_10",
+              "name": "Duddupalem",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_gajapathinagaram_11",
+              "name": "Gajapathinagaram",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_gandhavaram_12",
+              "name": "Gandhavaram",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_gavaravaram_13",
+              "name": "Gavaravaram",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_govada__sugar_factory__14",
+              "name": "Govada (Sugar Factory)",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_gowripatnam_15",
+              "name": "Gowripatnam",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_jannavaram_16",
+              "name": "Jannavaram",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_juttada_17",
+              "name": "Juttada",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_khandipalle_18",
+              "name": "Khandipalle",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_lakkavaram_19",
+              "name": "Lakkavaram",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_laxmipuram_20",
+              "name": "Laxmipuram",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_m__kothapalle_21",
+              "name": "M. Kothapalle",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_muddurthi_22",
+              "name": "Muddurthi",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_mycherlapalem_23",
+              "name": "Mycherlapalem",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_narasayyapeta_24",
+              "name": "Narasayyapeta",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_pakirsahebpeta_25",
+              "name": "Pakirsahebpeta",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_rayapurajupeta_26",
+              "name": "Rayapurajupeta",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_seemunapalle_27",
+              "name": "Seemunapalle",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_sreerampatnam_28",
+              "name": "Sreerampatnam",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_thimmannapalem_29",
+              "name": "Thimmannapalem",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_venkannapalem_30",
+              "name": "Venkannapalem",
+              "pincode": "531036"
+            },
+            {
+              "id": "vlg_chodavaram_venkayyagaripeta_31",
+              "name": "Venkayyagaripeta",
               "pincode": "531036"
             }
           ]
@@ -665,28 +1170,213 @@
           "name": "Butchayyapeta",
           "villages": [
             {
-              "id": "vlg_bcp_butchayyapeta",
+              "id": "vlg_butchayyapeta_aithampudi_1",
+              "name": "Aithampudi",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_appampalem_2",
+              "name": "Appampalem",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_bangarammapeta_3",
+              "name": "Bangarammapeta",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_bhatlova_4",
+              "name": "Bhatlova",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_butchayyapeta_5",
               "name": "Butchayyapeta",
               "pincode": "531037"
             },
             {
-              "id": "vlg_bcp_dibbapalem",
+              "id": "vlg_butchayyapeta_china_madina_6",
+              "name": "China Madina",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_chinappannapalem_7",
+              "name": "Chinappannapalem",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_chintapaka_8",
+              "name": "Chintapaka",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_chittiyyapalem_9",
+              "name": "Chittiyyapalem",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_dibbapalem_10",
               "name": "Dibbapalem",
               "pincode": "531037"
             },
             {
-              "id": "vlg_bcp_chinamadhina",
-              "name": "Chinamadhina",
+              "id": "vlg_butchayyapeta_dibbidi_11",
+              "name": "Dibbidi",
               "pincode": "531037"
             },
             {
-              "id": "vlg_bcp_rajam",
+              "id": "vlg_butchayyapeta_gantikorlam_12",
+              "name": "Gantikorlam",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_gunnempudi_13",
+              "name": "Gunnempudi",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_kandipudi_14",
+              "name": "Kandipudi",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_karaka_15",
+              "name": "Karaka",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_komallapudi_16",
+              "name": "Komallapudi",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_kondapalem_17",
+              "name": "Kondapalem",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_kondapalem_agraharam_18",
+              "name": "Kondapalem Agraharam",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_kondempudi_19",
+              "name": "Kondempudi",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_l__singavaram_20",
+              "name": "L. Singavaram",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_laluru_21",
+              "name": "Laluru",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_lingabhupala_puram_agrah_22",
+              "name": "Lingabhupala Puram Agraharam",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_lopudi_23",
+              "name": "Lopudi",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_mallam_24",
+              "name": "Mallam",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_mallam_bhupathipalem_25",
+              "name": "Mallam Bhupathipalem",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_mangalapuram_26",
+              "name": "Mangalapuram",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_neelakantapuram_27",
+              "name": "Neelakantapuram",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_nimmalova_28",
+              "name": "Nimmalova",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_p__bheemavaram_29",
+              "name": "P. Bheemavaram",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_pangidi_30",
+              "name": "Pangidi",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_peda_madina_31",
+              "name": "Peda Madina",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_pedapudi_32",
+              "name": "Pedapudi",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_pedapudi_agraharam_33",
+              "name": "Pedapudi Agraharam",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_polepalle_34",
+              "name": "Polepalle",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_pottidorapalem_35",
+              "name": "Pottidorapalem",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_r__bheemavaram_36",
+              "name": "R. Bheemavaram",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_r__sivarampuram_37",
+              "name": "R. Sivarampuram",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_rajam_38",
               "name": "Rajam",
               "pincode": "531037"
             },
             {
-              "id": "vlg_bcp_bangarammapeta",
-              "name": "Bangarammapeta",
+              "id": "vlg_butchayyapeta_turakalapudi_39",
+              "name": "Turakalapudi",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_typuram_40",
+              "name": "Typuram",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_vaddadi_41",
+              "name": "Vaddadi",
+              "pincode": "531037"
+            },
+            {
+              "id": "vlg_butchayyapeta_vijayaramarajupeta_42",
+              "name": "Vijayaramarajupeta",
               "pincode": "531037"
             }
           ]
@@ -696,28 +1386,173 @@
           "name": "Cheedikada",
           "villages": [
             {
-              "id": "vlg_cdk_cheedikada",
-              "name": "Cheedikada",
+              "id": "vlg_cheedikada_advi_agraharam_1",
+              "name": "Advi Agraharam",
               "pincode": "531028"
             },
             {
-              "id": "vlg_cdk_appalarajupuram",
+              "id": "vlg_cheedikada_appalarajupuram_2",
               "name": "Appalarajupuram",
               "pincode": "531028"
             },
             {
-              "id": "vlg_cdk_turakalapudi",
-              "name": "Turakalapudi",
+              "id": "vlg_cheedikada_arjunagiri_agraharam_3",
+              "name": "Arjunagiri Agraharam",
               "pincode": "531028"
             },
             {
-              "id": "vlg_cdk_konam",
+              "id": "vlg_cheedikada_bylapudi_4",
+              "name": "Bylapudi",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_bylapudi_singavaram_5",
+              "name": "Bylapudi Singavaram",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_cheedikada_6",
+              "name": "Cheedikada",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_cheedipalle_agraharam_7",
+              "name": "Cheedipalle Agraharam",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_chettupalle_8",
+              "name": "Chettupalle",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_chinagogada_9",
+              "name": "Chinagogada",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_chukkapalle_10",
+              "name": "Chukkapalle",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_dandi_suravaram_11",
+              "name": "Dandi Suravaram",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_dibbapalem_12",
+              "name": "Dibbapalem",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_g__kothapalle_13",
+              "name": "G. Kothapalle",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_j_b__puram_14",
+              "name": "J.B. Puram",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_jaithavaram_15",
+              "name": "Jaithavaram",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_kattuvari_agraharam_16",
+              "name": "Kattuvari Agraharam",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_khandivara_agraharam_17",
+              "name": "Khandivara Agraharam",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_konam_18",
               "name": "Konam",
               "pincode": "531028"
             },
             {
-              "id": "vlg_cdk_sirijam",
+              "id": "vlg_cheedikada_kondasompura_agraharam_19",
+              "name": "Kondasompura Agraharam",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_lingabhupala_patnam_20",
+              "name": "Lingabhupala Patnam",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_manchala_21",
+              "name": "Manchala",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_neelampeta_22",
+              "name": "Neelampeta",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_pedagogada_agraharam_23",
+              "name": "Pedagogada Agraharam",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_seetharampura_agraharam_24",
+              "name": "Seetharampura Agraharam",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_sirijam_25",
               "name": "Sirijam",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_tangudubilli_26",
+              "name": "Tangudubilli",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_tuni_valasa_27",
+              "name": "Tuni Valasa",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_tunivalasa_bhupatipalem_28",
+              "name": "Tunivalasa Bhupatipalem",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_turuvolu_29",
+              "name": "Turuvolu",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_varahapura_agraharam_30",
+              "name": "Varahapura Agraharam",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_veerabhadrapeta_31",
+              "name": "Veerabhadrapeta",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_veerapurajupeta_32",
+              "name": "Veerapurajupeta",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_vellanki_33",
+              "name": "Vellanki",
+              "pincode": "531028"
+            },
+            {
+              "id": "vlg_cheedikada_vintipalem_34",
+              "name": "Vintipalem",
               "pincode": "531028"
             }
           ]
@@ -727,28 +1562,218 @@
           "name": "Devarapalli",
           "villages": [
             {
-              "id": "vlg_dvp_devarapalli",
-              "name": "Devarapalli",
+              "id": "vlg_devarapalli_alamanda_1",
+              "name": "Alamanda",
               "pincode": "531030"
             },
             {
-              "id": "vlg_dvp_raiwada",
+              "id": "vlg_devarapalli_alamandakothapalle_2",
+              "name": "Alamandakothapalle",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_bethapudi_3",
+              "name": "Bethapudi",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_boddapadu_4",
+              "name": "Boddapadu",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_boilakintada_5",
+              "name": "Boilakintada",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_chainulapalem_6",
+              "name": "Chainulapalem",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_chinagangavaram_7",
+              "name": "Chinagangavaram",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_chinanandipalle_8",
+              "name": "Chinanandipalle",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_chinasompuram_9",
+              "name": "Chinasompuram",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_chintalapudi_10",
+              "name": "Chintalapudi",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_devarapalle_11",
+              "name": "Devarapalle",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_garisingi_12",
+              "name": "Garisingi",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_gorupalem_13",
+              "name": "Gorupalem",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_juttadapalem_14",
+              "name": "Juttadapalem",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_kaligotla_15",
+              "name": "Kaligotla",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_kasipathirajupuram_16",
+              "name": "Kasipathirajupuram",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_kasipuram_17",
+              "name": "Kasipuram",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_kondakodabu_18",
+              "name": "Kondakodabu",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_kothapenta_19",
+              "name": "Kothapenta",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_lovamukundapuram_20",
+              "name": "Lovamukundapuram",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_lovarayapuraju_peta_21",
+              "name": "Lovarayapuraju Peta",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_mamidipalle_22",
+              "name": "Mamidipalle",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_marepalle_23",
+              "name": "Marepalle",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_mulakalapalle_24",
+              "name": "Mulakalapalle",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_mushidipalle_25",
+              "name": "Mushidipalle",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_nagayyapeta_26",
+              "name": "Nagayyapeta",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_narasimha_gajapathinagar_27",
+              "name": "Narasimha Gajapathinagaram",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_pallapukodabu_28",
+              "name": "Pallapukodabu",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_pedanandipalle_agraharam_29",
+              "name": "Pedanandipalle Agraharam",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_pedasompuram_30",
+              "name": "Pedasompuram",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_raiwada__reservoir__31",
               "name": "Raiwada (Reservoir)",
               "pincode": "531030"
             },
             {
-              "id": "vlg_dvp_taruva",
+              "id": "vlg_devarapalli_sambuvanipalem_32",
+              "name": "Sambuvanipalem",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_sammeda_33",
+              "name": "Sammeda",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_seetampeta_34",
+              "name": "Seetampeta",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_sivaramachainulapalem_35",
+              "name": "Sivaramachainulapalem",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_tamarabba_36",
+              "name": "Tamarabba",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_taruva_37",
               "name": "Taruva",
               "pincode": "531030"
             },
             {
-              "id": "vlg_dvp_marepalli",
-              "name": "Marepalli",
+              "id": "vlg_devarapalli_tenugupudi_38",
+              "name": "Tenugupudi",
               "pincode": "531030"
             },
             {
-              "id": "vlg_dvp_tenugupudi",
-              "name": "Tenugupudi",
+              "id": "vlg_devarapalli_thimiram_39",
+              "name": "Thimiram",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_vakapalle_40",
+              "name": "Vakapalle",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_valabu_41",
+              "name": "Valabu",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_vechalam_42",
+              "name": "Vechalam",
+              "pincode": "531030"
+            },
+            {
+              "id": "vlg_devarapalli_venkatarajupuram_43",
+              "name": "Venkatarajupuram",
               "pincode": "531030"
             }
           ]
@@ -758,28 +1783,178 @@
           "name": "K. Kotapadu",
           "villages": [
             {
-              "id": "vlg_kkp_kkotapadu",
-              "name": "K. Kotapadu",
+              "id": "vlg_kkotapadu_alamanda_bheemavaram_1",
+              "name": "Alamanda Bheemavaram",
               "pincode": "531039"
             },
             {
-              "id": "vlg_kkp_medicherla",
-              "name": "Medicherla",
+              "id": "vlg_kkotapadu_alamandakoduru_2",
+              "name": "Alamandakoduru",
               "pincode": "531039"
             },
             {
-              "id": "vlg_kkp_pindrangi",
-              "name": "Pindrangi",
+              "id": "vlg_kkotapadu_arle_3",
+              "name": "Arle",
               "pincode": "531039"
             },
             {
-              "id": "vlg_kkp_chandanada",
+              "id": "vlg_kkotapadu_chandanada_4",
               "name": "Chandanada",
               "pincode": "531039"
             },
             {
-              "id": "vlg_kkp_gavaravaram",
+              "id": "vlg_kkotapadu_chandrayyapeta_5",
+              "name": "Chandrayyapeta",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_chowduvada_6",
+              "name": "Chowduvada",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_dalivalasa_7",
+              "name": "Dalivalasa",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_deekshitula_agraharam_8",
+              "name": "Deekshitula Agraharam",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_garugubilli_9",
+              "name": "Garugubilli",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_gavarapalem_10",
+              "name": "Gavarapalem",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_gavaravaram_11",
               "name": "Gavaravaram",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_gondupalem_12",
+              "name": "Gondupalem",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_gotlam_13",
+              "name": "Gotlam",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_gullepalle_14",
+              "name": "Gullepalle",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_k__kotapadu_15",
+              "name": "K. Kotapadu",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_kavi_konda_agraharam_16",
+              "name": "Kavi Konda Agraharam",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_kintada_17",
+              "name": "Kintada",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_kintadakotapadu_18",
+              "name": "Kintadakotapadu",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_koruvada_19",
+              "name": "Koruvada",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_koruvada_jagannadhapuram_20",
+              "name": "Koruvada Jagannadhapuram",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_marrivalasa_21",
+              "name": "Marrivalasa",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_medicherla_22",
+              "name": "Medicherla",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_paidampeta_23",
+              "name": "Paidampeta",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_pathavalasa_24",
+              "name": "Pathavalasa",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_pindrangi_25",
+              "name": "Pindrangi",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_pothanavalasa_agraharam_26",
+              "name": "Pothanavalasa Agraharam",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_ramayogi_agraharam_27",
+              "name": "Ramayogi Agraharam",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_rongalinaidupalle_28",
+              "name": "Rongalinaidupalle",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_santhapalem_29",
+              "name": "Santhapalem",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_singannadorapalem_30",
+              "name": "Singannadorapalem",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_srungavaram_31",
+              "name": "Srungavaram",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_sudivalasa_32",
+              "name": "Sudivalasa",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_suriddipalem_33",
+              "name": "Suriddipalem",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_ugginavalasa_34",
+              "name": "Ugginavalasa",
+              "pincode": "531039"
+            },
+            {
+              "id": "vlg_kkotapadu_varada_35",
+              "name": "Varada",
               "pincode": "531039"
             }
           ]
@@ -789,28 +1964,273 @@
           "name": "Madugula",
           "villages": [
             {
-              "id": "vlg_mdg_madugula",
-              "name": "Madugula",
+              "id": "vlg_madugula_anukuru_1",
+              "name": "Anukuru",
               "pincode": "531027"
             },
             {
-              "id": "vlg_mdg_vaddadi",
-              "name": "Vaddadi",
-              "pincode": "531034"
-            },
-            {
-              "id": "vlg_mdg_jalampalli",
-              "name": "Jalampalli",
+              "id": "vlg_madugula_avuruvada_2",
+              "name": "Avuruvada",
               "pincode": "531027"
             },
             {
-              "id": "vlg_mdg_kinthali",
+              "id": "vlg_madugula_bhagavathula_agraharam_3",
+              "name": "Bhagavathula Agraharam",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_china_gorrigedda_4",
+              "name": "China Gorrigedda",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_china_kurmam_5",
+              "name": "China Kurmam",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_china_sarada_6",
+              "name": "China Sarada",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_chintaluru_7",
+              "name": "Chintaluru",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_degalapalem_8",
+              "name": "Degalapalem",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_gadirai_9",
+              "name": "Gadirai",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_goppulapalem_10",
+              "name": "Goppulapalem",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_gotivada_agraharam_11",
+              "name": "Gotivada Agraharam",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_jalampalle_12",
+              "name": "Jalampalle",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_jammadevipeta_13",
+              "name": "Jammadevipeta",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_jampena_14",
+              "name": "Jampena",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_kagitha_15",
+              "name": "Kagitha",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_kamakutam_16",
+              "name": "Kamakutam",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_kaspa_jagannadhapuram_17",
+              "name": "Kaspa Jagannadhapuram",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_kinthali_18",
               "name": "Kinthali",
               "pincode": "531027"
             },
             {
-              "id": "vlg_mdg_sagaram",
+              "id": "vlg_madugula_kinthali_vallapuram_19",
+              "name": "Kinthali Vallapuram",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_kurmanadhapuram_20",
+              "name": "Kurmanadhapuram",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_lakshmipuram_21",
+              "name": "Lakshmipuram",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_lovagavara_varam_22",
+              "name": "Lovagavara Varam",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_lova_kothapalle_23",
+              "name": "Lova Kothapalle",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_lova_krishnapuram_24",
+              "name": "Lova Krishnapuram",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_lova_ponnavolu_25",
+              "name": "Lova Ponnavolu",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_maddulapalem_26",
+              "name": "Maddulapalem",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_madugula_27",
+              "name": "Madugula",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_madugula_koduru_28",
+              "name": "Madugula Koduru",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_madugulakotapadu_29",
+              "name": "Madugulakotapadu",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_medaveedu_30",
+              "name": "Medaveedu",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_m_k__vallapuram_31",
+              "name": "M.K. Vallapuram",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_moksha_krishnapuram_32",
+              "name": "Moksha Krishnapuram",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_mukundapuram_33",
+              "name": "Mukundapuram",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_pappusettiseri_34",
+              "name": "Pappusettiseri",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_peda_gorrigedda_35",
+              "name": "Peda Gorrigedda",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_peda_sarada_36",
+              "name": "Peda Sarada",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_pittagedda_37",
+              "name": "Pittagedda",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_pongalipaka_38",
+              "name": "Pongalipaka",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_pothanapudi_agraharam_39",
+              "name": "Pothanapudi Agraharam",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_p__sivarampuram_40",
+              "name": "P. Sivarampuram",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_ravipalem_41",
+              "name": "Ravipalem",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_sagaram_42",
               "name": "Sagaram",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_sanghyam_43",
+              "name": "Sanghyam",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_sankaram_44",
+              "name": "Sankaram",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_satyavaram_45",
+              "name": "Satyavaram",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_tatiparthi_46",
+              "name": "Tatiparthi",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_tiruvada_47",
+              "name": "Tiruvada",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_vaddadi_48",
+              "name": "Vaddadi",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_vantarlapalem_49",
+              "name": "Vantarlapalem",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_veeranarayanam_50",
+              "name": "Veeranarayanam",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_veeravilli_51",
+              "name": "Veeravilli",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_vommali_52",
+              "name": "Vommali",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_vommali_jagannadhapuram_53",
+              "name": "Vommali Jagannadhapuram",
+              "pincode": "531027"
+            },
+            {
+              "id": "vlg_madugula_yerukuvada_54",
+              "name": "Yerukuvada",
               "pincode": "531027"
             }
           ]
@@ -820,33 +2240,143 @@
           "name": "Paravada",
           "villages": [
             {
-              "id": "vlg_prv_paravada",
-              "name": "Paravada",
+              "id": "vlg_paravada_bharinikam_1",
+              "name": "Bharinikam",
               "pincode": "531021"
             },
             {
-              "id": "vlg_prv_pharmacity",
+              "id": "vlg_paravada_cheepurupalle__east__2",
+              "name": "Cheepurupalle (East)",
+              "pincode": "531021"
+            },
+            {
+              "id": "vlg_paravada_cheepurupalle__west__3",
+              "name": "Cheepurupalle (West)",
+              "pincode": "531021"
+            },
+            {
+              "id": "vlg_paravada_donkada_4",
+              "name": "Donkada",
+              "pincode": "531021"
+            },
+            {
+              "id": "vlg_paravada_edulapaka_bonangi_5",
+              "name": "Edulapaka Bonangi",
+              "pincode": "531021"
+            },
+            {
+              "id": "vlg_paravada_jagannadhapuram_agrahara_6",
+              "name": "Jagannadhapuram Agraharam",
+              "pincode": "531021"
+            },
+            {
+              "id": "vlg_paravada_jn_pharma_city_7",
               "name": "JN Pharma City",
               "pincode": "531021"
             },
             {
-              "id": "vlg_prv_vennelapalem",
-              "name": "Vennelapalem",
+              "id": "vlg_paravada_kalapaka_8",
+              "name": "Kalapaka",
               "pincode": "531021"
             },
             {
-              "id": "vlg_prv_thadi",
-              "name": "Thadi",
+              "id": "vlg_paravada_kannuru_9",
+              "name": "Kannuru",
               "pincode": "531021"
             },
             {
-              "id": "vlg_prv_mutyalammapalem",
+              "id": "vlg_paravada_lankelapalem_10",
+              "name": "Lankelapalem",
+              "pincode": "531021"
+            },
+            {
+              "id": "vlg_paravada_lemarthi_agraharam_11",
+              "name": "Lemarthi Agraharam",
+              "pincode": "531021"
+            },
+            {
+              "id": "vlg_paravada_mantripalem_12",
+              "name": "Mantripalem",
+              "pincode": "531021"
+            },
+            {
+              "id": "vlg_paravada_marripalem_13",
+              "name": "Marripalem",
+              "pincode": "531021"
+            },
+            {
+              "id": "vlg_paravada_matripalem_14",
+              "name": "Matripalem",
+              "pincode": "531021"
+            },
+            {
+              "id": "vlg_paravada_mutyalammapalem_15",
               "name": "Mutyalammapalem",
               "pincode": "531021"
             },
             {
-              "id": "vlg_prv_kalapaka",
-              "name": "Kalapaka",
+              "id": "vlg_paravada_paravada_16",
+              "name": "Paravada",
+              "pincode": "531021"
+            },
+            {
+              "id": "vlg_paravada_payakarao_bonangi_17",
+              "name": "Payakarao Bonangi",
+              "pincode": "531021"
+            },
+            {
+              "id": "vlg_paravada_pedamadaka_18",
+              "name": "Pedamadaka",
+              "pincode": "531021"
+            },
+            {
+              "id": "vlg_paravada_pedamusidivada_19",
+              "name": "Pedamusidivada",
+              "pincode": "531021"
+            },
+            {
+              "id": "vlg_paravada_pentaseema_bonangi_20",
+              "name": "Pentaseema Bonangi",
+              "pincode": "531021"
+            },
+            {
+              "id": "vlg_paravada_pinamadaka_21",
+              "name": "Pinamadaka",
+              "pincode": "531021"
+            },
+            {
+              "id": "vlg_paravada_ponnuruagraharam_22",
+              "name": "Ponnuruagraharam",
+              "pincode": "531021"
+            },
+            {
+              "id": "vlg_paravada_p__sivarampuram_23",
+              "name": "P. Sivarampuram",
+              "pincode": "531021"
+            },
+            {
+              "id": "vlg_paravada_ravada_24",
+              "name": "Ravada",
+              "pincode": "531021"
+            },
+            {
+              "id": "vlg_paravada_swayambuvaram_25",
+              "name": "Swayambuvaram",
+              "pincode": "531021"
+            },
+            {
+              "id": "vlg_paravada_thadi_26",
+              "name": "Thadi",
+              "pincode": "531021"
+            },
+            {
+              "id": "vlg_paravada_thanam_27",
+              "name": "Thanam",
+              "pincode": "531021"
+            },
+            {
+              "id": "vlg_paravada_vennelapalem_28",
+              "name": "Vennelapalem",
               "pincode": "531021"
             }
           ]
@@ -856,33 +2386,178 @@
           "name": "Sabbavaram",
           "villages": [
             {
-              "id": "vlg_sbv_sabbavaram",
-              "name": "Sabbavaram",
+              "id": "vlg_sabbavaram_amrutapuram_1",
+              "name": "Amrutapuram",
               "pincode": "531035"
             },
             {
-              "id": "vlg_sbv_asakapalli",
-              "name": "Asakapalli",
+              "id": "vlg_sabbavaram_anjanagiri_2",
+              "name": "Anjanagiri",
               "pincode": "531035"
             },
             {
-              "id": "vlg_sbv_mogalipuram",
+              "id": "vlg_sabbavaram_antakapalle_3",
+              "name": "Antakapalle",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_aripaka_4",
+              "name": "Aripaka",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_asakapalle_5",
+              "name": "Asakapalle",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_ayyannapalem_6",
+              "name": "Ayyannapalem",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_bangarammapalem_7",
+              "name": "Bangarammapalem",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_batajangalapalem_8",
+              "name": "Batajangalapalem",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_boduvalasa_9",
+              "name": "Boduvalasa",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_chintagatla_agraharam_10",
+              "name": "Chintagatla Agraharam",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_dongalamarri_sitarampura_11",
+              "name": "Dongalamarri Sitarampuram",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_elluppi_12",
+              "name": "Elluppi",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_erukunaidupalem_13",
+              "name": "Erukunaidupalem",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_gali_bhimavaram_14",
+              "name": "Gali Bhimavaram",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_gangavaram_15",
+              "name": "Gangavaram",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_gollalapalem_16",
+              "name": "Gollalapalem",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_gotivada_17",
+              "name": "Gotivada",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_gullepalle_18",
+              "name": "Gullepalle",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_iruvada_19",
+              "name": "Iruvada",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_lagisettipalem_20",
+              "name": "Lagisettipalem",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_mogalipuram_21",
               "name": "Mogalipuram",
               "pincode": "531035"
             },
             {
-              "id": "vlg_sbv_amruthapuram",
-              "name": "Amruthapuram",
+              "id": "vlg_sabbavaram_nallaregulapalem_22",
+              "name": "Nallaregulapalem",
               "pincode": "531035"
             },
             {
-              "id": "vlg_sbv_gullepalli",
-              "name": "Gullepalli",
+              "id": "vlg_sabbavaram_nanginarapadu_23",
+              "name": "Nanginarapadu",
               "pincode": "531035"
             },
             {
-              "id": "vlg_sbv_rayapurajupeta",
+              "id": "vlg_sabbavaram_pydivada_24",
+              "name": "Pydivada",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_pydivada_agraharam_25",
+              "name": "Pydivada Agraharam",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_rayapuram_agraharam_26",
+              "name": "Rayapuram Agraharam",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_rayapurajupeta_27",
               "name": "Rayapurajupeta",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_sabbavaram_28",
+              "name": "Sabbavaram",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_sabbavaram_agraharam_29",
+              "name": "Sabbavaram Agraharam",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_sirasapalleadduru_30",
+              "name": "Sirasapalleadduru",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_tekkalipalem_31",
+              "name": "Tekkalipalem",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_vangali_32",
+              "name": "Vangali",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_vedullanarava_33",
+              "name": "Vedullanarava",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_vippaka_agraharam_34",
+              "name": "Vippaka Agraharam",
+              "pincode": "531035"
+            },
+            {
+              "id": "vlg_sabbavaram_yerukunaidupalem_35",
+              "name": "Yerukunaidupalem",
               "pincode": "531035"
             }
           ]
@@ -892,38 +2567,183 @@
           "name": "Atchutapuram",
           "villages": [
             {
-              "id": "vlg_atc_atchutapuram",
-              "name": "Atchutapuram Junction",
+              "id": "vlg_atchutapuram_andalapalle_1",
+              "name": "Andalapalle",
               "pincode": "531011"
             },
             {
-              "id": "vlg_atc_apsez",
+              "id": "vlg_atchutapuram_apsez_special_economic_z_2",
               "name": "APSEZ Special Economic Zone",
               "pincode": "531011"
             },
             {
-              "id": "vlg_atc_haripalem",
-              "name": "Haripalem",
+              "id": "vlg_atchutapuram_atchutapuram_junction_3",
+              "name": "Atchutapuram Junction",
               "pincode": "531011"
             },
             {
-              "id": "vlg_atc_pudimadaka",
-              "name": "Pudimadaka Beach",
+              "id": "vlg_atchutapuram_bhogapuram_4",
+              "name": "Bhogapuram",
               "pincode": "531011"
             },
             {
-              "id": "vlg_atc_kondakarla",
-              "name": "Kondakarla Ava",
+              "id": "vlg_atchutapuram_cheemalapalle_5",
+              "name": "Cheemalapalle",
               "pincode": "531011"
             },
             {
-              "id": "vlg_atc_dosuru",
+              "id": "vlg_atchutapuram_chippada_6",
+              "name": "Chippada",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_chodapalle_7",
+              "name": "Chodapalle",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_dibbapalem_8",
+              "name": "Dibbapalem",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_dopperla_9",
+              "name": "Dopperla",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_dosuru_10",
               "name": "Dosuru",
               "pincode": "531011"
             },
             {
-              "id": "vlg_atc_thantadi",
-              "name": "Thantadi",
+              "id": "vlg_atchutapuram_duppituru_11",
+              "name": "Duppituru",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_gangamambapura_agraharam_12",
+              "name": "Gangamambapura Agraharam",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_haripalem_13",
+              "name": "Haripalem",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_iravada_14",
+              "name": "Iravada",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_jagannadhapura_agraharam_15",
+              "name": "Jagannadhapura Agraharam",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_jaggannapeta_16",
+              "name": "Jaggannapeta",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_janguluru_17",
+              "name": "Janguluru",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_jogannapalem_18",
+              "name": "Jogannapalem",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_khajipalem_19",
+              "name": "Khajipalem",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_kondakarla__ava_lake__20",
+              "name": "Kondakarla (Ava Lake)",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_maduthuru_21",
+              "name": "Maduthuru",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_maruturu_22",
+              "name": "Maruturu",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_melupaka_jagannadhapuram_23",
+              "name": "Melupaka Jagannadhapuram",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_nadimpalle_24",
+              "name": "Nadimpalle",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_nunaparthi_25",
+              "name": "Nunaparthi",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_pedapadu_26",
+              "name": "Pedapadu",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_pudimadaka__fisheries_ha_27",
+              "name": "Pudimadaka (Fisheries Harbour & Beach)",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_ravipalem_28",
+              "name": "Ravipalem",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_somavaram_29",
+              "name": "Somavaram",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_tantadi_beach_30",
+              "name": "Tantadi Beach",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_thallapalem_31",
+              "name": "Thallapalem",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_thimmarajupeta_32",
+              "name": "Thimmarajupeta",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_uddlapalem_33",
+              "name": "Uddlapalem",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_uppavaram_34",
+              "name": "Uppavaram",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_veduruvada_35",
+              "name": "Veduruvada",
+              "pincode": "531011"
+            },
+            {
+              "id": "vlg_atchutapuram_yerravaram_36",
+              "name": "Yerravaram",
               "pincode": "531011"
             }
           ]
@@ -933,33 +2753,133 @@
           "name": "Elamanchili",
           "villages": [
             {
-              "id": "vlg_elc_town",
-              "name": "Elamanchili Town",
+              "id": "vlg_elamanchili_bayyavaram_1",
+              "name": "Bayyavaram",
               "pincode": "531055"
             },
             {
-              "id": "vlg_elc_regupalem",
-              "name": "Regupalem",
-              "pincode": "531055"
-            },
-            {
-              "id": "vlg_elc_dimili",
+              "id": "vlg_elamanchili_dimili_2",
               "name": "Dimili",
               "pincode": "531055"
             },
             {
-              "id": "vlg_elc_somalingapalem",
+              "id": "vlg_elamanchili_elamanchili_town_3",
+              "name": "Elamanchili Town",
+              "pincode": "531055"
+            },
+            {
+              "id": "vlg_elamanchili_etikoppaka__toy_village__4",
+              "name": "Etikoppaka (Toy Village)",
+              "pincode": "531055"
+            },
+            {
+              "id": "vlg_elamanchili_gollagunta_5",
+              "name": "Gollagunta",
+              "pincode": "531055"
+            },
+            {
+              "id": "vlg_elamanchili_gundrabilli_6",
+              "name": "Gundrabilli",
+              "pincode": "531055"
+            },
+            {
+              "id": "vlg_elamanchili_jampapalem_7",
+              "name": "Jampapalem",
+              "pincode": "531055"
+            },
+            {
+              "id": "vlg_elamanchili_kattupalem_8",
+              "name": "Kattupalem",
+              "pincode": "531055"
+            },
+            {
+              "id": "vlg_elamanchili_kokkirapalle_9",
+              "name": "Kokkirapalle",
+              "pincode": "531055"
+            },
+            {
+              "id": "vlg_elamanchili_kothali_10",
+              "name": "Kothali",
+              "pincode": "531055"
+            },
+            {
+              "id": "vlg_elamanchili_krishnampalem_11",
+              "name": "Krishnampalem",
+              "pincode": "531055"
+            },
+            {
+              "id": "vlg_elamanchili_krishnapuram_12",
+              "name": "Krishnapuram",
+              "pincode": "531055"
+            },
+            {
+              "id": "vlg_elamanchili_lakkavaram_13",
+              "name": "Lakkavaram",
+              "pincode": "531055"
+            },
+            {
+              "id": "vlg_elamanchili_line_kothuru_14",
+              "name": "Line Kothuru",
+              "pincode": "531055"
+            },
+            {
+              "id": "vlg_elamanchili_mulakalapalli_15",
+              "name": "Mulakalapalli",
+              "pincode": "531055"
+            },
+            {
+              "id": "vlg_elamanchili_padmanabharaju_peta_16",
+              "name": "Padmanabharaju Peta",
+              "pincode": "531055"
+            },
+            {
+              "id": "vlg_elamanchili_pothu_reddi_palem_17",
+              "name": "Pothu Reddi Palem",
+              "pincode": "531055"
+            },
+            {
+              "id": "vlg_elamanchili_pulaparthi_18",
+              "name": "Pulaparthi",
+              "pincode": "531055"
+            },
+            {
+              "id": "vlg_elamanchili_purushothapuram_19",
+              "name": "Purushothapuram",
+              "pincode": "531055"
+            },
+            {
+              "id": "vlg_elamanchili_regupalem_20",
+              "name": "Regupalem",
+              "pincode": "531055"
+            },
+            {
+              "id": "vlg_elamanchili_rukminipuram_21",
+              "name": "Rukminipuram",
+              "pincode": "531055"
+            },
+            {
+              "id": "vlg_elamanchili_shekilla_palem_22",
+              "name": "Shekilla Palem",
+              "pincode": "531055"
+            },
+            {
+              "id": "vlg_elamanchili_somalingapalem_23",
               "name": "Somalingapalem",
               "pincode": "531055"
             },
             {
-              "id": "vlg_elc_yerravaram",
-              "name": "Yerravaram",
+              "id": "vlg_elamanchili_teruvupalle_24",
+              "name": "Teruvupalle",
               "pincode": "531055"
             },
             {
-              "id": "vlg_elc_krishnampalem",
-              "name": "Krishnampalem",
+              "id": "vlg_elamanchili_thurangalapalem_25",
+              "name": "Thurangalapalem",
+              "pincode": "531055"
+            },
+            {
+              "id": "vlg_elamanchili_yerravaram_26",
+              "name": "Yerravaram",
               "pincode": "531055"
             }
           ]
@@ -969,28 +2889,118 @@
           "name": "Kotauratla",
           "villages": [
             {
-              "id": "vlg_ktu_kotauratla",
-              "name": "Kotauratla",
+              "id": "vlg_kotauratla_annavaram_1",
+              "name": "Annavaram",
               "pincode": "531085"
             },
             {
-              "id": "vlg_ktu_kailasapatnam",
-              "name": "Kailasapatnam",
+              "id": "vlg_kotauratla_bapiraju_kothapalle_2",
+              "name": "Bapiraju Kothapalle",
               "pincode": "531085"
             },
             {
-              "id": "vlg_ktu_boddavaram",
+              "id": "vlg_kotauratla_bodapalem_3",
+              "name": "Bodapalem",
+              "pincode": "531085"
+            },
+            {
+              "id": "vlg_kotauratla_boddavaram_4",
               "name": "Boddavaram",
               "pincode": "531085"
             },
             {
-              "id": "vlg_ktu_panduru",
+              "id": "vlg_kotauratla_chinaboddepalle_5",
+              "name": "Chinaboddepalle",
+              "pincode": "531085"
+            },
+            {
+              "id": "vlg_kotauratla_chowduvada_6",
+              "name": "Chowduvada",
+              "pincode": "531085"
+            },
+            {
+              "id": "vlg_kotauratla_g__sanyasirajupalem_7",
+              "name": "G. Sanyasirajupalem",
+              "pincode": "531085"
+            },
+            {
+              "id": "vlg_kotauratla_gottivada_8",
+              "name": "Gottivada",
+              "pincode": "531085"
+            },
+            {
+              "id": "vlg_kotauratla_jalluru_9",
+              "name": "Jalluru",
+              "pincode": "531085"
+            },
+            {
+              "id": "vlg_kotauratla_kailasapatnam_10",
+              "name": "Kailasapatnam",
+              "pincode": "531085"
+            },
+            {
+              "id": "vlg_kotauratla_kodavatipudi_11",
+              "name": "Kodavatipudi",
+              "pincode": "531085"
+            },
+            {
+              "id": "vlg_kotauratla_kotauratla_12",
+              "name": "Kotauratla",
+              "pincode": "531085"
+            },
+            {
+              "id": "vlg_kotauratla_krishnambhotla_agraharam_13",
+              "name": "Krishnambhotla Agraharam",
+              "pincode": "531085"
+            },
+            {
+              "id": "vlg_kotauratla_lingapuram_14",
+              "name": "Lingapuram",
+              "pincode": "531085"
+            },
+            {
+              "id": "vlg_kotauratla_pamulavaka_15",
+              "name": "Pamulavaka",
+              "pincode": "531085"
+            },
+            {
+              "id": "vlg_kotauratla_panduru_16",
               "name": "Panduru",
               "pincode": "531085"
             },
             {
-              "id": "vlg_ktu_thangedu",
+              "id": "vlg_kotauratla_pippalla_kothapalle_17",
+              "name": "Pippalla Kothapalle",
+              "pincode": "531085"
+            },
+            {
+              "id": "vlg_kotauratla_rajupeta_18",
+              "name": "Rajupeta",
+              "pincode": "531085"
+            },
+            {
+              "id": "vlg_kotauratla_ramannapalem_19",
+              "name": "Ramannapalem",
+              "pincode": "531085"
+            },
+            {
+              "id": "vlg_kotauratla_sunkapuru_20",
+              "name": "Sunkapuru",
+              "pincode": "531085"
+            },
+            {
+              "id": "vlg_kotauratla_tadaparthi_jangampeta_21",
+              "name": "Tadaparthi Jangampeta",
+              "pincode": "531085"
+            },
+            {
+              "id": "vlg_kotauratla_thangedu_22",
               "name": "Thangedu",
+              "pincode": "531085"
+            },
+            {
+              "id": "vlg_kotauratla_yendapalle_23",
+              "name": "Yendapalle",
               "pincode": "531085"
             }
           ]
@@ -1000,33 +3010,183 @@
           "name": "Nakkapalli",
           "villages": [
             {
-              "id": "vlg_nkp_nakkapalli",
-              "name": "Nakkapalli",
+              "id": "vlg_nakkapalli_amalapuram_1",
+              "name": "Amalapuram",
               "pincode": "531081"
             },
             {
-              "id": "vlg_nkp_upamaka",
-              "name": "Upamaka (Venkateswara Swamy)",
+              "id": "vlg_nakkapalli_bangarammapeta_2",
+              "name": "Bangarammapeta",
               "pincode": "531081"
             },
             {
-              "id": "vlg_nkp_kagitha",
-              "name": "Kagitha",
+              "id": "vlg_nakkapalli_bodugallam_3",
+              "name": "Bodugallam",
               "pincode": "531081"
             },
             {
-              "id": "vlg_nkp_rajayyapeta",
-              "name": "Rajayyapeta",
+              "id": "vlg_nakkapalli_buchirajupeta_4",
+              "name": "Buchirajupeta",
               "pincode": "531081"
             },
             {
-              "id": "vlg_nkp_godicherla",
+              "id": "vlg_nakkapalli_chandanada_5",
+              "name": "Chandanada",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_cheedika_6",
+              "name": "Cheedika",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_chinadoddigallu_7",
+              "name": "Chinadoddigallu",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_chinateenarla_8",
+              "name": "Chinateenarla",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_chinarambhadrapuram_9",
+              "name": "Chinarambhadrapuram",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_chittibatla_agraharam_10",
+              "name": "Chittibatla Agraharam",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_chukalavari_lakshmipuram_11",
+              "name": "Chukalavari Lakshmipuram",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_d_l__puram_12",
+              "name": "D.L. Puram",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_devavaram_13",
+              "name": "Devavaram",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_donivanilakshmipuram_14",
+              "name": "Donivanilakshmipuram",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_donkada_15",
+              "name": "Donkada",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_dosalapadu_16",
+              "name": "Dosalapadu",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_g__jagannadhapuram_17",
+              "name": "G. Jagannadhapuram",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_godicherla_18",
               "name": "Godicherla",
               "pincode": "531081"
             },
             {
-              "id": "vlg_nkp_dlpuram",
-              "name": "D.L. Puram",
+              "id": "vlg_nakkapalli_gullipadu_19",
+              "name": "Gullipadu",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_gunupudi_20",
+              "name": "Gunupudi",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_janakayyapeta_21",
+              "name": "Janakayyapeta",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_kagitha_22",
+              "name": "Kagitha",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_mukundarajupeta_23",
+              "name": "Mukundarajupeta",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_n__narasapuram_24",
+              "name": "N. Narasapuram",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_nakkapalli_town_25",
+              "name": "Nakkapalli Town",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_nallamattipalem_26",
+              "name": "Nallamattipalem",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_nayampudi_27",
+              "name": "Nayampudi",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_nellipudi_28",
+              "name": "Nellipudi",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_pedadoddigallu_29",
+              "name": "Pedadoddigallu",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_pedateenarla_30",
+              "name": "Pedateenarla",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_rajayyapeta_31",
+              "name": "Rajayyapeta",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_ramanayyapeta_32",
+              "name": "Ramanayyapeta",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_rebaka_33",
+              "name": "Rebaka",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_uddandapuram_34",
+              "name": "Uddandapuram",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_upamaka__sri_venkateswar_35",
+              "name": "Upamaka (Sri Venkateswara Swamy Temple)",
+              "pincode": "531081"
+            },
+            {
+              "id": "vlg_nakkapalli_vempadu_36",
+              "name": "Vempadu",
               "pincode": "531081"
             }
           ]
@@ -1036,33 +3196,103 @@
           "name": "Payakaraopeta",
           "villages": [
             {
-              "id": "vlg_pkp_town",
-              "name": "Payakaraopeta Town",
-              "pincode": "531126"
-            },
-            {
-              "id": "vlg_pkp_editha",
-              "name": "Editha",
-              "pincode": "531126"
-            },
-            {
-              "id": "vlg_pkp_aratlakota",
+              "id": "vlg_payakaraopeta_aratlakota_1",
               "name": "Aratlakota",
               "pincode": "531126"
             },
             {
-              "id": "vlg_pkp_mangavaram",
+              "id": "vlg_payakaraopeta_edatam_2",
+              "name": "Edatam",
+              "pincode": "531126"
+            },
+            {
+              "id": "vlg_payakaraopeta_editha_3",
+              "name": "Editha",
+              "pincode": "531126"
+            },
+            {
+              "id": "vlg_payakaraopeta_gopalapatnam_4",
+              "name": "Gopalapatnam",
+              "pincode": "531126"
+            },
+            {
+              "id": "vlg_payakaraopeta_guntapalle_5",
+              "name": "Guntapalle",
+              "pincode": "531126"
+            },
+            {
+              "id": "vlg_payakaraopeta_kandipudi_6",
+              "name": "Kandipudi",
+              "pincode": "531126"
+            },
+            {
+              "id": "vlg_payakaraopeta_kesavaram_7",
+              "name": "Kesavaram",
+              "pincode": "531126"
+            },
+            {
+              "id": "vlg_payakaraopeta_kumarapuram_8",
+              "name": "Kumarapuram",
+              "pincode": "531126"
+            },
+            {
+              "id": "vlg_payakaraopeta_mangavaram_9",
               "name": "Mangavaram",
               "pincode": "531126"
             },
             {
-              "id": "vlg_pkp_pentakota",
-              "name": "Pentakota",
+              "id": "vlg_payakaraopeta_masahebpeta_10",
+              "name": "Masahebpeta",
               "pincode": "531126"
             },
             {
-              "id": "vlg_pkp_gopalapatnam",
-              "name": "Gopalapatnam",
+              "id": "vlg_payakaraopeta_namavaram_11",
+              "name": "Namavaram",
+              "pincode": "531126"
+            },
+            {
+              "id": "vlg_payakaraopeta_padalavani_laxmipuram_12",
+              "name": "Padalavani Laxmipuram",
+              "pincode": "531126"
+            },
+            {
+              "id": "vlg_payakaraopeta_palteru_13",
+              "name": "Palteru",
+              "pincode": "531126"
+            },
+            {
+              "id": "vlg_payakaraopeta_payakaraopeta_town_14",
+              "name": "Payakaraopeta Town",
+              "pincode": "531126"
+            },
+            {
+              "id": "vlg_payakaraopeta_pedaramabhadrapuram_15",
+              "name": "Pedaramabhadrapuram",
+              "pincode": "531126"
+            },
+            {
+              "id": "vlg_payakaraopeta_pentakota__coastal_port__16",
+              "name": "Pentakota (Coastal Port Area)",
+              "pincode": "531126"
+            },
+            {
+              "id": "vlg_payakaraopeta_rajavaram_17",
+              "name": "Rajavaram",
+              "pincode": "531126"
+            },
+            {
+              "id": "vlg_payakaraopeta_s__narasapuram_18",
+              "name": "S. Narasapuram",
+              "pincode": "531126"
+            },
+            {
+              "id": "vlg_payakaraopeta_satyavaram_19",
+              "name": "Satyavaram",
+              "pincode": "531126"
+            },
+            {
+              "id": "vlg_payakaraopeta_srirampuram_20",
+              "name": "Srirampuram",
               "pincode": "531126"
             }
           ]
@@ -1072,33 +3302,183 @@
           "name": "Rambilli",
           "villages": [
             {
-              "id": "vlg_rmb_rambilli",
-              "name": "Rambilli",
+              "id": "vlg_rambilli_anandapuram_1",
+              "name": "Anandapuram",
               "pincode": "531061"
             },
             {
-              "id": "vlg_rmb_dimili",
+              "id": "vlg_rambilli_apparayyudupalem_2",
+              "name": "Apparayyudupalem",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_chatametta_3",
+              "name": "Chatametta",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_chebrolu_veerappa_konda_4",
+              "name": "Chebrolu Veerappa Konda",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_china_kalavalapalli_5",
+              "name": "China Kalavalapalli",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_dimili_6",
               "name": "Dimili",
               "pincode": "531061"
             },
             {
-              "id": "vlg_rmb_lalamkoduru",
-              "name": "Lalamkoduru",
+              "id": "vlg_rambilli_edullammalova_7",
+              "name": "Edullammalova",
               "pincode": "531061"
             },
             {
-              "id": "vlg_rmb_krishnapatnam",
+              "id": "vlg_rambilli_gokivada_8",
+              "name": "Gokivada",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_gorapudi_9",
+              "name": "Gorapudi",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_govindapalem_10",
+              "name": "Govindapalem",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_gurjapalem_11",
+              "name": "Gurjapalem",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_haripuram_12",
+              "name": "Haripuram",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_kalavalapalle_13",
+              "name": "Kalavalapalle",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_kattabolu_14",
+              "name": "Kattabolu",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_kotha_patnam_15",
+              "name": "Kotha Patnam",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_kothapeta_16",
+              "name": "Kothapeta",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_kothuru_17",
+              "name": "Kothuru",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_krishnampalem_18",
+              "name": "Krishnampalem",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_krishnapatnam_19",
               "name": "Krishnapatnam",
               "pincode": "531061"
             },
             {
-              "id": "vlg_rmb_velchuru",
+              "id": "vlg_rambilli_kumarapalli_20",
+              "name": "Kumarapalli",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_lalamkoduru_21",
+              "name": "Lalamkoduru",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_mamidivada_22",
+              "name": "Mamidivada",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_manyapuchintuva_23",
+              "name": "Manyapuchintuva",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_marripalem_24",
+              "name": "Marripalem",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_mulajampa_25",
+              "name": "Mulajampa",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_murakada_26",
+              "name": "Murakada",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_nakkapalem_27",
+              "name": "Nakkapalem",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_panchadarla__dharmalinge_28",
+              "name": "Panchadarla (Dharmalingeswara Swamy)",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_raja_koduru_29",
+              "name": "Raja Koduru",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_rajala_30",
+              "name": "Rajala",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_rajala_agraharam_31",
+              "name": "Rajala Agraharam",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_rambilli_32",
+              "name": "Rambilli",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_sitapalem_33",
+              "name": "Sitapalem",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_velchuru_34",
               "name": "Velchuru",
               "pincode": "531061"
             },
             {
-              "id": "vlg_rmb_marripalem",
-              "name": "Marripalem",
+              "id": "vlg_rambilli_vijayarampuram_agraharam_35",
+              "name": "Vijayarampuram Agraharam",
+              "pincode": "531061"
+            },
+            {
+              "id": "vlg_rambilli_zirayati_chintuva_36",
+              "name": "Zirayati Chintuva",
               "pincode": "531061"
             }
           ]
@@ -1108,27 +3488,112 @@
           "name": "S. Rayavaram",
           "villages": [
             {
-              "id": "vlg_sry_srayavaram",
-              "name": "S. Rayavaram",
+              "id": "vlg_srayavaram_bheemavaram_1",
+              "name": "Bheemavaram",
               "pincode": "531060"
             },
             {
-              "id": "vlg_sry_dharmavaram",
-              "name": "Dharmavaram",
+              "id": "vlg_srayavaram_chinagummuluru_2",
+              "name": "Chinagummuluru",
               "pincode": "531060"
             },
             {
-              "id": "vlg_sry_thimmapuram",
-              "name": "Thimmapuram (Addu Road)",
+              "id": "vlg_srayavaram_china_uppalam_3",
+              "name": "China Uppalam",
               "pincode": "531060"
             },
             {
-              "id": "vlg_sry_penugollu",
+              "id": "vlg_srayavaram_darlapudi_4",
+              "name": "Darlapudi",
+              "pincode": "531060"
+            },
+            {
+              "id": "vlg_srayavaram_dharmavaram_agraharam_5",
+              "name": "Dharmavaram Agraharam",
+              "pincode": "531060"
+            },
+            {
+              "id": "vlg_srayavaram_gudivada_6",
+              "name": "Gudivada",
+              "pincode": "531060"
+            },
+            {
+              "id": "vlg_srayavaram_janguluruvelampalem_7",
+              "name": "Janguluruvelampalem",
+              "pincode": "531060"
+            },
+            {
+              "id": "vlg_srayavaram_karrivanipalem_8",
+              "name": "Karrivanipalem",
+              "pincode": "531060"
+            },
+            {
+              "id": "vlg_srayavaram_koruprolu_9",
+              "name": "Koruprolu",
+              "pincode": "531060"
+            },
+            {
+              "id": "vlg_srayavaram_lingarajupalem_10",
+              "name": "Lingarajupalem",
+              "pincode": "531060"
+            },
+            {
+              "id": "vlg_srayavaram_pedagummuluru_11",
+              "name": "Pedagummuluru",
+              "pincode": "531060"
+            },
+            {
+              "id": "vlg_srayavaram_peda_uppalam_12",
+              "name": "Peda Uppalam",
+              "pincode": "531060"
+            },
+            {
+              "id": "vlg_srayavaram_penugollu_13",
               "name": "Penugollu",
               "pincode": "531060"
             },
             {
-              "id": "vlg_sry_vommavaram",
+              "id": "vlg_srayavaram_petasudipuram_14",
+              "name": "Petasudipuram",
+              "pincode": "531060"
+            },
+            {
+              "id": "vlg_srayavaram_pettugollapalle_15",
+              "name": "Pettugollapalle",
+              "pincode": "531060"
+            },
+            {
+              "id": "vlg_srayavaram_s__rayavaram__sarvasiddh_16",
+              "name": "S. Rayavaram (Sarvasiddhi Rayavaram)",
+              "pincode": "531060"
+            },
+            {
+              "id": "vlg_srayavaram_sarvasiddi_17",
+              "name": "Sarvasiddi",
+              "pincode": "531060"
+            },
+            {
+              "id": "vlg_srayavaram_thimmapuram__addu_road__18",
+              "name": "Thimmapuram (Addu Road)",
+              "pincode": "531060"
+            },
+            {
+              "id": "vlg_srayavaram_upparapalle_19",
+              "name": "Upparapalle",
+              "pincode": "531060"
+            },
+            {
+              "id": "vlg_srayavaram_vakapadu_20",
+              "name": "Vakapadu",
+              "pincode": "531060"
+            },
+            {
+              "id": "vlg_srayavaram_vemagiri_21",
+              "name": "Vemagiri",
+              "pincode": "531060"
+            },
+            {
+              "id": "vlg_srayavaram_vommavaram_22",
               "name": "Vommavaram",
               "pincode": "531060"
             }
@@ -1139,33 +3604,78 @@
           "name": "Narsipatnam",
           "villages": [
             {
-              "id": "vlg_nsp_town",
-              "name": "Narsipatnam Town",
+              "id": "vlg_narsipatnam_amalapuram_1",
+              "name": "Amalapuram",
               "pincode": "531116"
             },
             {
-              "id": "vlg_nsp_balighattam",
-              "name": "Balighattam",
+              "id": "vlg_narsipatnam_balighattam__brahmalinge_2",
+              "name": "Balighattam (Brahmalingeswara Swamy)",
               "pincode": "531116"
             },
             {
-              "id": "vlg_nsp_pedaboddepalli",
-              "name": "Pedaboddepalli",
+              "id": "vlg_narsipatnam_chettupalle_3",
+              "name": "Chettupalle",
               "pincode": "531116"
             },
             {
-              "id": "vlg_nsp_vemulapudi",
-              "name": "Vemulapudi",
+              "id": "vlg_narsipatnam_dharmasagaram_4",
+              "name": "Dharmasagaram",
               "pincode": "531116"
             },
             {
-              "id": "vlg_nsp_duggada",
+              "id": "vlg_narsipatnam_duggada_5",
               "name": "Duggada",
               "pincode": "531116"
             },
             {
-              "id": "vlg_nsp_lingatheeru",
+              "id": "vlg_narsipatnam_gabbada_6",
+              "name": "Gabbada",
+              "pincode": "531116"
+            },
+            {
+              "id": "vlg_narsipatnam_guramdorapalem_7",
+              "name": "Guramdorapalem",
+              "pincode": "531116"
+            },
+            {
+              "id": "vlg_narsipatnam_lingatheeru_8",
               "name": "Lingatheeru",
+              "pincode": "531116"
+            },
+            {
+              "id": "vlg_narsipatnam_narsipatnam_town_9",
+              "name": "Narsipatnam Town",
+              "pincode": "531116"
+            },
+            {
+              "id": "vlg_narsipatnam_neelampeta_10",
+              "name": "Neelampeta",
+              "pincode": "531116"
+            },
+            {
+              "id": "vlg_narsipatnam_ordinary_laxmipuram_11",
+              "name": "Ordinary Laxmipuram",
+              "pincode": "531116"
+            },
+            {
+              "id": "vlg_narsipatnam_peda_boddepalle_12",
+              "name": "Peda Boddepalle",
+              "pincode": "531116"
+            },
+            {
+              "id": "vlg_narsipatnam_veerabhupala_patnam_13",
+              "name": "Veerabhupala Patnam",
+              "pincode": "531116"
+            },
+            {
+              "id": "vlg_narsipatnam_vemulapudi_14",
+              "name": "Vemulapudi",
+              "pincode": "531116"
+            },
+            {
+              "id": "vlg_narsipatnam_yerakannapalem_15",
+              "name": "Yerakannapalem",
               "pincode": "531116"
             }
           ]
@@ -1175,28 +3685,203 @@
           "name": "Golugonda",
           "villages": [
             {
-              "id": "vlg_glg_golugonda",
-              "name": "Golugonda",
+              "id": "vlg_golugonda_agency_laxmipuram_1",
+              "name": "Agency Laxmipuram",
               "pincode": "531117"
             },
             {
-              "id": "vlg_glg_cheedigummala",
+              "id": "vlg_golugonda_ammapeta_2",
+              "name": "Ammapeta",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_cheedigummala_3",
               "name": "Cheedigummala",
               "pincode": "531117"
             },
             {
-              "id": "vlg_glg_kothagudem",
-              "name": "Kothagudem",
+              "id": "vlg_golugonda_cheedikada_4",
+              "name": "Cheedikada",
               "pincode": "531117"
             },
             {
-              "id": "vlg_glg_pakalapadu",
+              "id": "vlg_golugonda_chinnayyapalem_5",
+              "name": "Chinnayyapalem",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_chodyam_6",
+              "name": "Chodyam",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_gadampalem_7",
+              "name": "Gadampalem",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_golugonda_8",
+              "name": "Golugonda",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_gopalapatnam_9",
+              "name": "Gopalapatnam",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_gundupala_10",
+              "name": "Gundupala",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_jammadevipeta_11",
+              "name": "Jammadevipeta",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_jammavaram_12",
+              "name": "Jammavaram",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_jogampeta_13",
+              "name": "Jogampeta",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_k_d__peta__krishnadevipe_14",
+              "name": "K.D. Peta (Krishnadevipeta)",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_kantaram_15",
+              "name": "Kantaram",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_karaka_16",
+              "name": "Karaka",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_kasimi_17",
+              "name": "Kasimi",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_komira_18",
+              "name": "Komira",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_konkasingi_19",
+              "name": "Konkasingi",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_kotha_yellavaram_20",
+              "name": "Kotha Yellavaram",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_kothamallempeta_21",
+              "name": "Kothamallempeta",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_kothapalem_22",
+              "name": "Kothapalem",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_kumarapuram_23",
+              "name": "Kumarapuram",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_lingamdora_palem_24",
+              "name": "Lingamdora Palem",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_lingampeta_25",
+              "name": "Lingampeta",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_mungerlapalem_26",
+              "name": "Mungerlapalem",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_nagannadorapalem_27",
+              "name": "Nagannadorapalem",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_nallanki_28",
+              "name": "Nallanki",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_nathavaram_road_29",
+              "name": "Nathavaram Road",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_pakalapadu_30",
               "name": "Pakalapadu",
               "pincode": "531117"
             },
             {
-              "id": "vlg_glg_nathavaramroad",
-              "name": "Nathavaram Road",
+              "id": "vlg_golugonda_pallapu_nagannadora_pale_31",
+              "name": "Pallapu Nagannadora Palem",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_pappusettipalem_32",
+              "name": "Pappusettipalem",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_pathamallempeta_33",
+              "name": "Pathamallempeta",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_pogachetlapalem_34",
+              "name": "Pogachetlapalem",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_polavaram_35",
+              "name": "Polavaram",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_seethakandi_36",
+              "name": "Seethakandi",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_thallacheedikada_37",
+              "name": "Thallacheedikada",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_vadaparthi_38",
+              "name": "Vadaparthi",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_yarakampeta_39",
+              "name": "Yarakampeta",
+              "pincode": "531117"
+            },
+            {
+              "id": "vlg_golugonda_yarravaram_40",
+              "name": "Yarravaram",
               "pincode": "531117"
             }
           ]
@@ -1206,28 +3891,138 @@
           "name": "Makavarapalem",
           "villages": [
             {
-              "id": "vlg_mkv_makavarapalem",
-              "name": "Makavarapalem",
+              "id": "vlg_makavarapalem_appandorapalem_1",
+              "name": "Appandorapalem",
               "pincode": "531113"
             },
             {
-              "id": "vlg_mkv_tamaram",
-              "name": "Tamaram",
+              "id": "vlg_makavarapalem_bayyavaram_2",
+              "name": "Bayyavaram",
               "pincode": "531113"
             },
             {
-              "id": "vlg_mkv_bheemannadorapalem",
+              "id": "vlg_makavarapalem_bheemaboina_palem_3",
+              "name": "Bheemaboina Palem",
+              "pincode": "531113"
+            },
+            {
+              "id": "vlg_makavarapalem_bheemannadorapalem_4",
               "name": "Bheemannadorapalem",
               "pincode": "531113"
             },
             {
-              "id": "vlg_mkv_settypalem",
+              "id": "vlg_makavarapalem_burugupalem_5",
+              "name": "Burugupalem",
+              "pincode": "531113"
+            },
+            {
+              "id": "vlg_makavarapalem_g__koduru_6",
+              "name": "G. Koduru",
+              "pincode": "531113"
+            },
+            {
+              "id": "vlg_makavarapalem_gangavaram_7",
+              "name": "Gangavaram",
+              "pincode": "531113"
+            },
+            {
+              "id": "vlg_makavarapalem_giduthuru_8",
+              "name": "Giduthuru",
+              "pincode": "531113"
+            },
+            {
+              "id": "vlg_makavarapalem_harappa_agraharam_9",
+              "name": "Harappa Agraharam",
+              "pincode": "531113"
+            },
+            {
+              "id": "vlg_makavarapalem_jangalapalle_10",
+              "name": "Jangalapalle",
+              "pincode": "531113"
+            },
+            {
+              "id": "vlg_makavarapalem_koduru_11",
+              "name": "Koduru",
+              "pincode": "531113"
+            },
+            {
+              "id": "vlg_makavarapalem_kondala_agraharam_12",
+              "name": "Kondala Agraharam",
+              "pincode": "531113"
+            },
+            {
+              "id": "vlg_makavarapalem_makavarapalem_13",
+              "name": "Makavarapalem",
+              "pincode": "531113"
+            },
+            {
+              "id": "vlg_makavarapalem_mallavaram_14",
+              "name": "Mallavaram",
+              "pincode": "531113"
+            },
+            {
+              "id": "vlg_makavarapalem_narayana_gajapathirajapu_15",
+              "name": "Narayana Gajapathirajapuram Agraharam",
+              "pincode": "531113"
+            },
+            {
+              "id": "vlg_makavarapalem_peddipalem_16",
+              "name": "Peddipalem",
+              "pincode": "531113"
+            },
+            {
+              "id": "vlg_makavarapalem_pochinapeddi_agraharam_17",
+              "name": "Pochinapeddi Agraharam",
+              "pincode": "531113"
+            },
+            {
+              "id": "vlg_makavarapalem_pydipala_18",
+              "name": "Pydipala",
+              "pincode": "531113"
+            },
+            {
+              "id": "vlg_makavarapalem_rachapalle_19",
+              "name": "Rachapalle",
+              "pincode": "531113"
+            },
+            {
+              "id": "vlg_makavarapalem_seethanna_agraharam_20",
+              "name": "Seethanna Agraharam",
+              "pincode": "531113"
+            },
+            {
+              "id": "vlg_makavarapalem_settypalem_21",
               "name": "Settypalem",
               "pincode": "531113"
             },
             {
-              "id": "vlg_mkv_gkoduru",
-              "name": "G. Koduru",
+              "id": "vlg_makavarapalem_tadapala_22",
+              "name": "Tadapala",
+              "pincode": "531113"
+            },
+            {
+              "id": "vlg_makavarapalem_tamaram_23",
+              "name": "Tamaram",
+              "pincode": "531113"
+            },
+            {
+              "id": "vlg_makavarapalem_tootipala_24",
+              "name": "Tootipala",
+              "pincode": "531113"
+            },
+            {
+              "id": "vlg_makavarapalem_vajragada_25",
+              "name": "Vajragada",
+              "pincode": "531113"
+            },
+            {
+              "id": "vlg_makavarapalem_venkannapalem_26",
+              "name": "Venkannapalem",
+              "pincode": "531113"
+            },
+            {
+              "id": "vlg_makavarapalem_zamindari_gangavaram_27",
+              "name": "Zamindari Gangavaram",
               "pincode": "531113"
             }
           ]
@@ -1237,28 +4032,218 @@
           "name": "Nathavaram",
           "villages": [
             {
-              "id": "vlg_ntv_nathavaram",
-              "name": "Nathavaram",
+              "id": "vlg_nathavaram_adivikamayya_agraharam_1",
+              "name": "Adivikamayya Agraharam",
               "pincode": "531115"
             },
             {
-              "id": "vlg_ntv_sarabhavaram",
-              "name": "Sarabhavaram",
+              "id": "vlg_nathavaram_anantha_padmanabhapuram_2",
+              "name": "Anantha Padmanabhapuram",
               "pincode": "531115"
             },
             {
-              "id": "vlg_ntv_gunnempudi",
+              "id": "vlg_nathavaram_buradapalle_agraharam_3",
+              "name": "Buradapalle Agraharam",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_chammachinta_4",
+              "name": "Chammachinta",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_cherlopalem_5",
+              "name": "Cherlopalem",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_china_jaggampeta_6",
+              "name": "China Jaggampeta",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_chollangipalem_7",
+              "name": "Chollangipalem",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_dharmavaram_agraharam_8",
+              "name": "Dharmavaram Agraharam",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_donkada_agraharam_9",
+              "name": "Donkada Agraharam",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_gannavaram_10",
+              "name": "Gannavaram",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_golugondapeta_11",
+              "name": "Golugondapeta",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_gummidigonda_12",
+              "name": "Gummidigonda",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_gunnempudi_13",
               "name": "Gunnempudi",
               "pincode": "531115"
             },
             {
-              "id": "vlg_ntv_kuruvada",
+              "id": "vlg_nathavaram_gunupudi_14",
+              "name": "Gunupudi",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_kalavavoddu_sarabhavaram_15",
+              "name": "Kalavavoddu Sarabhavaram",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_kesavaram_agraharam_16",
+              "name": "Kesavaram Agraharam",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_kodavatipudi_agraharam_17",
+              "name": "Kodavatipudi Agraharam",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_krishnapura_agraharam_18",
+              "name": "Krishnapura Agraharam",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_kuruvada_19",
               "name": "Kuruvada",
               "pincode": "531115"
             },
             {
-              "id": "vlg_ntv_yellavaram",
+              "id": "vlg_nathavaram_mallubhupala_patnam_20",
+              "name": "Mallubhupala Patnam",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_manyapuratla_21",
+              "name": "Manyapuratla",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_mulagapudi_bennavaram_22",
+              "name": "Mulagapudi Bennavaram",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_nathavaram_23",
+              "name": "Nathavaram",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_pedabhairavabhoopati_agr_24",
+              "name": "Pedabhairavabhoopati Agraharam",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_pedajaggampeta_25",
+              "name": "Pedajaggampeta",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_pichchiganti_kothagudam_26",
+              "name": "Pichchiganti Kothagudam",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_pottinagannadora_palem_27",
+              "name": "Pottinagannadora Palem",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_rajupeta_agraharam_28",
+              "name": "Rajupeta Agraharam",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_ramachandraraju_agrahara_29",
+              "name": "Ramachandraraju Agraharam",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_sarabhoopala_patnam_30",
+              "name": "Sarabhoopala Patnam",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_sarabhoopati_agraharam_31",
+              "name": "Sarabhoopati Agraharam",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_sarabhavaram_32",
+              "name": "Sarabhavaram",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_sarugudu_33",
+              "name": "Sarugudu",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_srungavaram_34",
+              "name": "Srungavaram",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_valasampeta_35",
+              "name": "Valasampeta",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_vedurupalle_36",
+              "name": "Vedurupalle",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_veerabhupati_agraharam_37",
+              "name": "Veerabhupati Agraharam",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_vootamalla_38",
+              "name": "Vootamalla",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_yellavaram_39",
               "name": "Yellavaram",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_yellavaram_dondapeta_40",
+              "name": "Yellavaram Dondapeta",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_yerakabhoopati_agraharam_41",
+              "name": "Yerakabhoopati Agraharam",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_yerakampeta_42",
+              "name": "Yerakampeta",
+              "pincode": "531115"
+            },
+            {
+              "id": "vlg_nathavaram_zilledipudi_43",
+              "name": "Zilledipudi",
               "pincode": "531115"
             }
           ]
@@ -1268,28 +4253,183 @@
           "name": "Ravikamatham",
           "villages": [
             {
-              "id": "vlg_rvk_ravikamatham",
-              "name": "Ravikamatham",
+              "id": "vlg_ravikamatham_badanapadu_1",
+              "name": "Badanapadu",
               "pincode": "531025"
             },
             {
-              "id": "vlg_rvk_komira",
+              "id": "vlg_ravikamatham_buddibanda_2",
+              "name": "Buddibanda",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_chalisingam___demudukond_3",
+              "name": "Chalisingam @ Demudukonda",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_cheemalapadu_4",
+              "name": "Cheemalapadu",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_chinapachila_5",
+              "name": "Chinapachila",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_dharmavaram_6",
+              "name": "Dharmavaram",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_diddi_7",
+              "name": "Diddi",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_dondapudi_8",
+              "name": "Dondapudi",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_garnikam_9",
+              "name": "Garnikam",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_gogamcheedipalle_10",
+              "name": "Gogamcheedipalle",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_gompa_11",
+              "name": "Gompa",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_guddipa_12",
+              "name": "Guddipa",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_gudiwada_13",
+              "name": "Gudiwada",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_gummallapadu_14",
+              "name": "Gummallapadu",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_kanada_15",
+              "name": "Kanada",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_kavagunta_16",
+              "name": "Kavagunta",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_komira_17",
               "name": "Komira",
               "pincode": "531025"
             },
             {
-              "id": "vlg_rvk_zbennavolu",
-              "name": "Z. Bennavolu",
+              "id": "vlg_ravikamatham_kothakota_18",
+              "name": "Kothakota",
               "pincode": "531025"
             },
             {
-              "id": "vlg_rvk_medivada",
+              "id": "vlg_ravikamatham_kotnabilli_19",
+              "name": "Kotnabilli",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_krishnabhupala_puram_agr_20",
+              "name": "Krishnabhupala Puram Agraharam",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_machchavanipalem_21",
+              "name": "Machchavanipalem",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_marrivalasa_22",
+              "name": "Marrivalasa",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_marupaka_23",
+              "name": "Marupaka",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_matsyapuram_24",
+              "name": "Matsyapuram",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_medivada_25",
               "name": "Medivada",
               "pincode": "531025"
             },
             {
-              "id": "vlg_rvk_marrivalasa",
-              "name": "Marrivalasa",
+              "id": "vlg_ravikamatham_pasuvulabanda_26",
+              "name": "Pasuvulabanda",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_pedapachila_27",
+              "name": "Pedapachila",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_pulakandam_ponavolu_28",
+              "name": "Pulakandam Ponavolu",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_ravikamatham_29",
+              "name": "Ravikamatham",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_t__arjapuram_30",
+              "name": "T. Arjapuram",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_tattabanda_31",
+              "name": "Tattabanda",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_totakurapalem_32",
+              "name": "Totakurapalem",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_z__bennavaram_33",
+              "name": "Z. Bennavaram",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_z__bennavolu_34",
+              "name": "Z. Bennavolu",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_z__kothapatnam_35",
+              "name": "Z. Kothapatnam",
+              "pincode": "531025"
+            },
+            {
+              "id": "vlg_ravikamatham_zeelugulova_36",
+              "name": "Zeelugulova",
               "pincode": "531025"
             }
           ]
@@ -1299,28 +4439,163 @@
           "name": "Rolugunta",
           "villages": [
             {
-              "id": "vlg_rlg_rolugunta",
-              "name": "Rolugunta",
+              "id": "vlg_rolugunta_addasaram_1",
+              "name": "Addasaram",
               "pincode": "531114"
             },
             {
-              "id": "vlg_rlg_komaravolu",
-              "name": "Komaravolu",
+              "id": "vlg_rolugunta_arla_2",
+              "name": "Arla",
               "pincode": "531114"
             },
             {
-              "id": "vlg_rlg_jaggampeta",
-              "name": "Jaggampeta",
+              "id": "vlg_rolugunta_benna_bhupala_patnam_3",
+              "name": "Benna Bhupala Patnam",
               "pincode": "531114"
             },
             {
-              "id": "vlg_rlg_bennavaram",
+              "id": "vlg_rolugunta_bennavaram_4",
               "name": "Bennavaram",
               "pincode": "531114"
             },
             {
-              "id": "vlg_rlg_kusalapuram",
+              "id": "vlg_rolugunta_bottavanigaviram_peta_5",
+              "name": "Bottavanigaviram Peta",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_butchampeta_6",
+              "name": "Butchampeta",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_chintalapudi_7",
+              "name": "Chintalapudi",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_gangavaram_8",
+              "name": "Gangavaram",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_gundubadu_9",
+              "name": "Gundubadu",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_gurrampeta_10",
+              "name": "Gurrampeta",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_jaggampeta_11",
+              "name": "Jaggampeta",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_janakirampuram_agraharam_12",
+              "name": "Janakirampuram Agraharam",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_kanchugummala_13",
+              "name": "Kanchugummala",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_komaravolu_14",
+              "name": "Komaravolu",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_kondapalem_15",
+              "name": "Kondapalem",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_konthalam_16",
+              "name": "Konthalam",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_koruprolu_17",
+              "name": "Koruprolu",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_kovvuru_18",
+              "name": "Kovvuru",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_kusalapuram_19",
               "name": "Kusalapuram",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_kusarlapudi_20",
+              "name": "Kusarlapudi",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_losingi_21",
+              "name": "Losingi",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_mokhasa_kothapatnam_22",
+              "name": "Mokhasa Kothapatnam",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_nindugonda_23",
+              "name": "Nindugonda",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_panasalapadu_24",
+              "name": "Panasalapadu",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_pedapeta_25",
+              "name": "Pedapeta",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_rajannapeta_26",
+              "name": "Rajannapeta",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_ratnampeta_27",
+              "name": "Ratnampeta",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_rolugunta_28",
+              "name": "Rolugunta",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_sarabavaram_29",
+              "name": "Sarabavaram",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_vaddippa_30",
+              "name": "Vaddippa",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_vedullavalasa_31",
+              "name": "Vedullavalasa",
+              "pincode": "531114"
+            },
+            {
+              "id": "vlg_rolugunta_yerrabhupalapatnam_32",
+              "name": "Yerrabhupalapatnam",
               "pincode": "531114"
             }
           ]
