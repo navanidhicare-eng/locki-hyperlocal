@@ -60,10 +60,18 @@ class _PartnerHomeScreenState extends State<PartnerHomeScreen> {
   void _initData() async {
     setState(() => _loading = true);
     if (!_api.isLoggedIn) {
-      await _api.loginPartner(phone: '9876522222', password: 'provider123');
-    } else {
-      await _api.fetchProfile();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => const PartnerAuthScreen()),
+            (route) => false,
+          );
+        }
+      });
+      return;
     }
+    await _api.fetchProfile();
     final list = await _api.fetchPartnerOrders();
     final profileCancelled = (_api.profile?['cancelledJobs'] as num?)?.toInt() ?? 1;
     setState(() {

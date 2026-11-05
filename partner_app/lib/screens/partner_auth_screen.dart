@@ -18,8 +18,8 @@ class _PartnerAuthScreenState extends State<PartnerAuthScreen> {
   bool _obscurePassword = true;
 
   // Controllers for Login
-  final TextEditingController _loginPhoneController = TextEditingController(text: '9876522222');
-  final TextEditingController _loginPasswordController = TextEditingController(text: 'provider123');
+  final TextEditingController _loginPhoneController = TextEditingController();
+  final TextEditingController _loginPasswordController = TextEditingController();
 
   // Controllers for Register
   final TextEditingController _regNameController = TextEditingController();
@@ -373,37 +373,7 @@ class _PartnerAuthScreenState extends State<PartnerAuthScreen> {
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, letterSpacing: 0.5),
                 ),
         ),
-        const SizedBox(height: 18),
-
-        // Quick demo credentials shortcut
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: const Color(0xFFFFFBEB),
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: const Color(0xFFFDE68A)),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Demo Verified Partner Accounts:',
-                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFFB45309)),
-              ),
-              const SizedBox(height: 6),
-              Wrap(
-                spacing: 6,
-                runSpacing: 6,
-                children: [
-                  _buildDemoChip('Ramesh (Plumbing)', '9876522222', 'provider123'),
-                  _buildDemoChip('Suresh (Electric)', '9876533333', 'provider123'),
-                  _buildDemoChip('Rajesh (Delivery)', '9876544444', 'provider123'),
-                ],
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
 
         // Switch to Register
         Center(
@@ -576,31 +546,6 @@ class _PartnerAuthScreenState extends State<PartnerAuthScreen> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildDemoChip(String label, String phone, String pass) {
-    return InkWell(
-      onTap: () {
-        setState(() {
-          _isLogin = true;
-          _loginPhoneController.text = phone;
-          _loginPasswordController.text = pass;
-        });
-      },
-      borderRadius: BorderRadius.circular(6),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(6),
-          border: Border.all(color: const Color(0xFFFCD34D)),
-        ),
-        child: Text(
-          label,
-          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Color(0xFFB45309)),
-        ),
-      ),
     );
   }
 }
