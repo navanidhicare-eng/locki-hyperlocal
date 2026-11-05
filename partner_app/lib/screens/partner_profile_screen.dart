@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:js' as js;
 import 'package:flutter/material.dart';
 import '../core/constants.dart';
 import '../core/anakapalli_locations.dart';
@@ -66,6 +68,17 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
 
   // 7. Payout Controller
   late TextEditingController _upiController;
+
+  // Uploaded Compressed Image Data (Base64) & Size Tracker
+  String? _livePhotoBase64;
+  String? _shopFrontPhotoBase64;
+  String? _shopInsidePhotoBase64;
+  String? _aadhaarFrontBase64;
+  String? _aadhaarBackBase64;
+  String? _panCardBase64;
+  String? _drivingLicenseBase64;
+  String? _skillCertificateBase64;
+  final Map<String, int> _uploadedFileSizes = {};
 
   // Document Upload States
   bool _aadhaarFrontUploaded = false;
@@ -414,23 +427,24 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
       'shopLandmark': _hasPhysicalShop ? _selectedShopVillage : '',
       'shopAddress': _hasPhysicalShop ? '${_shopDoorStreetController.text.trim()}, $_selectedShopVillage, $_selectedShopMandal, $_selectedShopDistrict' : '',
       'shopGstNumber': _hasPhysicalShop ? _shopGstController.text.trim() : '',
-      'shopFrontPhotoUrl': _hasPhysicalShop && _shopFrontPhotoUploaded ? 'shop_front_photo.jpg' : null,
-      'shopInsidePhotoUrl': _hasPhysicalShop && _shopInsidePhotoUploaded ? 'shop_inside_photo.jpg' : null,
+      'shopFrontPhotoUrl': _hasPhysicalShop ? (_shopFrontPhotoBase64 ?? (_shopFrontPhotoUploaded ? 'shop_front_photo.jpg' : null)) : null,
+      'shopInsidePhotoUrl': _hasPhysicalShop ? (_shopInsidePhotoBase64 ?? (_shopInsidePhotoUploaded ? 'shop_inside_photo.jpg' : null)) : null,
       'category': _selectedCategory,
       'serviceName': _serviceNameController.text.trim(),
       'experience': _selectedExperience,
       'workingHours': _selectedWorkingHours,
       'serviceRadius': _selectedServiceRadius,
       'aadhaarNumber': _aadhaarController.text.trim(),
-      'aadhaarFrontUrl': 'verified_aadhaar_front.jpg',
-      'aadhaarBackUrl': 'verified_aadhaar_back.jpg',
+      'aadhaarFrontUrl': _aadhaarFrontBase64 ?? (_aadhaarFrontUploaded ? 'verified_aadhaar_front.jpg' : null),
+      'aadhaarBackUrl': _aadhaarBackBase64 ?? (_aadhaarBackUploaded ? 'verified_aadhaar_back.jpg' : null),
       'panNumber': _panNumberController.text.trim(),
-      'panCardUrl': 'verified_pan_card.jpg',
+      'panCardUrl': _panCardBase64 ?? (_panCardUploaded ? 'verified_pan_card.jpg' : null),
       'drivingLicenseNumber': _drivingLicenseController.text.trim(),
-      'drivingLicenseUrl': 'verified_driving_license.jpg',
+      'drivingLicenseUrl': _drivingLicenseBase64 ?? (_drivingLicenseUploaded ? 'verified_driving_license.jpg' : null),
       'skillCertificates': _skillCertificatesController.text.trim(),
-      'skillCertificatesUrl': 'verified_trade_certificate.pdf',
-      'livePhotoVerificationStatus': 'Verified',
+      'skillCertificatesUrl': _skillCertificateBase64 ?? (_skillCertificateUploaded ? 'verified_trade_certificate.pdf' : null),
+      'livePhotoVerificationStatus': _livePhotoVerified ? 'Verified' : 'Pending',
+      'livePhotoUrl': _livePhotoBase64,
       'guarantorName': _guarantorNameController.text.trim(),
       'guarantorRelation': _guarantorRelationController.text.trim(),
       'guarantorPhone': _guarantorPhoneController.text.trim(),
@@ -504,48 +518,182 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
     }
   }
 
-  void _showMockUploadDialog(String documentName, VoidCallback onUploaded) {
-    showDialog(
+  // Bottom Sheet to choose Camera or Gallery with HTML Canvas Auto-Compression
+  void _openMediaSourceSelector({
+    required String title,
+    bool isSelfie = false,
+    required Function(String dataUrl, int sizeKb, String fileName) onCaptured,
+  }) {
+    showModalBottomSheet(
       context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Row(
-          children: [
-            const Icon(Icons.cloud_upload_outlined, color: PartnerConstants.primary),
-            const SizedBox(width: 8),
-            Expanded(child: Text(documentName, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold))),
-          ],
-        ),
-        content: Text(
-          'Select or capture clear photo of $documentName for automated OCR and admin KYC approval.',
-          style: const TextStyle(fontSize: 13, color: Color(0xFF64748B)),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('CANCEL', style: TextStyle(color: Color(0xFF64748B))),
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: PartnerConstants.primary.withOpacity(0.12),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Icon(Icons.add_a_photo_rounded, color: PartnerConstants.primary, size: 20),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        'Upload: $title',
+                        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF192338)),
+                      ),
+                    ],
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, size: 20, color: Color(0xFF64748B)),
+                    onPressed: () => Navigator.pop(ctx),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 6),
+              const Text(
+                'Capture live with camera or choose from gallery. Images are automatically compressed to HTML format for high speed.',
+                style: TextStyle(fontSize: 12, color: Color(0xFF64748B)),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  // Option 1: Camera
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pop(ctx);
+                        _triggerJsImagePicker(
+                          sourceType: isSelfie ? 'selfie' : 'camera',
+                          onSuccess: onCaptured,
+                        );
+                      },
+                      borderRadius: BorderRadius.circular(16),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFF2ED),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: const Color(0xFFFFCCBA)),
+                        ),
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: const BoxDecoration(
+                                color: PartnerConstants.primary,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(Icons.camera_alt_rounded, color: Colors.white, size: 24),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              isSelfie ? 'Take Live Selfie' : 'Camera Photo',
+                              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xFF192338)),
+                            ),
+                            const SizedBox(height: 2),
+                            const Text('Open device camera', style: TextStyle(fontSize: 10, color: Color(0xFF64748B))),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+
+                  // Option 2: Gallery / Files
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pop(ctx);
+                        _triggerJsImagePicker(
+                          sourceType: 'gallery',
+                          onSuccess: onCaptured,
+                        );
+                      },
+                      borderRadius: BorderRadius.circular(16),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF1F5F9),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: const Color(0xFFCBD5E1)),
+                        ),
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: const BoxDecoration(
+                                color: Color(0xFF475569),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(Icons.photo_library_rounded, color: Colors.white, size: 24),
+                            ),
+                            const SizedBox(height: 10),
+                            const Text(
+                              'Gallery / Files',
+                              style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xFF192338)),
+                            ),
+                            const SizedBox(height: 2),
+                            const Text('Select photo or PDF', style: TextStyle(fontSize: 10, color: Color(0xFF64748B))),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+            ],
           ),
-          ElevatedButton.icon(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: PartnerConstants.primary,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            ),
-            onPressed: () {
-              Navigator.pop(ctx);
-              onUploaded();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('$documentName uploaded successfully!'), backgroundColor: Colors.green),
-              );
-            },
-            icon: const Icon(Icons.check, size: 16, color: Colors.white),
-            label: const Text('ATTACH FILE', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          ),
-        ],
+        ),
       ),
     );
   }
 
-  @override
+  void _triggerJsImagePicker({
+    required String sourceType,
+    required Function(String dataUrl, int sizeKb, String fileName) onSuccess,
+  }) {
+    try {
+      js.context.callMethod('lokiPickAndCompressImage', [
+        sourceType,
+        js.allowInterop((resultStr) {
+          try {
+            final res = jsonDecode(resultStr.toString());
+            if (res['success'] == true && res['dataUrl'] != null) {
+              final dataUrl = res['dataUrl'].toString();
+              final sizeKb = (res['fileSizeKb'] as num?)?.toInt() ?? 100;
+              final fileName = res['fileName']?.toString() ?? 'photo.jpg';
+              onSuccess(dataUrl, sizeKb, fileName);
+            } else if (res['cancelled'] != true && res['message'] != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Upload failed: ${res['message']}'), backgroundColor: Colors.red),
+              );
+            }
+          } catch (e) {
+            debugPrint('Error parsing upload callback: $e');
+          }
+        })
+      ]);
+    } catch (e) {
+      debugPrint('Error triggering JS image picker: $e');
+    }
+  }
+
+    @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: PartnerConstants.backgroundLight,
@@ -583,19 +731,39 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
                       CircleAvatar(
                         radius: 46,
                         backgroundColor: PartnerConstants.primary.withOpacity(0.12),
-                        child: const Icon(Icons.person, size: 56, color: PartnerConstants.primary),
+                        backgroundImage: (_livePhotoBase64 != null && _livePhotoBase64!.contains(','))
+                            ? MemoryImage(base64Decode(_livePhotoBase64!.split(',').last))
+                            : null,
+                        child: (_livePhotoBase64 == null)
+                            ? const Icon(Icons.person, size: 56, color: PartnerConstants.primary)
+                            : null,
                       ),
                       Positioned(
                         bottom: 0,
                         right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(7),
-                          decoration: BoxDecoration(
-                            color: PartnerConstants.primary,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 2),
+                        child: GestureDetector(
+                          onTap: () => _openMediaSourceSelector(
+                            title: 'Live Selfie Verification',
+                            isSelfie: true,
+                            onCaptured: (dataUrl, sizeKb, fileName) {
+                              setState(() {
+                                _livePhotoBase64 = dataUrl;
+                                _livePhotoVerified = true;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Live selfie captured & compressed (${sizeKb} KB)!'), backgroundColor: Colors.green),
+                              );
+                            },
                           ),
-                          child: const Icon(Icons.camera_alt_rounded, size: 15, color: Colors.white),
+                          child: Container(
+                            padding: const EdgeInsets.all(7),
+                            decoration: BoxDecoration(
+                              color: PartnerConstants.primary,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 2),
+                            ),
+                            child: const Icon(Icons.camera_alt_rounded, size: 15, color: Colors.white),
+                          ),
                         ),
                       ),
                     ],
@@ -654,12 +822,19 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
                           ),
                         ),
                         TextButton(
-                          onPressed: () {
-                            setState(() => _livePhotoVerified = true);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Live photo selfie captured and verified!'), backgroundColor: Colors.green),
-                            );
-                          },
+                          onPressed: () => _openMediaSourceSelector(
+                            title: 'Live Selfie Verification',
+                            isSelfie: true,
+                            onCaptured: (dataUrl, sizeKb, fileName) {
+                              setState(() {
+                                _livePhotoBase64 = dataUrl;
+                                _livePhotoVerified = true;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Live selfie captured & compressed (${sizeKb} KB)!'), backgroundColor: Colors.green),
+                              );
+                            },
+                          ),
                           style: TextButton.styleFrom(
                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                             minimumSize: Size.zero,
@@ -1015,17 +1190,37 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
                         _buildDocUploadCard(
                           title: 'Shop Front / Nameboard Photo',
                           isUploaded: _shopFrontPhotoUploaded,
-                          onUpload: () => _showMockUploadDialog('Shop Front / Nameboard Photo', () {
-                            setState(() => _shopFrontPhotoUploaded = true);
-                          }),
+                          onUpload: () => _openMediaSourceSelector(
+                            title: 'Shop Front / Nameboard Photo',
+                            onCaptured: (dataUrl, sizeKb, fileName) {
+                              setState(() {
+                                _shopFrontPhotoBase64 = dataUrl;
+                                _shopFrontPhotoUploaded = true;
+                                _uploadedFileSizes['Shop Front / Nameboard Photo'] = sizeKb;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Shop front photo attached (${sizeKb} KB)!'), backgroundColor: Colors.green),
+                              );
+                            },
+                          ),
                         ),
                         const SizedBox(height: 10),
                         _buildDocUploadCard(
                           title: 'Shop Inside / Work Area Photo',
                           isUploaded: _shopInsidePhotoUploaded,
-                          onUpload: () => _showMockUploadDialog('Shop Inside / Work Area Photo', () {
-                            setState(() => _shopInsidePhotoUploaded = true);
-                          }),
+                          onUpload: () => _openMediaSourceSelector(
+                            title: 'Shop Inside / Work Area Photo',
+                            onCaptured: (dataUrl, sizeKb, fileName) {
+                              setState(() {
+                                _shopInsidePhotoBase64 = dataUrl;
+                                _shopInsidePhotoUploaded = true;
+                                _uploadedFileSizes['Shop Inside / Work Area Photo'] = sizeKb;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Shop inside photo attached (${sizeKb} KB)!'), backgroundColor: Colors.green),
+                              );
+                            },
+                          ),
                         ),
                       ],
                     ),
@@ -1136,9 +1331,19 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
                       child: _buildDocUploadCard(
                         title: 'Aadhaar Front Side',
                         isUploaded: _aadhaarFrontUploaded,
-                        onUpload: () => _showMockUploadDialog('Aadhaar Front Side', () {
-                          setState(() => _aadhaarFrontUploaded = true);
-                        }),
+                        onUpload: () => _openMediaSourceSelector(
+                          title: 'Aadhaar Front Side',
+                          onCaptured: (dataUrl, sizeKb, fileName) {
+                            setState(() {
+                              _aadhaarFrontBase64 = dataUrl;
+                              _aadhaarFrontUploaded = true;
+                              _uploadedFileSizes['Aadhaar Front Side'] = sizeKb;
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Aadhaar front attached (${sizeKb} KB)!'), backgroundColor: Colors.green),
+                            );
+                          },
+                        ),
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -1146,9 +1351,19 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
                       child: _buildDocUploadCard(
                         title: 'Aadhaar Back Side',
                         isUploaded: _aadhaarBackUploaded,
-                        onUpload: () => _showMockUploadDialog('Aadhaar Back Side', () {
-                          setState(() => _aadhaarBackUploaded = true);
-                        }),
+                        onUpload: () => _openMediaSourceSelector(
+                          title: 'Aadhaar Back Side',
+                          onCaptured: (dataUrl, sizeKb, fileName) {
+                            setState(() {
+                              _aadhaarBackBase64 = dataUrl;
+                              _aadhaarBackUploaded = true;
+                              _uploadedFileSizes['Aadhaar Back Side'] = sizeKb;
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Aadhaar back attached (${sizeKb} KB)!'), backgroundColor: Colors.green),
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ],
@@ -1162,9 +1377,19 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
                 _buildDocUploadCard(
                   title: 'PAN Card Photo Document',
                   isUploaded: _panCardUploaded,
-                  onUpload: () => _showMockUploadDialog('PAN Card Photo Document', () {
-                    setState(() => _panCardUploaded = true);
-                  }),
+                  onUpload: () => _openMediaSourceSelector(
+                    title: 'PAN Card Photo Document',
+                    onCaptured: (dataUrl, sizeKb, fileName) {
+                      setState(() {
+                        _panCardBase64 = dataUrl;
+                        _panCardUploaded = true;
+                        _uploadedFileSizes['PAN Card Photo Document'] = sizeKb;
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('PAN card photo attached (${sizeKb} KB)!'), backgroundColor: Colors.green),
+                      );
+                    },
+                  ),
                 ),
                 const SizedBox(height: 16),
 
@@ -1175,9 +1400,19 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
                 _buildDocUploadCard(
                   title: 'Driving License Document Copy',
                   isUploaded: _drivingLicenseUploaded,
-                  onUpload: () => _showMockUploadDialog('Driving License Document Copy', () {
-                    setState(() => _drivingLicenseUploaded = true);
-                  }),
+                  onUpload: () => _openMediaSourceSelector(
+                    title: 'Driving License Document Copy',
+                    onCaptured: (dataUrl, sizeKb, fileName) {
+                      setState(() {
+                        _drivingLicenseBase64 = dataUrl;
+                        _drivingLicenseUploaded = true;
+                        _uploadedFileSizes['Driving License Document Copy'] = sizeKb;
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Driving license attached (${sizeKb} KB)!'), backgroundColor: Colors.green),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),
@@ -1198,9 +1433,19 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
                 _buildDocUploadCard(
                   title: 'Upload Skill / Trade Certificate Proof',
                   isUploaded: _skillCertificateUploaded,
-                  onUpload: () => _showMockUploadDialog('Skill / Trade Certificate Proof', () {
-                    setState(() => _skillCertificateUploaded = true);
-                  }),
+                  onUpload: () => _openMediaSourceSelector(
+                    title: 'Skill / Trade Certificate Proof',
+                    onCaptured: (dataUrl, sizeKb, fileName) {
+                      setState(() {
+                        _skillCertificateBase64 = dataUrl;
+                        _skillCertificateUploaded = true;
+                        _uploadedFileSizes['Skill / Trade Certificate Proof'] = sizeKb;
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Skill certificate attached (${sizeKb} KB)!'), backgroundColor: Colors.green),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),
@@ -1433,7 +1678,7 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: isUploaded ? const Color(0xFF166534) : const Color(0xFF334155)),
                 ),
                 Text(
-                  isUploaded ? 'Document Attached (Verified)' : 'Upload PDF or JPG Photo',
+                  isUploaded ? (_uploadedFileSizes[title] != null ? 'Attached (${_uploadedFileSizes[title]} KB - Compressed)' : 'Document Attached (Verified)') : 'Upload PDF or JPG Photo',
                   style: TextStyle(fontSize: 10, color: isUploaded ? const Color(0xFF15803D) : const Color(0xFF64748B)),
                 ),
               ],
