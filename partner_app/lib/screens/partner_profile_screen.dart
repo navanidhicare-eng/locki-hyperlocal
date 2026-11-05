@@ -52,7 +52,7 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
   String _selectedExperience = '3 - 5 Years';
 
   // 4. Working Hours & Service Radius
-  String _selectedWorkingHours = 'Full-Time (9:00 AM - 6:00 PM)';
+  String _selectedWorkingHours = 'Full-Time';
   String _selectedServiceRadius = '10 KM (Standard Urban Coverage)';
 
   // 5. KYC Government IDs Controllers
@@ -192,10 +192,8 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
   ];
 
   final List<String> _workingHoursOptions = const [
-    'Full-Time (9:00 AM - 6:00 PM)',
-    'Part-Time (Morning: 8:00 AM - 1:00 PM)',
-    'Part-Time (Evening: 3:00 PM - 9:00 PM)',
-    'Flexible / On-Demand Hours',
+    'Full-Time',
+    'Part-Time',
   ];
 
   final List<String> _serviceRadiusOptions = const [
@@ -293,8 +291,17 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
     }
 
     // 4. Working Hours & Service Radius
-    if (profile['workingHours'] != null && _workingHoursOptions.contains(profile['workingHours'])) {
-      _selectedWorkingHours = profile['workingHours'];
+    if (profile['workingHours'] != null) {
+      final wh = profile['workingHours'].toString();
+      if (_workingHoursOptions.contains(wh)) {
+        _selectedWorkingHours = wh;
+      } else if (wh.toLowerCase().contains('part')) {
+        _selectedWorkingHours = 'Part-Time';
+      } else {
+        _selectedWorkingHours = 'Full-Time';
+      }
+    } else {
+      _selectedWorkingHours = 'Full-Time';
     }
     if (profile['serviceRadius'] != null && _serviceRadiusOptions.contains(profile['serviceRadius'])) {
       _selectedServiceRadius = profile['serviceRadius'];
@@ -1257,7 +1264,7 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
                 ),
                 const SizedBox(height: 6),
                 const Text(
-                  'Choose whether you want Full-Time dispatch (9:00 AM - 6:00 PM) or Part-Time flexible jobs.',
+                  'Choose whether you want Full-Time or Part-Time jobs.',
                   style: TextStyle(fontSize: 11, color: Color(0xFF64748B)),
                 ),
                 const SizedBox(height: 14),
