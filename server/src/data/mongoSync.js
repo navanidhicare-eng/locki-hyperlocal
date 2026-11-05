@@ -79,12 +79,20 @@ const PromotionSchema = new mongoose.Schema({
   type: String
 }, { strict: false, timestamps: true });
 
+const LocationSchema = new mongoose.Schema({
+  id: { type: String, required: true, unique: true },
+  name: String,
+  state: String,
+  mandals: Array
+}, { strict: false, timestamps: true });
+
 const CategoryModel = mongoose.models.Category || mongoose.model('Category', CategorySchema);
 const ServiceModel = mongoose.models.Service || mongoose.model('Service', ServiceSchema);
 const ProviderModel = mongoose.models.Provider || mongoose.model('Provider', ProviderSchema);
 const UserModel = mongoose.models.User || mongoose.model('User', UserSchema);
 const OrderModel = mongoose.models.Order || mongoose.model('Order', OrderSchema);
 const PromotionModel = mongoose.models.Promotion || mongoose.model('Promotion', PromotionSchema);
+const LocationModel = mongoose.models.Location || mongoose.model('Location', LocationSchema);
 
 async function syncJsonToMongo(jsonData) {
   try {
@@ -124,6 +132,15 @@ async function syncJsonToMongo(jsonData) {
       await PromotionModel.insertMany(jsonData.promotions);
     }
 
+    if (jsonData.locations && jsonData.locations.length > 0) {
+      // Upsert locations to match current district setup
+      for (const loc of jsonData.locations) {
+        await LocationModel.findOneAndUpdate({ id: loc.id }, { $set: loc }, { upsert: true, new: true });
+      }
+      // Remove any legacy Telangana locations from Atlas
+      await LocationModel.deleteMany({ id: { $nin: jsonData.locations.map(l => l.id) } });
+    }
+
     console.log('✨ MongoDB Atlas Cloud Database Synchronization Complete!');
   } catch (err) {
     console.error('Mongo sync error:', err.message);
@@ -155,6 +172,7 @@ module.exports = {
   UserModel,
   OrderModel,
   PromotionModel,
+  LocationModel,
   syncJsonToMongo,
   saveDocumentToMongo
 };

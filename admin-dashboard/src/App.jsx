@@ -104,7 +104,7 @@ export default function App() {
 
   // Form inputs for Locations
   const [districtNameInput, setDistrictNameInput] = useState('');
-  const [districtStateInput, setDistrictStateInput] = useState('Telangana');
+  const [districtStateInput, setDistrictStateInput] = useState('Andhra Pradesh');
   const [mandalNameInput, setMandalNameInput] = useState('');
   const [villageNameInput, setVillageNameInput] = useState('');
   const [villagePincodeInput, setVillagePincodeInput] = useState('');
@@ -532,7 +532,7 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: districtNameInput.trim(),
-          state: districtStateInput.trim() || 'Telangana'
+          state: districtStateInput.trim() || 'Andhra Pradesh'
         })
       });
       const data = await res.json();
@@ -2083,7 +2083,7 @@ export default function App() {
                     gap: 6
                   }}>
                     <Building2 size={15} />
-                    {selectedDistrict ? `${selectedDistrict.name} (${selectedDistrict.state || 'Telangana'})` : 'Select District'}
+                    {selectedDistrict ? `${selectedDistrict.name} (${selectedDistrict.state || 'Andhra Pradesh'})` : 'Select District'}
                   </span>
                   <ChevronRight size={15} color="var(--text-dim)" />
                   <span style={{
@@ -2197,7 +2197,7 @@ export default function App() {
                                   {dist.name}
                                 </p>
                                 <p style={{ fontSize: '0.72rem', color: isSelected ? '#DE4915' : 'var(--text-muted)' }}>
-                                  {dist.state || 'Telangana'} • {dist.mandals?.length || 0} Mandals
+                                  {dist.state || 'Andhra Pradesh'} • {dist.mandals?.length || 0} Mandals
                                 </p>
                               </div>
                             </div>
@@ -2536,7 +2536,7 @@ export default function App() {
                     {customers.length}
                   </h3>
                   <p style={{ fontSize: '0.75rem', color: '#059669', fontWeight: 600, marginTop: 8 }}>
-                    • Active App Users in Telangana
+                    • Active App Users in Andhra Pradesh
                   </p>
                 </div>
 
@@ -3833,7 +3833,7 @@ export default function App() {
                 <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>State</label>
                 <input
                   type="text"
-                  placeholder="e.g. Telangana"
+                  placeholder="e.g. Andhra Pradesh"
                   value={districtStateInput}
                   onChange={(e) => setDistrictStateInput(e.target.value)}
                   style={{ width: '100%', padding: '11px 14px', marginTop: 6, borderRadius: 8, background: '#F8FAFC', color: 'var(--text-main)', border: '1px solid #CBD5E1', outline: 'none', fontSize: '0.9rem' }}

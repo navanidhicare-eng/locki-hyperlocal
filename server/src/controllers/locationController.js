@@ -1,76 +1,11 @@
 const db = require('../data/db');
 const { v4: uuidv4 } = require('uuid');
+const { anakapalliDistrict } = require('../data/anakapalliData');
 
-// Ensure db.data.locations is initialized with standard Telangana/Andhra regional seed
+// Ensure db.data.locations is initialized with Anakapalli District, Andhra Pradesh
 const ensureLocationsInit = () => {
   if (!db.data.locations || !Array.isArray(db.data.locations) || db.data.locations.length === 0) {
-    db.data.locations = [
-      {
-        id: "dist_hyderabad",
-        name: "Hyderabad",
-        state: "Telangana",
-        mandals: [
-          {
-            id: "mnd_serilingampally",
-            name: "Serilingampally",
-            villages: [
-              { id: "vlg_madhapur", name: "Madhapur", pincode: "500081" },
-              { id: "vlg_gachibowli", name: "Gachibowli", pincode: "500032" },
-              { id: "vlg_kondapur", name: "Kondapur", pincode: "500084" }
-            ]
-          },
-          {
-            id: "mnd_khairatabad",
-            name: "Khairatabad",
-            villages: [
-              { id: "vlg_banjara_hills", name: "Banjara Hills", pincode: "500034" },
-              { id: "vlg_jubilee_hills", name: "Jubilee Hills", pincode: "500033" },
-              { id: "vlg_somajiguda", name: "Somajiguda", pincode: "500082" }
-            ]
-          }
-        ]
-      },
-      {
-        id: "dist_rangareddy",
-        name: "Rangareddy",
-        state: "Telangana",
-        mandals: [
-          {
-            id: "mnd_rajendranagar",
-            name: "Rajendranagar",
-            villages: [
-              { id: "vlg_attapur", name: "Attapur", pincode: "500048" },
-              { id: "vlg_bandlaguda", name: "Bandlaguda Jagir", pincode: "500086" },
-              { id: "vlg_narsingi", name: "Narsingi", pincode: "500075" }
-            ]
-          },
-          {
-            id: "mnd_shamshabad",
-            name: "Shamshabad",
-            villages: [
-              { id: "vlg_airport_colony", name: "Airport Colony", pincode: "501218" },
-              { id: "vlg_mamidipally", name: "Mamidipally", pincode: "500005" }
-            ]
-          }
-        ]
-      },
-      {
-        id: "dist_medchal",
-        name: "Medchal-Malkajgiri",
-        state: "Telangana",
-        mandals: [
-          {
-            id: "mnd_kukatpally",
-            name: "Kukatpally",
-            villages: [
-              { id: "vlg_kphb", name: "KPHB Colony", pincode: "500072" },
-              { id: "vlg_pragathi", name: "Pragathi Nagar", pincode: "500090" },
-              { id: "vlg_nizampet", name: "Nizampet", pincode: "500090" }
-            ]
-          }
-        ]
-      }
-    ];
+    db.data.locations = [anakapalliDistrict];
     db.save();
   }
 };
@@ -96,7 +31,7 @@ exports.createDistrict = (req, res) => {
   const newDistrict = {
     id: `dist_${uuidv4().substring(0, 8)}`,
     name: name.trim(),
-    state: state?.trim() || 'Telangana',
+    state: state?.trim() || 'Andhra Pradesh',
     mandals: []
   };
 
