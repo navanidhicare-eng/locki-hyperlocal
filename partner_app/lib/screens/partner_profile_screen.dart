@@ -53,7 +53,7 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
 
   // 4. Working Hours & Service Radius
   String _selectedWorkingHours = 'Full-Time';
-  String _selectedServiceRadius = '10 KM (Standard Urban Coverage)';
+  String _selectedServiceRadius = '10 KM';
 
   // 5. KYC Government IDs Controllers
   late TextEditingController _aadhaarController;
@@ -197,10 +197,11 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
   ];
 
   final List<String> _serviceRadiusOptions = const [
-    '5 KM (Local Neighborhood)',
-    '10 KM (Standard Urban Coverage)',
-    '15 KM (Wide City Coverage)',
-    '25 KM (Extended Region)',
+    '5 KM',
+    '10 KM',
+    '25 KM',
+    '50 KM',
+    '100 KM',
   ];
 
   @override
@@ -303,8 +304,19 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
     } else {
       _selectedWorkingHours = 'Full-Time';
     }
-    if (profile['serviceRadius'] != null && _serviceRadiusOptions.contains(profile['serviceRadius'])) {
-      _selectedServiceRadius = profile['serviceRadius'];
+    if (profile['serviceRadius'] != null) {
+      final sr = profile['serviceRadius'].toString();
+      if (_serviceRadiusOptions.contains(sr)) {
+        _selectedServiceRadius = sr;
+      } else {
+        final match = _serviceRadiusOptions.firstWhere(
+          (opt) => sr.startsWith(opt.split(' ')[0]),
+          orElse: () => '10 KM',
+        );
+        _selectedServiceRadius = match;
+      }
+    } else {
+      _selectedServiceRadius = '10 KM';
     }
 
     // 5. KYC Government IDs
