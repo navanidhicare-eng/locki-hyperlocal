@@ -184,179 +184,10 @@ const initialData = () => {
         passwordHash: hash("admin123"),
         role: "admin",
         createdAt: new Date().toISOString()
-      },
-      {
-        id: "usr_cust_1",
-        name: "Prasad (Customer)",
-        email: "customer@loki.com",
-        phone: "+91 98765 11111",
-        passwordHash: hash("customer123"),
-        role: "customer",
-        address: "Flat 402, Green Meadows, Hyderabad",
-        coordinates: { lat: 17.4435, lng: 78.3772 },
-        walletBalance: 750,
-        createdAt: new Date().toISOString()
       }
     ],
-    providers: [
-      {
-        id: "prv_1",
-        name: "Ramesh Kumar",
-        email: "ramesh@loki.com",
-        phone: "+91 98765 22222",
-        passwordHash: hash("provider123"),
-        role: "provider",
-        category: "cat_plumbing",
-        serviceName: "Master Plumber",
-        rating: 4.85,
-        jobsCompleted: 312,
-        isOnline: true,
-        kycStatus: "approved", // approved, pending, rejected
-        aadhaarNumber: "XXXX-XXXX-9821",
-        currentLocation: { lat: 17.4480, lng: 78.3740 },
-        walletBalance: 4250,
-        createdAt: new Date().toISOString()
-      },
-      {
-        id: "prv_2",
-        name: "Suresh Babu",
-        email: "suresh@loki.com",
-        phone: "+91 98765 33333",
-        passwordHash: hash("provider123"),
-        role: "provider",
-        category: "cat_electrical",
-        serviceName: "Certified Wireman",
-        rating: 4.92,
-        jobsCompleted: 450,
-        isOnline: true,
-        kycStatus: "approved",
-        aadhaarNumber: "XXXX-XXXX-4512",
-        currentLocation: { lat: 17.4410, lng: 78.3820 },
-        walletBalance: 6180,
-        createdAt: new Date().toISOString()
-      },
-      {
-        id: "prv_3",
-        name: "Rajesh Varma",
-        email: "rajesh@loki.com",
-        phone: "+91 98765 44444",
-        passwordHash: hash("provider123"),
-        role: "provider",
-        category: "cat_delivery",
-        serviceName: "Hyperlocal Rider",
-        rating: 4.88,
-        jobsCompleted: 980,
-        isOnline: true,
-        kycStatus: "approved",
-        vehicleNumber: "TS 09 EA 4521",
-        currentLocation: { lat: 17.4455, lng: 78.3760 },
-        walletBalance: 2840,
-        createdAt: new Date().toISOString()
-      },
-      {
-        id: "prv_4",
-        name: "Anitha Rao",
-        email: "anitha@loki.com",
-        phone: "+91 98765 55555",
-        passwordHash: hash("provider123"),
-        role: "provider",
-        category: "cat_cleaning",
-        serviceName: "Pro Housekeeping & Sanitizer",
-        rating: 0,
-        jobsCompleted: 0,
-        isOnline: false,
-        kycStatus: "pending",
-        aadhaarNumber: "XXXX-XXXX-6710",
-        currentLocation: { lat: 17.4520, lng: 78.3690 },
-        walletBalance: 0,
-        createdAt: new Date().toISOString()
-      }
-    ],
-    orders: [
-      {
-        id: "ORD-9032",
-        customerId: "usr_cust_1",
-        customerName: "Prasad (Customer)",
-        customerPhone: "+91 98765 11111",
-        providerId: "prv_1",
-        providerName: "Ramesh Kumar",
-        serviceId: "srv_1",
-        serviceName: "Bathroom Tap Leakage Repair",
-        category: "cat_plumbing",
-        amount: 249,
-        paymentStatus: "PENDING",
-        paymentMethod: "Direct Cash / UPI to Partner",
-        orderStatus: "PENDING",
-        customerAddress: "Flat 304, Fortune Towers, Madhapur, Hyderabad",
-        coordinates: { lat: 17.4475, lng: 78.3755 },
-        providerLocation: { lat: 17.4445, lng: 78.3768 },
-        otp: "5821",
-        notes: "Washbasin faucet tap continuously dripping water. Needs urgent replacement.",
-        createdAt: new Date().toISOString()
-      },
-      {
-        id: "ORD-9030",
-        customerId: "usr_cust_1",
-        customerName: "Prasad (Customer)",
-        customerPhone: "+91 98765 11111",
-        providerId: "prv_1",
-        providerName: "Ramesh Kumar",
-        serviceId: "srv_1",
-        serviceName: "Emergency Pipeline Leak & Valve Repair",
-        category: "cat_plumbing",
-        amount: 299,
-        paymentStatus: "PENDING",
-        paymentMethod: "Direct Cash / UPI to Partner",
-        orderStatus: "PENDING",
-        customerAddress: "Flat 501, Sai Residency, Madhapur, Hyderabad",
-        coordinates: { lat: 17.4470, lng: 78.3760 },
-        providerLocation: { lat: 17.4445, lng: 78.3768 },
-        otp: "3942",
-        notes: "Urgent water pipe burst under bathroom washbasin. Needs immediate fix.",
-        createdAt: new Date().toISOString()
-      },
-      {
-        id: "ORD-9021",
-        customerId: "usr_cust_1",
-        customerName: "Prasad (Customer)",
-        customerPhone: "+91 98765 11111",
-        providerId: "prv_1",
-        providerName: "Ramesh Kumar",
-        serviceId: "srv_1",
-        serviceName: "Tap & Shower Repair / Replacement",
-        category: "cat_plumbing",
-        amount: 199,
-        paymentStatus: "PAID",
-        paymentMethod: "UPI",
-        orderStatus: "IN_PROGRESS", // PENDING, ACCEPTED, IN_PROGRESS, COMPLETED, CANCELLED
-        customerAddress: "Flat 402, Green Meadows, Madhapur, Hyderabad",
-        coordinates: { lat: 17.4435, lng: 78.3772 },
-        providerLocation: { lat: 17.4445, lng: 78.3768 },
-        otp: "4821",
-        notes: "Master bathroom shower head is leaking constantly",
-        createdAt: new Date(Date.now() - 25 * 60 * 1000).toISOString()
-      },
-      {
-        id: "ORD-9022",
-        customerId: "usr_cust_1",
-        customerName: "Prasad (Customer)",
-        customerPhone: "+91 98765 11111",
-        providerId: "prv_3",
-        providerName: "Rajesh Varma",
-        serviceId: "srv_5",
-        serviceName: "Hyperlocal Express Parcel Drop",
-        category: "cat_delivery",
-        amount: 85,
-        paymentStatus: "PAID",
-        paymentMethod: "Loki Wallet",
-        orderStatus: "COMPLETED",
-        customerAddress: "Gachibowli to HITEC City, Hyderabad",
-        coordinates: { lat: 17.4410, lng: 78.3810 },
-        otp: "7193",
-        notes: "Office laptop charger delivery",
-        createdAt: new Date(Date.now() - 3 * 3600 * 1000).toISOString()
-      }
-    ]
+    providers: [],
+    orders: []
   };
 };
 
@@ -372,16 +203,16 @@ class Database {
         const raw = fs.readFileSync(DB_FILE, 'utf-8');
         this.data = JSON.parse(raw);
         const init = initialData();
-        if (!this.data.providers || this.data.providers.length === 0) {
-          this.data.providers = init.providers;
-        }
         if (!this.data.users || this.data.users.length === 0) {
           this.data.users = init.users;
         }
-        if (!this.data.orders || this.data.orders.length === 0) {
-          this.data.orders = init.orders;
+        if (!this.data.providers) {
+          this.data.providers = [];
         }
-        // Ensure demo providers have isProfileComplete true
+        if (!this.data.orders) {
+          this.data.orders = [];
+        }
+        // Ensure providers have isProfileComplete
         this.data.providers.forEach(p => {
           if (p.kycStatus === 'approved' && p.isProfileComplete === undefined) {
             p.isProfileComplete = true;
