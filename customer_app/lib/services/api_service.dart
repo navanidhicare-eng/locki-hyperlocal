@@ -169,19 +169,85 @@ class ApiService {
     return null;
   }
 
+  // Fetch verified providers in a category (with phone & location)
+  Future<List<Map<String, dynamic>>> fetchProvidersByCategory(String categoryId, {String? mandal}) async {
+    try {
+      String url = '${AppConstants.baseUrl}/providers/by-category/$categoryId';
+      if (mandal != null && mandal.isNotEmpty) {
+        url += '?mandal=${Uri.encodeComponent(mandal)}';
+      }
+      final res = await http.get(Uri.parse(url));
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+        final list = (data['providers'] as List?) ?? [];
+        return list.map((p) => p as Map<String, dynamic>).toList();
+      }
+    } catch (e) {
+      print('Fetch providers by category error: $e');
+    }
+    return [];
+  }
+
+  // Quick Service Request (Category -> Sub -> Child -> Problem Description -> Dispatch)
+  Future<Map<String, dynamic>?> submitQuickRequest({
+    required String categoryId,
+    String? subCategoryId,
+    String? childTaskId,
+    String? childTaskName,
+    required String problemDescription,
+    required String customerAddress,
+    required String customerMandal,
+    String? customerPhone,
+    String? customerName,
+    String? providerId,
+    String? paymentMethod,
+    double? amount,
+  }) async {
+    try {
+      final res = await http.post(
+        Uri.parse('${AppConstants.baseUrl}/orders/quick-request'),
+        headers: {
+          'Content-Type': 'application/json',
+          if (_authToken != null) 'Authorization': 'Bearer $_authToken',
+        },
+        body: jsonEncode({
+          'categoryId': categoryId,
+          'subCategoryId': subCategoryId,
+          'childTaskId': childTaskId,
+          'childTaskName': childTaskName,
+          'problemDescription': problemDescription,
+          'customerAddress': customerAddress,
+          'customerMandal': customerMandal,
+          'customerPhone': customerPhone ?? currentUser?['phone'] ?? '9010737882',
+          'customerName': customerName ?? currentUser?['name'] ?? 'Customer',
+          'providerId': providerId,
+          'paymentMethod': paymentMethod ?? 'Cash on Service / UPI',
+          'amount': amount ?? 299,
+        }),
+      );
+      if (res.statusCode == 201 || res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+        return data;
+      }
+    } catch (e) {
+      print('Submit quick request error: $e');
+    }
+    return null;
+  }
+
   // Fetch customer orders
   Future<List<OrderModel>> fetchMyOrders() async {
-    await ensureCustomerAuth();
     try {
+      final phone = currentUser?['phone'] ?? '9010737882';
       final res = await http.get(
-        Uri.parse('${AppConstants.baseUrl}/orders/my'),
+        Uri.parse('${AppConstants.baseUrl}/orders/my?phone=${Uri.encodeComponent(phone)}'),
         headers: {
-          'Authorization': 'Bearer $_authToken',
+          if (_authToken != null) 'Authorization': 'Bearer $_authToken',
         },
       );
       if (res.statusCode == 200) {
         final data = jsonDecode(res.body);
-        final list = data['orders'] as List;
+        final list = (data['orders'] as List?) ?? [];
         return list.map((o) => OrderModel.fromJson(o)).toList();
       }
     } catch (e) {

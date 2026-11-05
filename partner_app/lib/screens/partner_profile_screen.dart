@@ -69,8 +69,6 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
   late TextEditingController _guarantorRelationController;
   late TextEditingController _guarantorPhoneController;
 
-  // 7. Payout Controller
-  late TextEditingController _upiController;
 
   // Uploaded Compressed Image Data (Base64) & Size Tracker
   String? _livePhotoBase64;
@@ -711,8 +709,6 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
     _guarantorRelationController = TextEditingController(text: profile['guarantorRelation'] ?? '');
     _guarantorPhoneController = TextEditingController(text: profile['guarantorPhone'] ?? '');
 
-    // 7. Payout
-    _upiController = TextEditingController(text: profile['upiId'] ?? '');
 
     // Document Upload flags
     _aadhaarFrontUploaded = profile['aadhaarFrontUrl'] != null;
@@ -720,7 +716,12 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
     _panCardUploaded = profile['panCardUrl'] != null;
     _drivingLicenseUploaded = profile['drivingLicenseUrl'] != null;
     _skillCertificateUploaded = profile['skillCertificatesUrl'] != null;
-    _livePhotoVerified = profile['livePhotoVerificationStatus'] == 'Verified' || profile['livePhotoVerified'] == true;
+    if (profile['livePhotoUrl'] != null && profile['livePhotoUrl'].toString().isNotEmpty) {
+      _livePhotoBase64 = profile['livePhotoUrl'].toString();
+      _livePhotoVerified = true;
+    } else {
+      _livePhotoVerified = profile['livePhotoVerificationStatus'] == 'Verified' || profile['livePhotoVerified'] == true;
+    }
 
     // Load dynamic real-time locations from backend
     _loadLocationsFromBackend();
@@ -751,7 +752,6 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
     _guarantorNameController.dispose();
     _guarantorRelationController.dispose();
     _guarantorPhoneController.dispose();
-    _upiController.dispose();
     super.dispose();
   }
 
@@ -799,6 +799,35 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please enter your full name'), backgroundColor: Colors.red),
       );
+      return;
+    }
+
+    // MANDATORY LIVE PHOTO VERIFICATION CHECK
+    if (!_livePhotoVerified || _livePhotoBase64 == null || _livePhotoBase64!.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Row(
+            children: [
+              Icon(Icons.camera_alt_rounded, color: Colors.white, size: 20),
+              SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  'Live Photo తప్పనిసరి (Mandatory)! దయచేసి Live Camera తో మీ ఫోటోను Capture చేయండి.',
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: const Color(0xFFDC2626),
+          duration: const Duration(seconds: 4),
+          action: SnackBarAction(
+            label: 'CAPTURE NOW',
+            textColor: Colors.white,
+            onPressed: _startLiveSelfieScanner,
+          ),
+        ),
+      );
+      _startLiveSelfieScanner();
       return;
     }
 
@@ -855,7 +884,6 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
       'guarantorName': _guarantorNameController.text.trim(),
       'guarantorRelation': _guarantorRelationController.text.trim(),
       'guarantorPhone': _guarantorPhoneController.text.trim(),
-      'upiId': _upiController.text.trim(),
       'isProfileComplete': true,
     };
 
@@ -1211,21 +1239,22 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
                   ),
                   const SizedBox(height: 14),
 
-                  // LIVE PHOTO VERIFICATION BADGE
+                  // LIVE PHOTO VERIFICATION BADGE (MANDATORY)
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                     decoration: BoxDecoration(
-                      color: _livePhotoVerified ? const Color(0xFFECFDF5) : const Color(0xFFFFFBEB),
+                      color: _livePhotoVerified ? const Color(0xFFECFDF5) : const Color(0xFFFEF2F2),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: _livePhotoVerified ? const Color(0xFFA7F3D0) : const Color(0xFFFDE68A),
+                        color: _livePhotoVerified ? const Color(0xFFA7F3D0) : const Color(0xFFFCA5A5),
+                        width: 1.5,
                       ),
                     ),
                     child: Row(
                       children: [
                         Icon(
-                          _livePhotoVerified ? Icons.verified_user_rounded : Icons.pending_actions_rounded,
-                          color: _livePhotoVerified ? const Color(0xFF059669) : const Color(0xFFD97706),
+                          _livePhotoVerified ? Icons.verified_user_rounded : Icons.camera_alt_rounded,
+                          color: _livePhotoVerified ? const Color(0xFF059669) : const Color(0xFFDC2626),
                           size: 22,
                         ),
                         const SizedBox(width: 10),
@@ -1233,38 +1262,55 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                _livePhotoVerified ? 'Live Photo Verification: Verified' : 'Live Photo Verification: Pending',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: _livePhotoVerified ? const Color(0xFF065F46) : const Color(0xFF92400E),
-                                ),
+                              Row(
+                                children: [
+                                  Text(
+                                    _livePhotoVerified ? 'Live Photo: Verified ✓' : 'Live Photo Verification *',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: _livePhotoVerified ? const Color(0xFF065F46) : const Color(0xFF991B1B),
+                                    ),
+                                  ),
+                                  if (!_livePhotoVerified) ...[
+                                    const SizedBox(width: 6),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFDC2626),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: const Text(
+                                        'MANDATORY',
+                                        style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
+                                ],
                               ),
                               const SizedBox(height: 2),
                               Text(
-                                _livePhotoVerified ? 'AI facial match confirmed with Aadhaar ID' : 'Selfie capture required for activation',
+                                _livePhotoVerified ? 'AI eye-blink & liveness verified' : 'Live camera selfie is mandatory to submit technician profile',
                                 style: TextStyle(
                                   fontSize: 11,
-                                  color: _livePhotoVerified ? const Color(0xFF047857) : const Color(0xFFB45309),
+                                  color: _livePhotoVerified ? const Color(0xFF047857) : const Color(0xFFB91C1C),
+                                  fontWeight: _livePhotoVerified ? FontWeight.normal : FontWeight.w600,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        TextButton(
+                        ElevatedButton.icon(
                           onPressed: _startLiveSelfieScanner,
-                          style: TextButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                            minimumSize: Size.zero,
-                          ),
-                          child: Text(
-                            _livePhotoVerified ? 'RETAKE' : 'CAPTURE',
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.bold,
-                              color: _livePhotoVerified ? const Color(0xFF059669) : PartnerConstants.primary,
-                            ),
+                          icon: Icon(_livePhotoVerified ? Icons.refresh_rounded : Icons.camera_alt_rounded, size: 14),
+                          label: Text(_livePhotoVerified ? 'RETAKE' : 'CAPTURE *'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _livePhotoVerified ? const Color(0xFF059669) : const Color(0xFFDC2626),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                            elevation: 0,
+                            textStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           ),
                         ),
                       ],
@@ -1712,7 +1758,18 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
                           value: c['id']?.toString(),
                           child: Row(
                             children: [
-                              Icon(_getCategoryIcon(c['icon']?.toString()), size: 18, color: const Color(0xFFF97316)),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(4),
+                                child: (c['iconUrl'] != null && c['iconUrl'].toString().isNotEmpty)
+                                    ? Image.network(
+                                        c['iconUrl'].toString(),
+                                        width: 18,
+                                        height: 18,
+                                        fit: BoxFit.contain,
+                                        errorBuilder: (_, __, ___) => Icon(_getCategoryIcon(c['icon']?.toString()), size: 18, color: const Color(0xFFF97316)),
+                                      )
+                                    : Icon(_getCategoryIcon(c['icon']?.toString()), size: 18, color: const Color(0xFFF97316)),
+                              ),
                               const SizedBox(width: 10),
                               Expanded(child: Text(c['name']?.toString() ?? '', overflow: TextOverflow.ellipsis)),
                             ],
@@ -2107,23 +2164,7 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-
-            // SECTION 8: BANK UPI PAYOUT
-            _buildSectionCard(
-              title: '8. Daily Earnings Payout Account',
-              icon: Icons.account_balance_wallet_outlined,
-              children: [
-                _buildFieldLabel('UPI ID for Instant Daily Bank Payouts *'),
-                _buildTextField(_upiController, 'e.g. 9876522222@ybl / PhonePe / GPay', Icons.payments_outlined),
-                const SizedBox(height: 6),
-                const Text(
-                  'Daily earnings after 90% payout guarantee will be settled directly to this UPI ID.',
-                  style: TextStyle(fontSize: 11, color: Color(0xFF64748B)),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
 
             // SUBMIT BUTTON
             SizedBox(

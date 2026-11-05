@@ -4,17 +4,21 @@ class ServiceCategory {
   final String id;
   final String name;
   final String icon;
+  final String? iconUrl;
   final Color color;
   final String description;
   final int servicesCount;
+  final List<Map<String, dynamic>> subCategories;
 
   ServiceCategory({
     required this.id,
     required this.name,
     required this.icon,
+    this.iconUrl,
     required this.color,
     required this.description,
     required this.servicesCount,
+    this.subCategories = const [],
   });
 
   factory ServiceCategory.fromJson(Map<String, dynamic> json) {
@@ -26,13 +30,21 @@ class ServiceCategory {
       }
     }
 
+    final rawSubs = json['subCategories'];
+    List<Map<String, dynamic>> parsedSubs = [];
+    if (rawSubs is List) {
+      parsedSubs = rawSubs.map((s) => s as Map<String, dynamic>).toList();
+    }
+
     return ServiceCategory(
       id: json['id'] ?? '',
       name: json['name'] ?? '',
       icon: json['icon'] ?? 'grid',
+      iconUrl: json['iconUrl'] ?? json['image'] ?? json['imageUrl'],
       color: parsedColor,
       description: json['description'] ?? '',
       servicesCount: json['servicesCount'] ?? 0,
+      subCategories: parsedSubs,
     );
   }
 

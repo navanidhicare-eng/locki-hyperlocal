@@ -10,6 +10,7 @@ router.delete('/:id', verifyToken, requireRole('admin'), categoryController.dele
 
 // Sub-categories routes
 router.post('/:id/subcategories', verifyToken, requireRole('admin'), categoryController.addSubCategory);
+router.put('/:id/subcategories/:subId', verifyToken, requireRole('admin'), categoryController.updateSubCategory);
 router.delete('/:id/subcategories/:subId', verifyToken, requireRole('admin'), categoryController.deleteSubCategory);
 
 // Child-categories routes

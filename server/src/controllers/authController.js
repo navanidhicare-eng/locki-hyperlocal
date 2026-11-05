@@ -110,8 +110,10 @@ exports.register = async (req, res) => {
     const passwordHash = bcrypt.hashSync(password, salt);
 
     if (assignedRole === 'provider') {
+      const partnerSeq = (db.data.providers.length + 1).toString().padStart(4, '0');
       const newProvider = {
         id: `prv_${uuidv4().substring(0, 8)}`,
+        partnerCode: `LP-${partnerSeq}`,
         name,
         email: userEmail,
         phone: userPhone,
@@ -123,6 +125,7 @@ exports.register = async (req, res) => {
         jobsCompleted: 0,
         isOnline: false,
         kycStatus: 'pending', // Requires admin verification
+        subscriptionStatus: 'unpaid',
         isProfileComplete: false, // Incomplete profile initially
         aadhaarNumber: aadhaarNumber || 'PENDING_UPLOAD',
         vehicleNumber: vehicleNumber || 'N/A',

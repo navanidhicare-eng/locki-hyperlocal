@@ -10,7 +10,7 @@ exports.getAllCategories = (req, res) => {
 };
 
 exports.createCategory = (req, res) => {
-  const { name, icon, color, description, requiredDocuments, subCategories } = req.body;
+  const { name, icon, iconUrl, color, description, requiredDocuments, subCategories } = req.body;
   if (!name) {
     return res.status(400).json({ success: false, message: 'Category name is required' });
   }
@@ -19,6 +19,7 @@ exports.createCategory = (req, res) => {
     id: `cat_${uuidv4().substring(0, 8)}`,
     name,
     icon: icon || 'wrench',
+    iconUrl: iconUrl || '',
     color: color || '#3B82F6',
     description: description || '',
     requiredDocuments: requiredDocuments || ['aadhaar'],
@@ -108,6 +109,30 @@ exports.addSubCategory = (req, res) => {
     success: true,
     message: 'Sub-category added successfully',
     subCategory: newSub,
+    category: cat
+  });
+};
+
+// Update Sub-Category (Name, description, basePrice, duration, subscriptionPlans)
+exports.updateSubCategory = (req, res) => {
+  const { id, subId } = req.params;
+  const cat = db.data.categories.find(c => c.id === id);
+  if (!cat || !cat.subCategories) {
+    return res.status(404).json({ success: false, message: 'Category or sub-categories not found' });
+  }
+
+  const sub = cat.subCategories.find(s => s.id === subId);
+  if (!sub) {
+    return res.status(404).json({ success: false, message: 'Sub-category not found' });
+  }
+
+  Object.assign(sub, req.body);
+  db.save();
+
+  res.json({
+    success: true,
+    message: 'Sub-category updated successfully',
+    subCategory: sub,
     category: cat
   });
 };

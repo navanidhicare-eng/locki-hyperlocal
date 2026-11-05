@@ -31,7 +31,24 @@ const requireRole = (...roles) => {
   };
 };
 
+const optionalAuth = (req, res, next) => {
+  const authHeader = req.headers['authorization'] || req.headers['x-access-token'];
+  if (!authHeader) {
+    return next();
+  }
+
+  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
+  try {
+    const decoded = jwt.verify(token, config.JWT_SECRET);
+    req.user = decoded;
+  } catch (err) {
+    // Ignore invalid token in optionalAuth
+  }
+  next();
+};
+
 module.exports = {
   verifyToken,
+  optionalAuth,
   requireRole
 };

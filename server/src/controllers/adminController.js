@@ -100,6 +100,56 @@ exports.updateKycStatus = (req, res) => {
   });
 };
 
+exports.updateProviderSubscription = (req, res) => {
+  const { id } = req.params;
+  const { status, paymentMethod = 'cash', amount = 1999, months = 12 } = req.body;
+
+  const provider = db.data.providers.find(p => p.id === id);
+  if (!provider) {
+    return res.status(404).json({ success: false, message: 'Provider not found' });
+  }
+
+  if (status === 'active') {
+    provider.subscriptionStatus = 'active';
+    provider.subscriptionPaymentMethod = paymentMethod;
+    provider.subscriptionAmount = amount;
+    provider.subscriptionMonths = parseInt(months);
+    provider.subscriptionPlanName = parseInt(months) === 1 ? '1-Month Trial' : (parseInt(months) === 3 ? '3-Months Quarter' : (parseInt(months) === 6 ? '6-Months Half-Year' : '1-Year Annual Pro'));
+    provider.subscriptionPaidAt = new Date().toISOString();
+    const expiry = new Date();
+    expiry.setMonth(expiry.getMonth() + parseInt(months));
+    provider.subscriptionExpiresAt = expiry.toISOString();
+  } else {
+    provider.subscriptionStatus = 'unpaid';
+    provider.subscriptionExpiresAt = null;
+    provider.subscriptionPlanName = null;
+  }
+
+  db.save();
+
+  const io = req.app.get('io');
+  if (io) {
+    io.emit('provider:subscription_updated', {
+      providerId: provider.id,
+      subscriptionStatus: provider.subscriptionStatus,
+      subscriptionExpiresAt: provider.subscriptionExpiresAt
+    });
+  }
+
+  res.json({
+    success: true,
+    message: `Subscription successfully updated to ${provider.subscriptionStatus.toUpperCase()}`,
+    provider: {
+      id: provider.id,
+      name: provider.name,
+      subscriptionStatus: provider.subscriptionStatus,
+      subscriptionExpiresAt: provider.subscriptionExpiresAt,
+      subscriptionPaymentMethod: provider.subscriptionPaymentMethod,
+      subscriptionAmount: provider.subscriptionAmount
+    }
+  });
+};
+
 exports.getAllUsers = (req, res) => {
   ensureSeedUsersAndProviders();
   const customers = db.data.users.filter(u => u.role === 'customer').map(u => {

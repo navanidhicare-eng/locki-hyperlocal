@@ -10,6 +10,7 @@ import 'coming_soon_screen.dart';
 import 'login_screen.dart';
 import 'my_orders_screen.dart';
 import 'profile_screen.dart';
+import 'quick_request_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -1256,73 +1257,27 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildCategoryIconCard(ServiceCategory cat) {
-    final isPlumbing = cat.id == 'cat_plumbing' || cat.name.toLowerCase().contains('plumb');
-    final isElectrician = cat.id == 'cat_electrical' || cat.name.toLowerCase().contains('electr');
-    final isDelivery = cat.id == 'cat_delivery' || cat.name.toLowerCase().contains('deliver');
-    final isMechanic = cat.id == 'cat_mechanic' || cat.name.toLowerCase().contains('mechanic');
-    final isShop = cat.id == 'cat_shops' || cat.name.toLowerCase().contains('shop') || cat.name.toLowerCase().contains('kirana');
-    final isCleaning = cat.id == 'cat_cleaning' || cat.name.toLowerCase().contains('clean');
-    final isAppliance = cat.id == 'cat_appliances' || cat.name.toLowerCase().contains('appliance');
-    final isCable = cat.id == 'cat_bd22116b' || cat.name.toLowerCase().contains('cable');
-    final isLeaseRental = cat.id == 'cat_ab5c5cd1' || cat.name.toLowerCase().contains('lease') || cat.name.toLowerCase().contains('rent');
-
     Widget iconWidget;
-    if (isPlumbing) {
-      iconWidget = Image.asset(
-        'assets/images/plumbing_tap.png',
-        fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) => Icon(Icons.plumbing, color: cat.color, size: 26),
-      );
-    } else if (isElectrician) {
-      iconWidget = Image.asset(
-        'assets/images/electrician_bolt.png',
-        fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) => Icon(Icons.bolt, color: cat.color, size: 26),
-      );
-    } else if (isDelivery) {
-      iconWidget = Image.asset(
-        'assets/images/instant_delivery.png',
-        fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) => Icon(Icons.delivery_dining, color: cat.color, size: 26),
-      );
-    } else if (isMechanic) {
-      iconWidget = Image.asset(
-        'assets/images/mechanic_tools.png',
-        fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) => Icon(Icons.build, color: cat.color, size: 26),
-      );
-    } else if (isShop) {
-      iconWidget = Image.asset(
-        'assets/images/local_shop.png',
-        fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) => Icon(Icons.storefront, color: cat.color, size: 26),
-      );
-    } else if (isCleaning) {
-      iconWidget = Image.asset(
-        'assets/images/deep_cleaning.png',
-        fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) => Icon(Icons.cleaning_services, color: cat.color, size: 26),
-      );
-    } else if (isAppliance) {
-      iconWidget = Image.asset(
-        'assets/images/appliance_repairs.png',
-        fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) => Icon(Icons.tv, color: cat.color, size: 26),
-      );
-    } else if (isCable) {
-      iconWidget = Image.asset(
-        'assets/images/cable_technicians.png',
-        fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) => Icon(Icons.router, color: cat.color, size: 26),
-      );
-    } else if (isLeaseRental) {
-      iconWidget = Image.asset(
-        'assets/images/lease_rental.png',
-        fit: BoxFit.contain,
-        errorBuilder: (_, __, ___) => Icon(Icons.apartment, color: cat.color, size: 26),
-      );
+
+    // 1. Dynamic admin-uploaded iconUrl has highest priority
+    if (cat.iconUrl != null && cat.iconUrl!.isNotEmpty) {
+      if (cat.iconUrl!.startsWith('http://') || cat.iconUrl!.startsWith('https://')) {
+        iconWidget = Image.network(
+          cat.iconUrl!,
+          fit: BoxFit.contain,
+          errorBuilder: (_, __, ___) => _getCategoryFallbackWidget(cat),
+        );
+      } else if (cat.iconUrl!.startsWith('assets/')) {
+        iconWidget = Image.asset(
+          cat.iconUrl!,
+          fit: BoxFit.contain,
+          errorBuilder: (_, __, ___) => _getCategoryFallbackWidget(cat),
+        );
+      } else {
+        iconWidget = _getCategoryFallbackWidget(cat);
+      }
     } else {
-      iconWidget = Icon(cat.getIconData(), color: cat.color, size: 26);
+      iconWidget = _getCategoryFallbackWidget(cat);
     }
 
     return Container(
@@ -1344,6 +1299,76 @@ class _HomeScreenState extends State<HomeScreen> {
       alignment: Alignment.center,
       child: iconWidget,
     );
+  }
+
+  Widget _getCategoryFallbackWidget(ServiceCategory cat) {
+    final isPlumbing = cat.id == 'cat_plumbing' || cat.name.toLowerCase().contains('plumb');
+    final isElectrician = cat.id == 'cat_electrical' || cat.name.toLowerCase().contains('electr');
+    final isDelivery = cat.id == 'cat_delivery' || cat.name.toLowerCase().contains('deliver');
+    final isMechanic = cat.id == 'cat_mechanic' || cat.name.toLowerCase().contains('mechanic');
+    final isShop = cat.id == 'cat_shops' || cat.name.toLowerCase().contains('shop') || cat.name.toLowerCase().contains('kirana');
+    final isCleaning = cat.id == 'cat_cleaning' || cat.name.toLowerCase().contains('clean');
+    final isAppliance = cat.id == 'cat_appliances' || cat.name.toLowerCase().contains('appliance');
+    final isCable = cat.id == 'cat_bd22116b' || cat.name.toLowerCase().contains('cable');
+    final isLeaseRental = cat.id == 'cat_ab5c5cd1' || cat.name.toLowerCase().contains('lease') || cat.name.toLowerCase().contains('rent');
+
+    if (isPlumbing) {
+      return Image.asset(
+        'assets/images/plumbing_tap.png',
+        fit: BoxFit.contain,
+        errorBuilder: (_, __, ___) => Icon(Icons.plumbing, color: cat.color, size: 26),
+      );
+    } else if (isElectrician) {
+      return Image.asset(
+        'assets/images/electrician_bolt.png',
+        fit: BoxFit.contain,
+        errorBuilder: (_, __, ___) => Icon(Icons.bolt, color: cat.color, size: 26),
+      );
+    } else if (isDelivery) {
+      return Image.asset(
+        'assets/images/instant_delivery.png',
+        fit: BoxFit.contain,
+        errorBuilder: (_, __, ___) => Icon(Icons.delivery_dining, color: cat.color, size: 26),
+      );
+    } else if (isMechanic) {
+      return Image.asset(
+        'assets/images/mechanic_tools.png',
+        fit: BoxFit.contain,
+        errorBuilder: (_, __, ___) => Icon(Icons.build, color: cat.color, size: 26),
+      );
+    } else if (isShop) {
+      return Image.asset(
+        'assets/images/local_shop.png',
+        fit: BoxFit.contain,
+        errorBuilder: (_, __, ___) => Icon(Icons.storefront, color: cat.color, size: 26),
+      );
+    } else if (isCleaning) {
+      return Image.asset(
+        'assets/images/deep_cleaning.png',
+        fit: BoxFit.contain,
+        errorBuilder: (_, __, ___) => Icon(Icons.cleaning_services, color: cat.color, size: 26),
+      );
+    } else if (isAppliance) {
+      return Image.asset(
+        'assets/images/appliance_repairs.png',
+        fit: BoxFit.contain,
+        errorBuilder: (_, __, ___) => Icon(Icons.tv, color: cat.color, size: 26),
+      );
+    } else if (isCable) {
+      return Image.asset(
+        'assets/images/cable_technicians.png',
+        fit: BoxFit.contain,
+        errorBuilder: (_, __, ___) => Icon(Icons.router, color: cat.color, size: 26),
+      );
+    } else if (isLeaseRental) {
+      return Image.asset(
+        'assets/images/lease_rental.png',
+        fit: BoxFit.contain,
+        errorBuilder: (_, __, ___) => Icon(Icons.apartment, color: cat.color, size: 26),
+      );
+    } else {
+      return Icon(cat.getIconData(), color: cat.color, size: 26);
+    }
   }
 
   Widget _buildSpotlightBillboard() {
@@ -1731,6 +1756,78 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
 
+                    const SizedBox(height: 18),
+
+                    // Quick Service Request Banner (Category -> Sub -> Child -> Problem Description)
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const QuickRequestScreen()),
+                        );
+                      },
+                      borderRadius: BorderRadius.circular(16),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFFDE4915), Color(0xFFB8350B)],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFFDE4915).withOpacity(0.3),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 44,
+                              height: 44,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Icon(Icons.flash_on_rounded, color: Colors.white, size: 26),
+                            ),
+                            const SizedBox(width: 14),
+                            const Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '⚡ Quick Service Request (త్వరిత బుకింగ్)',
+                                    style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white, fontSize: 14),
+                                  ),
+                                  SizedBox(height: 2),
+                                  Text(
+                                    'Select category, describe problem & alert nearby experts',
+                                    style: TextStyle(color: Colors.white70, fontSize: 11),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Text(
+                                'Book Now ➔',
+                                style: TextStyle(color: Color(0xFFDE4915), fontWeight: FontWeight.bold, fontSize: 11),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
                     const SizedBox(height: 20),
 
                     // 3. Categories Section
@@ -1741,7 +1838,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           'All Hyperlocal Services',
                           style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: AppConstants.secondary),
                         ),
-                        if (_categories.length > 8)
+                        if (_categories.length > 12)
                           InkWell(
                             onTap: () {
                               setState(() {
@@ -1785,7 +1882,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(height: 14),
 
-                    // Grid of Services (2 Lines by default with Animated Expansion for See All)
+                    // Grid of Services (Animated Expansion for See All if > 12)
                     AnimatedSize(
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeInOut,
@@ -1801,7 +1898,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         itemCount: _showAllCategories
                             ? _categories.length
-                            : (_categories.length > 8 ? 8 : _categories.length),
+                            : (_categories.length > 12 ? 12 : _categories.length),
                         itemBuilder: (ctx, idx) {
                           final cat = _categories[idx];
                           return InkWell(
@@ -1812,7 +1909,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             onTap: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (_) => ComingSoonScreen(category: cat)),
+                                MaterialPageRoute(builder: (_) => CategoryDetailScreen(category: cat)),
                               );
                             },
                             child: Column(

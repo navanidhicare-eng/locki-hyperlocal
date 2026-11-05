@@ -28,6 +28,14 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  void _fillDemoCredentials() {
+    setState(() {
+      _identifierController.text = 'customer@loki.com';
+      _passwordController.text = '123456';
+      _errorMessage = null;
+    });
+  }
+
   Future<void> _handleLogin() async {
     if (!_formKey.currentState!.validate()) return;
 

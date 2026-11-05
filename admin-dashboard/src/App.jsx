@@ -42,7 +42,10 @@ import {
   X,
   Megaphone,
   Edit2,
-  Eye
+  Edit,
+  Eye,
+  UploadCloud,
+  Image as ImageIcon
 } from 'lucide-react';
 
 const API_BASE = 'http://localhost:5000/api';
@@ -109,6 +112,19 @@ export default function App() {
   const [villageNameInput, setVillageNameInput] = useState('');
   const [villagePincodeInput, setVillagePincodeInput] = useState('');
 
+  // Sub-Category Subscription Pricing Modal
+  const [subPricingModal, setSubPricingModal] = useState(null); // { catId, sub }
+  const [sub1mInput, setSub1mInput] = useState(199);
+  const [sub3mInput, setSub3mInput] = useState(499);
+  const [sub6mInput, setSub6mInput] = useState(899);
+  const [sub1yInput, setSub1yInput] = useState(1499);
+
+  // Partner Subscription Payment Modal
+  const [paySubModal, setPaySubModal] = useState(null); // { partner, cat, sub, plans }
+  const [payPlanDuration, setPayPlanDuration] = useState('1_year');
+  const [payCustomAmount, setPayCustomAmount] = useState('');
+  const [payMethod, setPayMethod] = useState('cash');
+
   const [targetCat, setTargetCat] = useState(null);
   const [targetSub, setTargetSub] = useState(null);
 
@@ -135,7 +151,12 @@ export default function App() {
   const [promoPriority, setPromoPriority] = useState(1);
 
   // Simplified form inputs
+  const [editingCategory, setEditingCategory] = useState(null);
   const [catNameInput, setCatNameInput] = useState('');
+  const [catIconUrlInput, setCatIconUrlInput] = useState('');
+  const [catIconPreview, setCatIconPreview] = useState('');
+  const [catColorInput, setCatColorInput] = useState('#DE4915');
+  const [catUploading, setCatUploading] = useState(false);
   const [subNameInput, setSubNameInput] = useState('');
   const [childNameInput, setChildNameInput] = useState('');
   const [childPriceInput, setChildPriceInput] = useState('299');
@@ -371,36 +392,122 @@ export default function App() {
     }
   };
 
-  // 1. Add Category
-  const handleCreateCategory = async (e) => {
+  const resetCatInputs = () => {
+    setCatNameInput('');
+    setCatIconUrlInput('');
+    setCatIconPreview('');
+    setCatColorInput('#DE4915');
+    setEditingCategory(null);
+  };
+
+  const handleOpenAddCategory = () => {
+    resetCatInputs();
+    setShowAddCatModal(true);
+  };
+
+  const handleOpenEditCategory = (cat) => {
+    setEditingCategory(cat);
+    setCatNameInput(cat.name || '');
+    setCatIconUrlInput(cat.iconUrl || '');
+    setCatIconPreview(cat.iconUrl || '');
+    setCatColorInput(cat.color || '#DE4915');
+    setShowAddCatModal(true);
+  };
+
+  const handleCategoryIconUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const base64 = reader.result;
+      setCatIconPreview(base64);
+
+      try {
+        setCatUploading(true);
+        const token = await getAdminToken();
+        const res = await fetch(`${API_BASE}/upload`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            dataUrl: base64,
+            filename: file.name,
+            folder: 'categories'
+          })
+        });
+        const data = await res.json();
+        if (data.success && data.url) {
+          setCatIconUrlInput(data.url);
+        } else {
+          setCatIconUrlInput(base64);
+        }
+      } catch (err) {
+        console.warn('Upload error, falling back to base64:', err);
+        setCatIconUrlInput(base64);
+      } finally {
+        setCatUploading(false);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // 1. Add / Edit Category Handler
+  const handleSaveCategory = async (e) => {
     e.preventDefault();
     if (!catNameInput.trim()) return;
     try {
       const token = await getAdminToken();
-      const res = await fetch(`${API_BASE}/categories`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          name: catNameInput.trim(),
-          icon: 'layers',
-          color: '#3B82F6',
-          description: '',
-          subCategories: []
-        })
-      });
-      const data = await res.json();
-      if (data.success) {
-        setShowAddCatModal(false);
-        setCatNameInput('');
-        await loadData();
+      if (editingCategory) {
+        const res = await fetch(`${API_BASE}/categories/${editingCategory.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            name: catNameInput.trim(),
+            iconUrl: catIconUrlInput || catIconPreview || '',
+            color: catColorInput || '#DE4915'
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          setShowAddCatModal(false);
+          resetCatInputs();
+          await loadData();
+        } else {
+          alert(data.message || 'Error updating category');
+        }
       } else {
-        alert(data.message || 'Error creating category');
+        const res = await fetch(`${API_BASE}/categories`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            name: catNameInput.trim(),
+            icon: 'layers',
+            iconUrl: catIconUrlInput || catIconPreview || '',
+            color: catColorInput || '#DE4915',
+            description: '',
+            subCategories: []
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          setShowAddCatModal(false);
+          resetCatInputs();
+          await loadData();
+        } else {
+          alert(data.message || 'Error creating category');
+        }
       }
     } catch (err) {
-      alert('Error creating category: ' + err.message);
+      alert('Error saving category: ' + err.message);
     }
   };
 
@@ -795,6 +902,102 @@ export default function App() {
     }
   };
 
+  // Subscription Status Handler
+  const handleSubscriptionStatus = async (providerId, status, paymentMethod = 'cash', amount = 1499, months = 12) => {
+    try {
+      const token = await getAdminToken();
+      const res = await fetch(`${API_BASE}/admin/providers/${providerId}/subscription`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ status, paymentMethod, amount, months })
+      });
+      const data = await res.json();
+      if (data.success) {
+        await loadData();
+      } else {
+        alert('Failed to update subscription: ' + (data.message || 'Unknown error'));
+      }
+    } catch (err) {
+      alert('Error updating subscription: ' + err.message);
+    }
+  };
+
+  const handleOpenEditSubPricing = (catId, sub) => {
+    setSubPricingModal({ catId, sub });
+    setSub1mInput(sub.subscriptionPlans?.['1_month'] || 199);
+    setSub3mInput(sub.subscriptionPlans?.['3_months'] || 499);
+    setSub6mInput(sub.subscriptionPlans?.['6_months'] || 899);
+    setSub1yInput(sub.subscriptionPlans?.['1_year'] || 1499);
+  };
+
+  const handleSaveSubPricing = async () => {
+    if (!subPricingModal) return;
+    try {
+      const token = await getAdminToken();
+      const res = await fetch(`${API_BASE}/categories/${subPricingModal.catId}/subcategories/${subPricingModal.sub.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          subscriptionPlans: {
+            '1_month': Number(sub1mInput) || 199,
+            '3_months': Number(sub3mInput) || 499,
+            '6_months': Number(sub6mInput) || 899,
+            '1_year': Number(sub1yInput) || 1499
+          }
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSubPricingModal(null);
+        await loadData();
+      } else {
+        alert('Failed to update pricing: ' + (data.message || 'Error'));
+      }
+    } catch (err) {
+      alert('Error updating sub-category pricing: ' + err.message);
+    }
+  };
+
+  const handleOpenPaySubModal = (partner) => {
+    const cat = categories.find(c => c.id === partner.category);
+    const sub = cat?.subCategories?.find(s => s.id === (partner.subCategoryId || partner.subCategory));
+    const plans = sub?.subscriptionPlans || { '1_month': 199, '3_months': 499, '6_months': 899, '1_year': 1499 };
+    setPaySubModal({ partner, cat, sub, plans });
+    setPayPlanDuration('1_year');
+    setPayCustomAmount(plans['1_year'] || 1499);
+    setPayMethod('cash');
+  };
+
+  const handleConfirmSubscriptionPayment = async () => {
+    if (!paySubModal) return;
+    const { partner, plans } = paySubModal;
+    let months = 12;
+    let amount = plans['1_year'] || 1499;
+
+    if (payPlanDuration === '1_month') {
+      months = 1;
+      amount = plans['1_month'] || 199;
+    } else if (payPlanDuration === '3_months') {
+      months = 3;
+      amount = plans['3_months'] || 499;
+    } else if (payPlanDuration === '6_months') {
+      months = 6;
+      amount = plans['6_months'] || 899;
+    } else if (payPlanDuration === 'custom') {
+      amount = Number(payCustomAmount) || 1000;
+      months = 12;
+    }
+
+    await handleSubscriptionStatus(partner.id, 'active', payMethod, amount, months);
+    setPaySubModal(null);
+  };
+
   // Quick Test Dispatch simulator
   const handleQuickTestOrder = async () => {
     try {
@@ -836,7 +1039,19 @@ export default function App() {
     totalCustomers: 1
   };
 
-  const getCategoryIcon = (id) => {
+  const getCategoryIcon = (catOrId) => {
+    let cat = typeof catOrId === 'object' ? catOrId : categories.find(c => c.id === catOrId);
+    if (cat?.iconUrl) {
+      return (
+        <img
+          src={cat.iconUrl}
+          alt={cat.name}
+          style={{ width: 20, height: 20, objectFit: 'contain', borderRadius: 4 }}
+          onError={(e) => { e.target.style.display = 'none'; }}
+        />
+      );
+    }
+    const id = typeof catOrId === 'string' ? catOrId : cat?.id;
     switch (id) {
       case 'cat_plumbing': return <Wrench size={18} color="#DE4915" />;
       case 'cat_electrical': return <Zap size={18} color="#F59E0B" />;
@@ -1277,7 +1492,7 @@ export default function App() {
               </button>
             ) : activeTab === 'tree' ? (
               <button
-                onClick={() => setShowAddCatModal(true)}
+                onClick={handleOpenAddCategory}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -1656,7 +1871,7 @@ export default function App() {
                     </div>
 
                     <button
-                      onClick={() => setShowAddCatModal(true)}
+                      onClick={handleOpenAddCategory}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -1710,17 +1925,20 @@ export default function App() {
                                 width: 34,
                                 height: 34,
                                 borderRadius: 8,
-                                background: isSelected ? '#DE4915' : '#FFFFFF',
-                                border: isSelected ? 'none' : '1px solid var(--border)',
+                                background: cat.iconUrl ? '#FFFFFF' : (isSelected ? (cat.color || '#DE4915') : '#FFFFFF'),
+                                border: isSelected ? '1.5px solid #DE4915' : '1px solid var(--border)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                flexShrink: 0
+                                flexShrink: 0,
+                                overflow: 'hidden'
                               }}>
-                                {isSelected ? (
+                                {cat.iconUrl ? (
+                                  <img src={cat.iconUrl} alt={cat.name} style={{ width: 22, height: 22, objectFit: 'contain' }} onError={(e) => { e.target.style.display = 'none'; }} />
+                                ) : isSelected ? (
                                   <Layers size={17} color="#fff" />
                                 ) : (
-                                  getCategoryIcon(cat.id)
+                                  getCategoryIcon(cat)
                                 )}
                               </div>
                               <div style={{ overflow: 'hidden' }}>
@@ -1737,21 +1955,64 @@ export default function App() {
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
+                                  handleOpenEditCategory(cat);
+                                }}
+                                title="Edit Category & Icon"
+                                style={{
+                                  background: '#F8FAFC',
+                                  border: '1px solid #E2E8F0',
+                                  color: 'var(--text-dim)',
+                                  width: 26,
+                                  height: 26,
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  borderRadius: 5,
+                                  cursor: 'pointer'
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.color = '#DE4915';
+                                  e.currentTarget.style.borderColor = '#FDBA74';
+                                  e.currentTarget.style.background = '#FFF7ED';
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.color = 'var(--text-dim)';
+                                  e.currentTarget.style.borderColor = '#E2E8F0';
+                                  e.currentTarget.style.background = '#F8FAFC';
+                                }}
+                              >
+                                <Edit size={12} />
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
                                   handleDeleteCategory(cat.id, cat.name);
                                 }}
                                 title="Delete Category"
                                 style={{
-                                  background: 'none',
-                                  border: 'none',
+                                  background: '#F8FAFC',
+                                  border: '1px solid #E2E8F0',
                                   color: 'var(--text-dim)',
-                                  padding: 4,
-                                  cursor: 'pointer',
-                                  borderRadius: 4
+                                  width: 26,
+                                  height: 26,
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  borderRadius: 5,
+                                  cursor: 'pointer'
                                 }}
-                                onMouseEnter={(e) => e.currentTarget.style.color = '#EF4444'}
-                                onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-dim)'}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.color = '#EF4444';
+                                  e.currentTarget.style.borderColor = '#FECACA';
+                                  e.currentTarget.style.background = '#FEF2F2';
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.color = 'var(--text-dim)';
+                                  e.currentTarget.style.borderColor = '#E2E8F0';
+                                  e.currentTarget.style.background = '#F8FAFC';
+                                }}
                               >
-                                <Trash2 size={13} />
+                                <Trash2 size={12} />
                               </button>
                               <ChevronRight size={16} color={isSelected ? '#DE4915' : 'var(--text-dim)'} />
                             </div>
@@ -1840,66 +2101,161 @@ export default function App() {
                             onClick={() => handleSelectSub(sub)}
                             style={{
                               padding: '12px 14px',
-                              borderRadius: 10,
+                              borderRadius: 12,
                               cursor: 'pointer',
                               display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'space-between',
+                              flexDirection: 'column',
+                              gap: 10,
                               transition: 'all 0.18s ease',
-                              background: isSelected
-                                ? '#FFFBEB'
-                                : '#F8FAFC',
-                              border: isSelected
-                                ? '1.5px solid #F59E0B'
-                                : '1px solid var(--border)',
-                              boxShadow: isSelected ? '0 2px 10px rgba(245, 158, 11, 0.15)' : 'none'
+                              background: isSelected ? '#FFFBEB' : '#FFFFFF',
+                              border: isSelected ? '1.5px solid #F59E0B' : '1px solid var(--border)',
+                              boxShadow: isSelected ? '0 4px 14px rgba(245, 158, 11, 0.12)' : '0 1px 3px rgba(0,0,0,0.02)'
                             }}
                           >
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
-                              <div style={{
-                                width: 32,
-                                height: 32,
-                                borderRadius: 8,
-                                background: isSelected ? '#FEF3C7' : '#FFFFFF',
-                                border: isSelected ? 'none' : '1px solid var(--border)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexShrink: 0
-                              }}>
-                                <Folder size={16} color={isSelected ? '#D97706' : 'var(--text-muted)'} />
+                            {/* TOP ROW: Icon + Name + Tasks Count + Actions (Plans, Delete, Chevron) */}
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0, flex: 1 }}>
+                                <div style={{
+                                  width: 32,
+                                  height: 32,
+                                  borderRadius: 8,
+                                  background: isSelected ? '#FEF3C7' : '#F1F5F9',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  flexShrink: 0
+                                }}>
+                                  <Folder size={16} color={isSelected ? '#D97706' : '#64748B'} />
+                                </div>
+                                <div style={{ minWidth: 0, overflow: 'hidden' }}>
+                                  <p style={{
+                                    fontWeight: 700,
+                                    fontSize: '0.9rem',
+                                    color: isSelected ? '#92400E' : 'var(--text-main)',
+                                    whiteSpace: 'nowrap',
+                                    textOverflow: 'ellipsis',
+                                    overflow: 'hidden',
+                                    margin: 0
+                                  }}>
+                                    {sub.name}
+                                  </p>
+                                  <span style={{ fontSize: '0.72rem', color: isSelected ? '#D97706' : 'var(--text-muted)', fontWeight: 500 }}>
+                                    {sub.childCategories?.length || 0} Child Tasks
+                                  </span>
+                                </div>
                               </div>
-                              <div style={{ overflow: 'hidden' }}>
-                                <p style={{ fontWeight: 600, fontSize: '0.88rem', color: isSelected ? '#92400E' : 'var(--text-main)', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                                  {sub.name}
-                                </p>
-                                <p style={{ fontSize: '0.72rem', color: isSelected ? '#D97706' : 'var(--text-muted)' }}>
-                                  {sub.childCategories?.length || 0} Services
-                                </p>
+
+                              {/* Perfectly Aligned Action Buttons Group */}
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleOpenEditSubPricing(selectedCat.id, sub);
+                                  }}
+                                  title="Edit Subscription Pricing"
+                                  style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: 4,
+                                    background: isSelected ? '#FEF3C7' : '#FFFBEB',
+                                    border: '1px solid #FCD34D',
+                                    color: '#B45309',
+                                    padding: '5px 9px',
+                                    borderRadius: 6,
+                                    fontSize: '0.73rem',
+                                    fontWeight: 700,
+                                    cursor: 'pointer',
+                                    transition: 'all 0.15s ease'
+                                  }}
+                                  onMouseEnter={(e) => e.currentTarget.style.background = '#FDE68A'}
+                                  onMouseLeave={(e) => e.currentTarget.style.background = isSelected ? '#FEF3C7' : '#FFFBEB'}
+                                >
+                                  <span>✏️</span> Plans
+                                </button>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDeleteSubCategory(selectedCat.id, sub.id, sub.name);
+                                  }}
+                                  title="Delete Sub-Category"
+                                  style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: 28,
+                                    height: 28,
+                                    background: '#F8FAFC',
+                                    border: '1px solid #E2E8F0',
+                                    color: '#64748B',
+                                    borderRadius: 6,
+                                    cursor: 'pointer',
+                                    transition: 'all 0.15s ease'
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    e.currentTarget.style.color = '#EF4444';
+                                    e.currentTarget.style.borderColor = '#FECACA';
+                                    e.currentTarget.style.background = '#FEF2F2';
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.currentTarget.style.color = '#64748B';
+                                    e.currentTarget.style.borderColor = '#E2E8F0';
+                                    e.currentTarget.style.background = '#F8FAFC';
+                                  }}
+                                >
+                                  <Trash2 size={13} />
+                                </button>
+                                <div style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  width: 20,
+                                  height: 28,
+                                  color: isSelected ? '#F59E0B' : '#94A3B8'
+                                }}>
+                                  <ChevronRight size={17} />
+                                </div>
                               </div>
                             </div>
 
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleDeleteSubCategory(selectedCat.id, sub.id, sub.name);
-                                }}
-                                title="Delete Sub-Category"
-                                style={{
-                                  background: 'none',
-                                  border: 'none',
-                                  color: 'var(--text-dim)',
-                                  padding: 4,
-                                  cursor: 'pointer',
-                                  borderRadius: 4
-                                }}
-                                onMouseEnter={(e) => e.currentTarget.style.color = '#EF4444'}
-                                onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-dim)'}
-                              >
-                                <Trash2 size={13} />
-                              </button>
-                              <ChevronRight size={16} color={isSelected ? '#F59E0B' : 'var(--text-dim)'} />
+                            {/* BOTTOM ROW: Clean Subscription Pricing Pills */}
+                            <div style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 5,
+                              flexWrap: 'wrap',
+                              paddingTop: 8,
+                              borderTop: isSelected ? '1px dashed #FDE68A' : '1px dashed #E2E8F0'
+                            }}>
+                              <span style={{ fontSize: '0.68rem', fontWeight: 700, color: isSelected ? '#B45309' : '#64748B', marginRight: 2 }}>
+                                💳 Rates:
+                              </span>
+                              {[
+                                { label: '1M', val: sub.subscriptionPlans?.['1_month'] || 199 },
+                                { label: '3M', val: sub.subscriptionPlans?.['3_months'] || 499 },
+                                { label: '6M', val: sub.subscriptionPlans?.['6_months'] || 899 },
+                                { label: '1Y', val: sub.subscriptionPlans?.['1_year'] || 1499, highlight: true }
+                              ].map(p => (
+                                <span
+                                  key={p.label}
+                                  style={{
+                                    fontSize: '0.67rem',
+                                    padding: '2px 6px',
+                                    borderRadius: 4,
+                                    fontWeight: 700,
+                                    background: p.highlight
+                                      ? (isSelected ? '#FDE68A' : '#EFF6FF')
+                                      : (isSelected ? '#FEF3C7' : '#F1F5F9'),
+                                    color: p.highlight
+                                      ? (isSelected ? '#92400E' : '#1D4ED8')
+                                      : (isSelected ? '#B45309' : '#475569'),
+                                    border: p.highlight
+                                      ? (isSelected ? '1px solid #FCD34D' : '1px solid #BFDBFE')
+                                      : '1px solid transparent'
+                                  }}
+                                >
+                                  {p.label}: ₹{p.val}
+                                </span>
+                              ))}
                             </div>
                           </div>
                         );
@@ -3018,6 +3374,7 @@ export default function App() {
                           <th style={{ padding: '14px 16px', fontWeight: 700, color: 'var(--text-muted)', fontSize: '0.75rem', letterSpacing: '0.04em' }}>AADHAAR / VEHICLE</th>
                           <th style={{ padding: '14px 16px', fontWeight: 700, color: 'var(--text-muted)', fontSize: '0.75rem', letterSpacing: '0.04em' }}>DUTY STATUS</th>
                           <th style={{ padding: '14px 16px', fontWeight: 700, color: 'var(--text-muted)', fontSize: '0.75rem', letterSpacing: '0.04em' }}>EARNINGS</th>
+                          <th style={{ padding: '14px 16px', fontWeight: 700, color: 'var(--text-muted)', fontSize: '0.75rem', letterSpacing: '0.04em' }}>SUBSCRIPTION</th>
                           <th style={{ padding: '14px 16px', fontWeight: 700, color: 'var(--text-muted)', fontSize: '0.75rem', letterSpacing: '0.04em' }}>KYC STATUS</th>
                           <th style={{ padding: '14px 20px', fontWeight: 700, color: 'var(--text-muted)', fontSize: '0.75rem', letterSpacing: '0.04em', textAlign: 'right' }}>ACTIONS</th>
                         </tr>
@@ -3057,11 +3414,11 @@ export default function App() {
                                       {prov.name}
                                     </span>
                                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 2, background: '#FEF9C3', color: '#854D0E', fontSize: '0.68rem', fontWeight: 700, padding: '1px 5px', borderRadius: 4 }}>
-                                      <Star size={10} fill="#CA8A04" color="#CA8A04" /> {prov.rating || 4.9}
+                                      <Star size={10} fill="#CA8A04" color="#CA8A04" /> {prov.rating || 5}
                                     </span>
                                   </div>
-                                  <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 1 }}>
-                                    ID: {prov.id}
+                                  <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 1, fontWeight: 600 }}>
+                                    ID: <span style={{ color: '#2563EB' }}>{prov.partnerCode || (prov.id?.startsWith('prv_') ? `LP-${prov.id.slice(-4).toUpperCase()}` : prov.id)}</span>
                                   </p>
                                 </div>
                               </div>
@@ -3072,13 +3429,18 @@ export default function App() {
                               <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: '#FFF4EF', padding: '2px 8px', borderRadius: 5, border: '1px solid #FFD3C2', width: 'fit-content' }}>
                                   {getCategoryIcon(prov.category)}
-                                  <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#DE4915', textTransform: 'capitalize' }}>
-                                    {prov.category ? prov.category.replace('cat_', '') : 'General'}
+                                  <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#DE4915' }}>
+                                    {prov.categoryName || (prov.category ? prov.category.replace('cat_', '').replace(/_/g, ' ') : 'General')}
                                   </span>
                                 </div>
-                                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 500 }}>
-                                  {prov.serviceName || 'Verified Specialist'}
+                                <span style={{ fontSize: '0.75rem', color: '#334155', fontWeight: 600 }}>
+                                  ↳ {prov.subCategoryName || prov.serviceName || 'All Services'}
                                 </span>
+                                {prov.selectedChildServices && prov.selectedChildServices.length > 0 && (
+                                  <span style={{ fontSize: '0.68rem', color: '#059669', background: '#ECFDF5', padding: '1px 6px', borderRadius: 4, width: 'fit-content', border: '1px solid #A7F3D0' }}>
+                                    {prov.selectedChildServices.length} Selected Tasks
+                                  </span>
+                                )}
                               </div>
                             </td>
 
@@ -3108,7 +3470,7 @@ export default function App() {
                                   </span>
                                 ) : (
                                   <span style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>
-                                    No vehicle assigned
+                                    Vehicle: <strong>N/A</strong>
                                   </span>
                                 )}
                               </div>
@@ -3143,17 +3505,92 @@ export default function App() {
                             <td style={{ padding: '14px 16px' }}>
                               <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                                 <span style={{ fontWeight: 700, color: '#059669', fontSize: '0.88rem' }}>
-                                  ₹{prov.earnings || prov.walletBalance || 1450}
+                                  ₹{prov.earnings ?? prov.walletBalance ?? 0}
                                 </span>
                                 <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                                  {prov.completedJobs || 12} completed jobs
+                                  {prov.completedJobs ?? 0} completed jobs
                                 </span>
                               </div>
                             </td>
 
-                            {/* 7. KYC Status & Actions */}
+                            {/* 7. Subscription Column */}
                             <td style={{ padding: '14px 16px' }}>
-                              {prov.kycStatus === 'verified' ? (
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                                {prov.subscriptionStatus === 'active' ? (
+                                  <div>
+                                    <span style={{
+                                      display: 'inline-flex',
+                                      alignItems: 'center',
+                                      gap: 4,
+                                      background: '#ECFDF5',
+                                      color: '#059669',
+                                      border: '1px solid #A7F3D0',
+                                      padding: '2px 8px',
+                                      borderRadius: 5,
+                                      fontSize: '0.72rem',
+                                      fontWeight: 700
+                                    }}>
+                                      <CheckCircle2 size={11} /> {prov.subscriptionPlanName || 'Active (0% cut)'}
+                                    </span>
+                                    {prov.subscriptionExpiresAt && (
+                                      <p style={{ fontSize: '0.67rem', color: 'var(--text-muted)', marginTop: 2 }}>
+                                        Till: {new Date(prov.subscriptionExpiresAt).toLocaleDateString()}
+                                      </p>
+                                    )}
+                                  </div>
+                                ) : (
+                                  <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                                    <span style={{
+                                      display: 'inline-flex',
+                                      alignItems: 'center',
+                                      gap: 4,
+                                      background: '#FEF2F2',
+                                      color: '#DC2626',
+                                      border: '1px solid #FECACA',
+                                      padding: '2px 8px',
+                                      borderRadius: 5,
+                                      fontSize: '0.72rem',
+                                      fontWeight: 700,
+                                      width: 'fit-content'
+                                    }}>
+                                      Unpaid
+                                    </span>
+                                    {(() => {
+                                      const cat = categories.find(c => c.id === prov.category);
+                                      const sub = cat?.subCategories?.find(s => s.id === (prov.subCategoryId || prov.subCategory));
+                                      const yrRate = sub?.subscriptionPlans?.['1_year'] || 1499;
+
+                                      return (
+                                        <button
+                                          onClick={() => handleOpenPaySubModal(prov)}
+                                          title="Record Payment & Activate Subscription for this Sub-Category"
+                                          style={{
+                                            background: '#F97316',
+                                            color: '#fff',
+                                            border: 'none',
+                                            padding: '4px 8px',
+                                            borderRadius: 5,
+                                            fontSize: '0.7rem',
+                                            fontWeight: 700,
+                                            cursor: 'pointer',
+                                            display: 'inline-flex',
+                                            alignItems: 'center',
+                                            gap: 4,
+                                            boxShadow: '0 1px 3px rgba(249,115,22,0.3)'
+                                          }}
+                                        >
+                                          💳 Mark Paid (₹{yrRate})
+                                        </button>
+                                      );
+                                    })()}
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+
+                            {/* 8. KYC Status & Actions */}
+                            <td style={{ padding: '14px 16px' }}>
+                              {prov.kycStatus === 'verified' || prov.kycStatus === 'approved' ? (
                                 <span style={{
                                   display: 'inline-flex',
                                   alignItems: 'center',
@@ -3631,7 +4068,7 @@ export default function App() {
         </div>
       </main>
 
-      {/* 1. SIMPLE MODAL: ADD CATEGORY */}
+      {/* 1. MODAL: ADD / EDIT CATEGORY WITH ICON UPLOAD */}
       {showAddCatModal && (
         <div style={{
           position: 'fixed',
@@ -3639,44 +4076,258 @@ export default function App() {
           left: 0,
           right: 0,
           bottom: 0,
-          background: 'rgba(15, 23, 42, 0.45)',
+          background: 'rgba(15, 23, 42, 0.55)',
           backdropFilter: 'blur(6px)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          zIndex: 100
+          zIndex: 1100,
+          padding: 20
         }}>
-          <div className="glass-panel" style={{ width: 420, padding: 26, background: '#FFFFFF', boxShadow: '0 20px 40px rgba(0,0,0,0.12)' }}>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: 16 }}>
-              Add Category
-            </h3>
-            <form onSubmit={handleCreateCategory} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div className="glass-panel" style={{ width: 460, maxWidth: '100%', padding: 26, background: '#FFFFFF', borderRadius: 16, boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)', border: '1px solid #E2E8F0' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
               <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>Category Name</label>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-main)', margin: 0 }}>
+                  {editingCategory ? 'Edit Category & Icon' : 'Add New Category'}
+                </h3>
+                <p style={{ margin: '4px 0 0', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                  Upload custom icon & assign theme color. Instantly syncs with Customer App.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => { setShowAddCatModal(false); resetCatInputs(); }}
+                style={{ background: '#F1F5F9', border: 'none', borderRadius: '50%', width: 30, height: 30, cursor: 'pointer', fontSize: '1rem', color: '#64748B' }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveCategory} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {/* Category Name */}
+              <div>
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-main)', fontWeight: 700 }}>
+                  Category Name *
+                </label>
                 <input
                   type="text"
-                  placeholder="e.g. Home Cleaning, Salon, Plumbing..."
+                  placeholder="e.g. Salon & Beauty, Home Cleaning, Painting..."
                   autoFocus
                   required
                   value={catNameInput}
                   onChange={(e) => setCatNameInput(e.target.value)}
-                  style={{ width: '100%', padding: '11px 14px', marginTop: 6, borderRadius: 8, background: '#F8FAFC', color: 'var(--text-main)', border: '1px solid #CBD5E1', outline: 'none', fontSize: '0.9rem' }}
+                  style={{ width: '100%', padding: '10px 14px', marginTop: 6, borderRadius: 8, background: '#F8FAFC', color: 'var(--text-main)', border: '1px solid #CBD5E1', outline: 'none', fontSize: '0.9rem', fontWeight: 600 }}
                 />
               </div>
 
+              {/* Category Icon / Image Upload */}
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+                  <label style={{ fontSize: '0.8rem', color: 'var(--text-main)', fontWeight: 700 }}>
+                    Category Icon / Image (PNG / SVG / JPG)
+                  </label>
+                  {catUploading && (
+                    <span style={{ fontSize: '0.72rem', color: '#DE4915', fontWeight: 700 }}>
+                      Uploading image...
+                    </span>
+                  )}
+                </div>
+
+                {catIconPreview || catIconUrlInput ? (
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 14,
+                    padding: 12,
+                    borderRadius: 10,
+                    background: '#F8FAFC',
+                    border: '1.5px solid #CBD5E1'
+                  }}>
+                    <div style={{
+                      width: 54,
+                      height: 54,
+                      borderRadius: 12,
+                      background: catColorInput || '#DE4915',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                      boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
+                    }}>
+                      <img
+                        src={catIconPreview || catIconUrlInput}
+                        alt="Icon Preview"
+                        style={{ width: 34, height: 34, objectFit: 'contain' }}
+                        onError={(e) => { e.target.style.display = 'none'; }}
+                      />
+                    </div>
+                    <div style={{ flex: 1, overflow: 'hidden' }}>
+                      <p style={{ margin: 0, fontSize: '0.82rem', fontWeight: 700, color: '#059669', display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <Check size={14} /> Icon Ready
+                      </p>
+                      <p style={{ margin: '3px 0 0', fontSize: '0.7rem', color: '#64748B', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                        {catIconUrlInput.startsWith('data:') ? 'Custom uploaded image (embedded)' : catIconUrlInput}
+                      </p>
+                    </div>
+                    <div style={{ display: 'flex', gap: 6 }}>
+                      <label style={{
+                        padding: '6px 10px',
+                        borderRadius: 6,
+                        background: '#FFFFFF',
+                        border: '1px solid #CBD5E1',
+                        color: 'var(--text-main)',
+                        fontSize: '0.73rem',
+                        fontWeight: 600,
+                        cursor: 'pointer'
+                      }}>
+                        Change
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleCategoryIconUpload}
+                          style={{ display: 'none' }}
+                        />
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => { setCatIconUrlInput(''); setCatIconPreview(''); }}
+                        style={{
+                          padding: '6px 8px',
+                          borderRadius: 6,
+                          background: '#FEF2F2',
+                          border: '1px solid #FECACA',
+                          color: '#DC2626',
+                          fontSize: '0.73rem',
+                          fontWeight: 600,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <label style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '20px 14px',
+                    borderRadius: 10,
+                    background: '#F8FAFC',
+                    border: '2px dashed #CBD5E1',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease'
+                  }}>
+                    <UploadCloud size={28} color="#94A3B8" />
+                    <span style={{ fontSize: '0.84rem', fontWeight: 700, color: '#334155', marginTop: 6 }}>
+                      Click to Upload Custom Icon / Image
+                    </span>
+                    <span style={{ fontSize: '0.72rem', color: '#94A3B8', marginTop: 2 }}>
+                      PNG, SVG, JPG, WebP (Transparent icons look best in Customer App)
+                    </span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleCategoryIconUpload}
+                      style={{ display: 'none' }}
+                    />
+                  </label>
+                )}
+
+                {/* Direct Image URL input option */}
+                <div style={{ marginTop: 8 }}>
+                  <input
+                    type="url"
+                    placeholder="...or paste direct image URL (https://.../icon.png)"
+                    value={catIconUrlInput}
+                    onChange={(e) => {
+                      setCatIconUrlInput(e.target.value);
+                      setCatIconPreview(e.target.value);
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '7px 10px',
+                      borderRadius: 6,
+                      background: '#FFFFFF',
+                      border: '1px solid #E2E8F0',
+                      fontSize: '0.76rem',
+                      color: '#475569',
+                      outline: 'none'
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Theme Color Swatch */}
+              <div>
+                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-main)', fontWeight: 700, marginBottom: 8 }}>
+                  Category Theme Color:
+                </label>
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                  {[
+                    { hex: '#DE4915', name: 'Loki Orange' },
+                    { hex: '#2563EB', name: 'Royal Blue' },
+                    { hex: '#10B981', name: 'Emerald' },
+                    { hex: '#F59E0B', name: 'Amber Gold' },
+                    { hex: '#8B5CF6', name: 'Purple' },
+                    { hex: '#EC4899', name: 'Pink' },
+                    { hex: '#EF4444', name: 'Red' },
+                    { hex: '#06B6D4', name: 'Cyan' },
+                  ].map(c => {
+                    const isSelected = catColorInput.toLowerCase() === c.hex.toLowerCase();
+                    return (
+                      <div
+                        key={c.hex}
+                        onClick={() => setCatColorInput(c.hex)}
+                        title={c.name}
+                        style={{
+                          width: 32,
+                          height: 32,
+                          borderRadius: 8,
+                          background: c.hex,
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          border: isSelected ? '3px solid #1E293B' : '2px solid #FFFFFF',
+                          boxShadow: isSelected ? '0 0 0 2px #DE4915' : '0 2px 5px rgba(0,0,0,0.1)',
+                          transition: 'all 0.15s ease'
+                        }}
+                      >
+                        {isSelected && <Check size={16} color="#FFFFFF" />}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Actions */}
               <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
                 <button
                   type="button"
-                  onClick={() => setShowAddCatModal(false)}
-                  style={{ flex: 1, padding: '10px', borderRadius: 8, background: '#F1F5F9', color: 'var(--text-muted)', fontWeight: 600, cursor: 'pointer' }}
+                  onClick={() => { setShowAddCatModal(false); resetCatInputs(); }}
+                  style={{ flex: 1, padding: '11px', borderRadius: 8, background: '#F1F5F9', color: 'var(--text-muted)', fontWeight: 600, cursor: 'pointer', border: 'none' }}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  style={{ flex: 1, padding: '10px', borderRadius: 8, background: 'var(--primary)', color: '#fff', fontWeight: 600, cursor: 'pointer', boxShadow: '0 2px 10px rgba(222, 73, 21, 0.25)' }}
+                  disabled={catUploading}
+                  style={{
+                    flex: 1.5,
+                    padding: '11px',
+                    borderRadius: 8,
+                    background: 'linear-gradient(135deg, #DE4915 0%, #B8350B 100%)',
+                    color: '#fff',
+                    fontWeight: 700,
+                    cursor: catUploading ? 'wait' : 'pointer',
+                    boxShadow: '0 4px 14px rgba(222, 73, 21, 0.3)',
+                    border: 'none',
+                    opacity: catUploading ? 0.7 : 1
+                  }}
                 >
-                  Save Category
+                  {editingCategory ? 'Update Category' : 'Save & Publish Category'}
                 </button>
               </div>
             </form>
@@ -4473,6 +5124,295 @@ export default function App() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* 9. MODAL: SUB-CATEGORY SUBSCRIPTION PRICING */}
+      {subPricingModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(15, 23, 42, 0.65)',
+          backdropFilter: 'blur(4px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1100,
+          padding: 20
+        }}>
+          <div style={{
+            background: '#fff',
+            borderRadius: 16,
+            width: '100%',
+            maxWidth: 480,
+            padding: 24,
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+            border: '1px solid #E2E8F0'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span style={{ fontSize: '1.4rem' }}>💳</span>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: '#1E293B' }}>
+                    Set Subscription Rates
+                  </h3>
+                  <p style={{ margin: 0, fontSize: '0.8rem', color: '#D97706', fontWeight: 600 }}>
+                    Sub-Category: {subPricingModal.sub?.name}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setSubPricingModal(null)}
+                style={{ background: '#F1F5F9', border: 'none', borderRadius: '50%', width: 32, height: 32, cursor: 'pointer', fontSize: '1rem', color: '#64748B' }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <p style={{ fontSize: '0.82rem', color: '#64748B', marginBottom: 18, lineHeight: 1.4 }}>
+              Set customized subscription rates for service partners registered under <strong>{subPricingModal.sub?.name}</strong>. Partners retain 100% customer earnings (0% commission).
+            </p>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 18 }}>
+              {/* 1 Month */}
+              <div style={{ background: '#F8FAFC', padding: 12, borderRadius: 10, border: '1px solid #E2E8F0' }}>
+                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>
+                  📅 1 Month Plan (₹)
+                </label>
+                <div style={{ position: 'relative' }}>
+                  <span style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', fontWeight: 700, color: '#94A3B8' }}>₹</span>
+                  <input
+                    type="number"
+                    min="1"
+                    value={sub1mInput}
+                    onChange={(e) => setSub1mInput(e.target.value)}
+                    style={{ width: '100%', padding: '8px 10px 8px 24px', borderRadius: 8, border: '1px solid #CBD5E1', fontSize: '0.95rem', fontWeight: 700, color: '#1E293B' }}
+                  />
+                </div>
+              </div>
+
+              {/* 3 Months */}
+              <div style={{ background: '#EFF6FF', padding: 12, borderRadius: 10, border: '1px solid #BFDBFE' }}>
+                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#1D4ED8', marginBottom: 6 }}>
+                  📅 3 Months Plan (₹)
+                </label>
+                <div style={{ position: 'relative' }}>
+                  <span style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', fontWeight: 700, color: '#93C5FD' }}>₹</span>
+                  <input
+                    type="number"
+                    min="1"
+                    value={sub3mInput}
+                    onChange={(e) => setSub3mInput(e.target.value)}
+                    style={{ width: '100%', padding: '8px 10px 8px 24px', borderRadius: 8, border: '1px solid #93C5FD', fontSize: '0.95rem', fontWeight: 700, color: '#1E293B' }}
+                  />
+                </div>
+              </div>
+
+              {/* 6 Months */}
+              <div style={{ background: '#F8FAFC', padding: 12, borderRadius: 10, border: '1px solid #E2E8F0' }}>
+                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>
+                  📅 6 Months Plan (₹)
+                </label>
+                <div style={{ position: 'relative' }}>
+                  <span style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', fontWeight: 700, color: '#94A3B8' }}>₹</span>
+                  <input
+                    type="number"
+                    min="1"
+                    value={sub6mInput}
+                    onChange={(e) => setSub6mInput(e.target.value)}
+                    style={{ width: '100%', padding: '8px 10px 8px 24px', borderRadius: 8, border: '1px solid #CBD5E1', fontSize: '0.95rem', fontWeight: 700, color: '#1E293B' }}
+                  />
+                </div>
+              </div>
+
+              {/* 1 Year */}
+              <div style={{ background: '#FFFBEB', padding: 12, borderRadius: 10, border: '1px solid #FCD34D' }}>
+                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#B45309', marginBottom: 6 }}>
+                  🏆 1 Year Annual Plan (₹)
+                </label>
+                <div style={{ position: 'relative' }}>
+                  <span style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', fontWeight: 700, color: '#FBBF24' }}>₹</span>
+                  <input
+                    type="number"
+                    min="1"
+                    value={sub1yInput}
+                    onChange={(e) => setSub1yInput(e.target.value)}
+                    style={{ width: '100%', padding: '8px 10px 8px 24px', borderRadius: 8, border: '1px solid #FCD34D', fontSize: '0.95rem', fontWeight: 700, color: '#1E293B' }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div style={{ background: '#FEF3C7', padding: '10px 14px', borderRadius: 10, marginBottom: 20, display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{ fontSize: '1.1rem' }}>💡</span>
+              <p style={{ margin: 0, fontSize: '0.78rem', color: '#92400E', lineHeight: 1.4 }}>
+                Changes will take effect immediately. Existing active subscriptions will remain valid till their renewal date.
+              </p>
+            </div>
+
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button
+                type="button"
+                onClick={() => setSubPricingModal(null)}
+                style={{ flex: 1, padding: '11px', borderRadius: 8, background: '#F1F5F9', color: '#475569', fontWeight: 600, cursor: 'pointer', border: 'none' }}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleSaveSubPricing}
+                style={{ flex: 1.5, padding: '11px', borderRadius: 8, background: 'linear-gradient(135deg, #DE4915 0%, #B8350B 100%)', color: '#fff', fontWeight: 700, cursor: 'pointer', border: 'none', boxShadow: '0 4px 14px rgba(222, 73, 21, 0.3)' }}
+              >
+                Save Subscription Rates
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 10. MODAL: RECORD PARTNER SUBSCRIPTION PAYMENT */}
+      {paySubModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(15, 23, 42, 0.65)',
+          backdropFilter: 'blur(4px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1100,
+          padding: 20
+        }}>
+          <div style={{
+            background: '#fff',
+            borderRadius: 16,
+            width: '100%',
+            maxWidth: 500,
+            padding: 24,
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+            border: '1px solid #E2E8F0'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span style={{ fontSize: '1.4rem' }}>💳</span>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: '#1E293B' }}>
+                    Record Subscription Payment
+                  </h3>
+                  <p style={{ margin: 0, fontSize: '0.8rem', color: '#059669', fontWeight: 600 }}>
+                    Partner: {paySubModal.partner?.name} ({paySubModal.partner?.partnerCode || paySubModal.partner?.id})
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setPaySubModal(null)}
+                style={{ background: '#F1F5F9', border: 'none', borderRadius: '50%', width: 32, height: 32, cursor: 'pointer', fontSize: '1rem', color: '#64748B' }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div style={{ background: '#F8FAFC', padding: '10px 14px', borderRadius: 10, border: '1px solid #E2E8F0', marginBottom: 16 }}>
+              <p style={{ margin: 0, fontSize: '0.78rem', color: '#64748B' }}>
+                Assigned Category: <strong>{paySubModal.cat?.name || 'General'}</strong>
+                {paySubModal.sub ? <> ↳ <strong>{paySubModal.sub.name}</strong></> : null}
+              </p>
+            </div>
+
+            {/* Duration Selector */}
+            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: 8 }}>
+              Select Plan Duration:
+            </label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 16 }}>
+              {[
+                { id: '1_month', label: '1 Month', rate: paySubModal.plans?.['1_month'] || 199 },
+                { id: '3_months', label: '3 Months', rate: paySubModal.plans?.['3_months'] || 499 },
+                { id: '6_months', label: '6 Months', rate: paySubModal.plans?.['6_months'] || 899 },
+                { id: '1_year', label: '1 Year (Annual)', rate: paySubModal.plans?.['1_year'] || 1499 },
+              ].map(plan => {
+                const isSelected = payPlanDuration === plan.id;
+                return (
+                  <div
+                    key={plan.id}
+                    onClick={() => {
+                      setPayPlanDuration(plan.id);
+                      setPayCustomAmount(plan.rate);
+                    }}
+                    style={{
+                      padding: '12px 14px',
+                      borderRadius: 10,
+                      border: isSelected ? '2px solid #DE4915' : '1px solid #E2E8F0',
+                      background: isSelected ? '#FFF7ED' : '#FAFAFA',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center'
+                    }}
+                  >
+                    <div>
+                      <div style={{ fontWeight: 700, fontSize: '0.85rem', color: isSelected ? '#C2410C' : '#334155' }}>{plan.label}</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748B' }}>0% commission</div>
+                    </div>
+                    <div style={{ fontWeight: 800, fontSize: '1rem', color: isSelected ? '#DE4915' : '#1E293B' }}>₹{plan.rate}</div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Payment Method */}
+            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: 8 }}>
+              Payment Received Mode:
+            </label>
+            <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
+              {[
+                { id: 'cash', label: '💵 Cash in Hand' },
+                { id: 'upi', label: '📱 Direct UPI / QR' },
+                { id: 'bank', label: '🏦 Bank Transfer' },
+              ].map(m => (
+                <button
+                  key={m.id}
+                  type="button"
+                  onClick={() => setPayMethod(m.id)}
+                  style={{
+                    flex: 1,
+                    padding: '9px 6px',
+                    borderRadius: 8,
+                    border: payMethod === m.id ? '2px solid #059669' : '1px solid #CBD5E1',
+                    background: payMethod === m.id ? '#ECFDF5' : '#fff',
+                    color: payMethod === m.id ? '#065F46' : '#475569',
+                    fontWeight: 700,
+                    fontSize: '0.78rem',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {m.label}
+                </button>
+              ))}
+            </div>
+
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button
+                type="button"
+                onClick={() => setPaySubModal(null)}
+                style={{ flex: 1, padding: '11px', borderRadius: 8, background: '#F1F5F9', color: '#475569', fontWeight: 600, cursor: 'pointer', border: 'none' }}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmSubscriptionPayment}
+                style={{ flex: 1.5, padding: '11px', borderRadius: 8, background: 'linear-gradient(135deg, #059669 0%, #047857 100%)', color: '#fff', fontWeight: 700, cursor: 'pointer', border: 'none', boxShadow: '0 4px 14px rgba(5, 150, 105, 0.3)' }}
+              >
+                ✓ Confirm & Activate Plan
+              </button>
+            </div>
           </div>
         </div>
       )}

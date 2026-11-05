@@ -12,6 +12,7 @@ router.get('/providers', adminController.getAllProviders);
 router.post('/providers', adminController.createProvider);
 router.delete('/providers/:id', adminController.deleteProvider);
 router.patch('/providers/:id/kyc', adminController.updateKycStatus);
+router.patch('/providers/:id/subscription', adminController.updateProviderSubscription);
 router.patch('/providers/:id/toggle-online', adminController.toggleProviderOnline);
 
 // Customer routes

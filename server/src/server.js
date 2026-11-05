@@ -1,5 +1,6 @@
 const http = require('http');
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
@@ -18,6 +19,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const locationRoutes = require('./routes/locationRoutes');
 const promotionRoutes = require('./routes/promotionRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
 
 const app = express();
 const server = http.createServer(app);
@@ -35,8 +37,11 @@ socketHandler(io);
 // Security & Middlewares
 app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(cors({ origin: '*' }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '25mb' }));
+app.use(express.urlencoded({ extended: true, limit: '25mb' }));
+
+// Static uploads serving for dynamic category icons, ad banners, etc.
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Rate Limiting (development friendly)
 const limiter = rateLimit({
@@ -67,6 +72,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/locations', locationRoutes);
 app.use('/api/promotions', promotionRoutes);
+app.use('/api/upload', uploadRoutes);
 
 // 404 handler
 app.use((req, res) => {

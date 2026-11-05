@@ -20,7 +20,13 @@
           "hasChildCategories": false,
           "basePrice": 199,
           "duration": "30 mins",
-          "childCategories": []
+          "childCategories": [],
+          "subscriptionPlans": {
+            "1_month": 99,
+            "3_months": 299,
+            "6_months": 899,
+            "1_year": 1499
+          }
         },
         {
           "id": "sub_tank_service",
@@ -42,9 +48,16 @@
               "duration": "60 mins",
               "description": "Starter box connection & pipeline wiring"
             }
-          ]
+          ],
+          "subscriptionPlans": {
+            "1_month": 219,
+            "3_months": 499,
+            "6_months": 899,
+            "1_year": 1499
+          }
         }
-      ]
+      ],
+      "iconUrl": "http://localhost:5000/uploads/categories/plumbing_tap.png"
     },
     {
       "id": "cat_electrical",
@@ -66,7 +79,13 @@
           "hasChildCategories": false,
           "basePrice": 149,
           "duration": "25 mins",
-          "childCategories": []
+          "childCategories": [],
+          "subscriptionPlans": {
+            "1_month": 219,
+            "3_months": 499,
+            "6_months": 899,
+            "1_year": 1499
+          }
         },
         {
           "id": "sub_fan_inverter",
@@ -88,9 +107,16 @@
               "duration": "60 mins",
               "description": "Dual battery rack wiring & load balance"
             }
-          ]
+          ],
+          "subscriptionPlans": {
+            "1_month": 219,
+            "3_months": 499,
+            "6_months": 899,
+            "1_year": 1499
+          }
         }
-      ]
+      ],
+      "iconUrl": "http://localhost:5000/uploads/categories/electrician_bolt.png"
     },
     {
       "id": "cat_delivery",
@@ -113,7 +139,13 @@
           "hasChildCategories": false,
           "basePrice": 49,
           "duration": "30 mins",
-          "childCategories": []
+          "childCategories": [],
+          "subscriptionPlans": {
+            "1_month": 219,
+            "3_months": 499,
+            "6_months": 899,
+            "1_year": 1499
+          }
         },
         {
           "id": "sub_heavy_parcel",
@@ -122,9 +154,16 @@
           "hasChildCategories": false,
           "basePrice": 120,
           "duration": "45 mins",
-          "childCategories": []
+          "childCategories": [],
+          "subscriptionPlans": {
+            "1_month": 219,
+            "3_months": 499,
+            "6_months": 899,
+            "1_year": 1499
+          }
         }
-      ]
+      ],
+      "iconUrl": "http://localhost:5000/uploads/categories/instant_delivery.png"
     },
     {
       "id": "cat_mechanic",
@@ -146,20 +185,19 @@
           "hasChildCategories": true,
           "childCategories": [
             {
-              "id": "ch_puncture",
-              "name": "Doorstep Tubeless Puncture Fix",
-              "basePrice": 99,
-              "duration": "20 mins",
-              "description": "Includes air top-up & sealant check"
-            },
-            {
-              "id": "ch_bike_service",
-              "name": "General Periodic Oil & Brake Service",
-              "basePrice": 399,
-              "duration": "45 mins",
-              "description": "Chain lubing, spark plug clean, clutch adjust"
+              "id": "ch_1609b260",
+              "name": "Electric Bike",
+              "basePrice": 299,
+              "duration": "30 mins",
+              "description": ""
             }
-          ]
+          ],
+          "subscriptionPlans": {
+            "1_month": 219,
+            "3_months": 499,
+            "6_months": 899,
+            "1_year": 1499
+          }
         },
         {
           "id": "sub_car_repair",
@@ -168,9 +206,16 @@
           "hasChildCategories": false,
           "basePrice": 399,
           "duration": "30 mins",
-          "childCategories": []
+          "childCategories": [],
+          "subscriptionPlans": {
+            "1_month": 219,
+            "3_months": 499,
+            "6_months": 899,
+            "1_year": 1499
+          }
         }
-      ]
+      ],
+      "iconUrl": "http://localhost:5000/uploads/categories/mechanic_tools.png"
     },
     {
       "id": "cat_shops",
@@ -192,9 +237,16 @@
           "hasChildCategories": false,
           "basePrice": 30,
           "duration": "20 mins",
-          "childCategories": []
+          "childCategories": [],
+          "subscriptionPlans": {
+            "1_month": 219,
+            "3_months": 499,
+            "6_months": 899,
+            "1_year": 1499
+          }
         }
-      ]
+      ],
+      "iconUrl": "http://localhost:5000/uploads/categories/local_shop.png"
     },
     {
       "id": "cat_cleaning",
@@ -228,7 +280,13 @@
               "duration": "60 mins",
               "description": "Hard water stain removal & sanitization"
             }
-          ]
+          ],
+          "subscriptionPlans": {
+            "1_month": 219,
+            "3_months": 499,
+            "6_months": 899,
+            "1_year": 1499
+          }
         },
         {
           "id": "sub_pest",
@@ -237,9 +295,16 @@
           "hasChildCategories": false,
           "basePrice": 799,
           "duration": "60 mins",
-          "childCategories": []
+          "childCategories": [],
+          "subscriptionPlans": {
+            "1_month": 219,
+            "3_months": 499,
+            "6_months": 899,
+            "1_year": 1499
+          }
         }
-      ]
+      ],
+      "iconUrl": "http://localhost:5000/uploads/categories/deep_cleaning.png"
     },
     {
       "id": "cat_appliances",
@@ -281,7 +346,13 @@
               "duration": "60 mins",
               "description": "R32/R410 refrigerant filling with pressure test"
             }
-          ]
+          ],
+          "subscriptionPlans": {
+            "1_month": 219,
+            "3_months": 499,
+            "6_months": 899,
+            "1_year": 1499
+          }
         },
         {
           "id": "sub_fridge",
@@ -290,7 +361,13 @@
           "hasChildCategories": false,
           "basePrice": 299,
           "duration": "40 mins",
-          "childCategories": []
+          "childCategories": [],
+          "subscriptionPlans": {
+            "1_month": 219,
+            "3_months": 499,
+            "6_months": 899,
+            "1_year": 1499
+          }
         },
         {
           "id": "sub_washing",
@@ -312,7 +389,13 @@
               "duration": "40 mins",
               "description": "Drain valve & belt replacement"
             }
-          ]
+          ],
+          "subscriptionPlans": {
+            "1_month": 219,
+            "3_months": 499,
+            "6_months": 899,
+            "1_year": 1499
+          }
         },
         {
           "id": "sub_f85515b9",
@@ -321,9 +404,16 @@
           "hasChildCategories": true,
           "basePrice": null,
           "duration": null,
-          "childCategories": []
+          "childCategories": [],
+          "subscriptionPlans": {
+            "1_month": 219,
+            "3_months": 499,
+            "6_months": 899,
+            "1_year": 1499
+          }
         }
-      ]
+      ],
+      "iconUrl": "http://localhost:5000/uploads/categories/appliance_repairs.png"
     },
     {
       "id": "cat_ab5c5cd1",
@@ -342,7 +432,13 @@
           "hasChildCategories": false,
           "basePrice": 499,
           "duration": "1-2 days",
-          "childCategories": []
+          "childCategories": [],
+          "subscriptionPlans": {
+            "1_month": 219,
+            "3_months": 499,
+            "6_months": 899,
+            "1_year": 1499
+          }
         },
         {
           "id": "sub_comm_lease",
@@ -351,11 +447,18 @@
           "hasChildCategories": false,
           "basePrice": 999,
           "duration": "2-3 days",
-          "childCategories": []
+          "childCategories": [],
+          "subscriptionPlans": {
+            "1_month": 219,
+            "3_months": 499,
+            "6_months": 899,
+            "1_year": 1499
+          }
         }
       ],
       "servicesCount": 2,
-      "active": true
+      "active": true,
+      "iconUrl": "http://localhost:5000/uploads/categories/lease_rental.png"
     },
     {
       "id": "cat_bd22116b",
@@ -368,24 +471,36 @@
       ],
       "subCategories": [
         {
-          "id": "sub_b3924192",
-          "name": "DTH Services",
+          "id": "sub_1a3bdbe3",
+          "name": "dth SERVICES",
           "description": "",
           "hasChildCategories": true,
           "basePrice": null,
           "duration": null,
-          "childCategories": []
-        },
-        {
-          "id": "sub_f112ab08",
-          "name": "Splicing Services",
-          "description": "",
-          "hasChildCategories": true,
-          "basePrice": null,
-          "duration": null,
-          "childCategories": []
+          "childCategories": [],
+          "subscriptionPlans": {
+            "1_month": 219,
+            "3_months": 499,
+            "6_months": 899,
+            "1_year": 1499
+          }
         }
       ],
+      "servicesCount": 0,
+      "active": true,
+      "iconUrl": "http://localhost:5000/uploads/categories/icons8-wi-fi-router-94_1793887970416.png"
+    },
+    {
+      "id": "cat_782c9cbd",
+      "name": "bykes",
+      "icon": "layers",
+      "iconUrl": "http://localhost:5000/uploads/categories/icons8-delivery-94_1793888349181.png",
+      "color": "#DE4915",
+      "description": "",
+      "requiredDocuments": [
+        "aadhaar"
+      ],
+      "subCategories": [],
       "servicesCount": 0,
       "active": true
     }
@@ -501,23 +616,33 @@
       "passwordHash": "$2a$10$MptCrf9UyRLHl86cI6voz.TWDD8A.0/r5AeA8w4Hzf0s7emKuhtT6",
       "role": "admin",
       "createdAt": "2026-11-02T05:37:25.343Z"
+    },
+    {
+      "id": "cust_prasad_01",
+      "name": "gandepalli prasad",
+      "email": "customer@loki.com",
+      "phone": "9010737882",
+      "passwordHash": ".7uitW75fEYTBekVlKzk0C.Z4sFgEVf49NwcwbqhOPtpi",
+      "role": "customer",
+      "address": "Station Road, Chodavaram Town",
+      "createdAt": "2026-11-05T15:30:35.962Z"
     }
   ],
   "providers": [
     {
       "id": "prv_76fcc359",
       "name": "gandepalli prasad",
-      "email": "9010737882@partner.loki",
+      "email": "psdgandepalli@gmail.com",
       "phone": "9010737882",
       "passwordHash": "$2a$10$jFwsbLvh.7uitW75fEYTBekVlKzk0C.Z4sFgEVf49NwcwbqhOPtpi",
       "role": "provider",
-      "category": "services",
+      "category": "cat_bd22116b",
       "serviceName": "Service Specialist",
-      "rating": 5,
-      "jobsCompleted": 0,
-      "isOnline": false,
-      "kycStatus": "pending",
-      "isProfileComplete": false,
+      "rating": 4.9,
+      "jobsCompleted": 19,
+      "isOnline": true,
+      "kycStatus": "approved",
+      "isProfileComplete": true,
       "aadhaarNumber": "576972607113",
       "vehicleNumber": "N/A",
       "currentLocation": {
@@ -525,10 +650,205 @@
         "lng": 78.3772
       },
       "walletBalance": 0,
-      "createdAt": "2026-11-05T11:13:46.468Z"
+      "createdAt": "2026-11-05T11:13:46.468Z",
+      "experience": "3 - 5 Years",
+      "district": "Anakapalli",
+      "mandal": "Chodavaram",
+      "village": "Chodavaram Town",
+      "pincode": "531036",
+      "address": "beside Rcm hcrach, Chodavaram Town, Chodavaram, Anakapalli - 531036, Chodavaram Town, Chodavaram, Anakapalli",
+      "fatherName": "satyanarayana murthy",
+      "motherName": "surya narayanamma",
+      "dob": "04/08/1986",
+      "age": "40",
+      "currentAddress": "beside Rcm hcrach, Chodavaram Town, Chodavaram, Anakapalli - 531036, Chodavaram Town, Chodavaram, Anakapalli - 531036",
+      "emergencyContact": "9848006463",
+      "aadhaarFrontUrl": "verified_aadhaar_front.jpg",
+      "aadhaarBackUrl": "verified_aadhaar_back.jpg",
+      "panNumber": "AYIPG5926B",
+      "panCardUrl": "verified_pan_card.jpg",
+      "drivingLicenseNumber": "AP31UB22566",
+      "drivingLicenseUrl": "verified_driving_license.jpg",
+      "skillCertificates": "1235625421",
+      "livePhotoVerificationStatus": "Verified",
+      "guarantorName": "JAYA PRAKASH",
+      "guarantorRelation": "SON",
+      "guarantorPhone": "9848006463",
+      "workingHours": "Full-Time",
+      "serviceRadius": "50 KM",
+      "hasPhysicalShop": true,
+      "shopName": "sony dth services",
+      "shopAddress": "Bisde rcm charch, Chodavaram Town, Chodavaram, Anakapalli, Chodavaram Town, Chodavaram, Anakapalli",
+      "shopFrontPhotoUrl": "shop_front_photo.jpg",
+      "shopInsidePhotoUrl": "shop_inside_photo.jpg",
+      "shopGstNumber": "",
+      "landmark": "Chodavaram Town",
+      "shopDistrict": "Anakapalli",
+      "shopMandal": "Chodavaram",
+      "shopVillage": "Chodavaram Town",
+      "shopLandmark": "Chodavaram Town",
+      "profileUpdatedAt": "2026-11-05T12:42:41.095Z",
+      "partnerCode": "LP-1001",
+      "categoryName": "Cable Technicians",
+      "subCategoryId": "sub_1a3bdbe3",
+      "subCategoryName": "dth SERVICES",
+      "selectedChildServices": [],
+      "subscriptionStatus": "active",
+      "leadsReceived": 315
+    },
+    {
+      "id": "prv_plumber_01",
+      "name": "K. Ramesh",
+      "phone": "9848022334",
+      "category": "cat_plumbing",
+      "categoryName": "Plumbing Services",
+      "subCategoryId": "sub_tap_repair",
+      "subCategoryName": "Taps, Shower & Valves",
+      "selectedChildServices": [],
+      "experience": "5+ Years",
+      "district": "Anakapalli",
+      "mandal": "Chodavaram",
+      "village": "Chodavaram Town",
+      "serviceRadius": "25 KM",
+      "rating": 4.9,
+      "jobsCompleted": 38,
+      "isOnline": true,
+      "kycStatus": "approved",
+      "subscriptionStatus": "active",
+      "shopName": "Ramesh Plumbing & Sanitary Works",
+      "createdAt": "2026-11-05T14:59:10.196Z",
+      "isProfileComplete": true
+    },
+    {
+      "id": "prv_electrician_01",
+      "name": "S. Venkatesh",
+      "phone": "9848055667",
+      "category": "cat_electrical",
+      "categoryName": "Electricians",
+      "subCategoryId": "sub_wiring",
+      "subCategoryName": "Switchboard & Short Circuits",
+      "selectedChildServices": [],
+      "experience": "4 Years",
+      "district": "Anakapalli",
+      "mandal": "Chodavaram",
+      "village": "Chodavaram Town",
+      "serviceRadius": "15 KM",
+      "rating": 4.8,
+      "jobsCompleted": 29,
+      "isOnline": true,
+      "kycStatus": "approved",
+      "subscriptionStatus": "active",
+      "shopName": "Sri Venkateswara Electricals",
+      "createdAt": "2026-11-05T14:59:10.197Z",
+      "isProfileComplete": true
     }
   ],
-  "orders": [],
+  "orders": [
+    {
+      "id": "ORD-361954",
+      "customerId": "cust_prasad_01",
+      "customerName": "gandepalli prasad",
+      "customerPhone": "9010737882",
+      "customerAddress": "Station Road, Chodavaram Town",
+      "customerMandal": "Chodavaram",
+      "customerDistrict": "Anakapalli",
+      "categoryId": "cat_bd22116b",
+      "categoryName": "Cable Technicians",
+      "subCategoryId": "sub_1a3bdbe3",
+      "subCategoryName": "dth SERVICES",
+      "childTaskId": null,
+      "childTaskName": null,
+      "problemDescription": "",
+      "serviceName": "dth SERVICES",
+      "amount": 299,
+      "paymentMethod": "Cash on Service / Direct UPI",
+      "paymentStatus": "PENDING",
+      "orderStatus": "PENDING",
+      "providerId": null,
+      "providerName": "Broadcasting to nearby specialists...",
+      "providerPhone": null,
+      "otp": "7499",
+      "createdAt": "2026-11-05T15:17:05.292Z"
+    },
+    {
+      "id": "ORD-485026",
+      "customerId": "cust_1793891296650",
+      "customerName": "Anitha",
+      "customerPhone": "9848998877",
+      "customerAddress": "Gandhi Chowk, Chodavaram",
+      "customerMandal": "Chodavaram",
+      "customerDistrict": "Anakapalli",
+      "categoryId": "cat_plumbing",
+      "categoryName": "Plumbing Services",
+      "subCategoryId": null,
+      "subCategoryName": null,
+      "childTaskId": null,
+      "childTaskName": null,
+      "problemDescription": "Kitchen sink pipe blockage",
+      "serviceName": "Plumbing Services",
+      "amount": 299,
+      "paymentMethod": "Cash on Service / UPI",
+      "paymentStatus": "PENDING",
+      "orderStatus": "PENDING_DIRECT",
+      "providerId": "prv_plumber_01",
+      "providerName": "K. Ramesh",
+      "providerPhone": "9848022334",
+      "otp": "6579",
+      "createdAt": "2026-11-05T15:08:16.651Z"
+    },
+    {
+      "id": "ORD-625481",
+      "customerId": "cust_1793891296636",
+      "customerName": "Suresh Kumar",
+      "customerPhone": "9848112233",
+      "customerAddress": "Main Bazar, Chodavaram",
+      "customerMandal": "Chodavaram",
+      "customerDistrict": "Anakapalli",
+      "categoryId": "cat_bd22116b",
+      "categoryName": "Cable Technicians",
+      "subCategoryId": null,
+      "subCategoryName": null,
+      "childTaskId": null,
+      "childTaskName": null,
+      "problemDescription": "DTH antenna dish needs re-alignment",
+      "serviceName": "Cable Technicians",
+      "amount": 299,
+      "paymentMethod": "Cash on Service / UPI",
+      "paymentStatus": "PENDING",
+      "orderStatus": "PENDING",
+      "providerId": null,
+      "providerName": "Broadcasting to nearby specialists...",
+      "providerPhone": null,
+      "otp": "2645",
+      "createdAt": "2026-11-05T15:08:16.636Z"
+    },
+    {
+      "id": "ORD-499560",
+      "customerId": "cust_1793890787666",
+      "customerName": "Test Customer",
+      "customerPhone": "9848123456",
+      "customerAddress": "Station Road, Chodavaram",
+      "customerMandal": "Chodavaram",
+      "customerDistrict": "Anakapalli",
+      "categoryId": "cat_bd22116b",
+      "categoryName": "Cable Technicians",
+      "subCategoryId": "sub_b3924192",
+      "subCategoryName": null,
+      "childTaskId": null,
+      "childTaskName": null,
+      "problemDescription": "DTH signal not receiving, need alignment",
+      "serviceName": "Cable Technicians",
+      "amount": 299,
+      "paymentMethod": "Cash on Service / UPI",
+      "paymentStatus": "PENDING",
+      "orderStatus": "PENDING",
+      "providerId": null,
+      "providerName": "Broadcasting to nearby specialists...",
+      "providerPhone": null,
+      "otp": "5792",
+      "createdAt": "2026-11-05T14:59:47.666Z"
+    }
+  ],
   "locations": [
     {
       "id": "dist_anakapalli",

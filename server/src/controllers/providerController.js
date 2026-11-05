@@ -106,11 +106,127 @@ exports.updateLocation = (req, res) => {
 
 exports.getProviderOrders = (req, res) => {
   const providerId = req.user.id;
-  const orders = db.data.orders.filter(o => o.providerId === providerId || (o.orderStatus === 'PENDING' && o.category === req.user.category));
+  const provider = db.data.providers.find(p => p.id === providerId);
+
+  if (!provider) {
+    return res.status(404).json({ success: false, message: 'Provider not found' });
+  }
+
+  const orders = db.data.orders.filter(o => {
+    // 1. Direct assignment to this provider (accepted or assigned directly)
+    if (o.providerId === providerId) {
+      return true;
+    }
+
+    // 2. If order is assigned to another specific provider, DO NOT show to anyone else!
+    if (o.providerId && o.providerId !== providerId) {
+      return false;
+    }
+
+    // 3. For PENDING open pool requests, apply strict 5-Layer Shield
+    if (o.orderStatus === 'PENDING') {
+      // Layer 1: Category Match
+      const orderCat = o.categoryId || o.category;
+      if (orderCat && provider.category && orderCat !== provider.category) {
+        return false;
+      }
+
+      // Layer 2: Sub-Category Match (match by ID or Name)
+      if (o.subCategoryId && provider.subCategoryId && o.subCategoryId !== provider.subCategoryId) {
+        const oSubName = (o.subCategoryName || '').toLowerCase().trim();
+        const pSubName = (provider.subCategoryName || '').toLowerCase().trim();
+        if (!oSubName || !pSubName || oSubName !== pSubName) {
+          return false;
+        }
+      }
+
+      // Layer 3: Child Task Match (if partner has child task selection and order specifies child task)
+      if (o.childTaskId && provider.selectedChildServices && provider.selectedChildServices.length > 0) {
+        if (!provider.selectedChildServices.includes(o.childTaskId)) {
+          return false;
+        }
+      }
+
+      // Layer 4: Admin KYC Approval & Duty Check
+      if (provider.kycStatus !== 'approved' || !provider.isOnline) {
+        return false;
+      }
+
+      // Layer 5: Paid Subscription Check
+      if (provider.subscriptionStatus === 'unpaid' || provider.subscriptionStatus === 'expired') {
+        return false;
+      }
+
+      // Location Check: Mandal or Radius
+      if (o.customerMandal && (provider.mandal || provider.shopMandal)) {
+        const pMandal = (provider.mandal || provider.shopMandal || '').toLowerCase();
+        const cMandal = o.customerMandal.toLowerCase();
+        if (pMandal !== cMandal && provider.serviceRadius !== '50 KM') {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    return false;
+  });
 
   res.json({
     success: true,
     orders: orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+  });
+};
+
+// Customer Directory: Get verified technicians in a category with phone and direct hire info
+exports.getProvidersByCategory = (req, res) => {
+  const { categoryId } = req.params;
+  const { mandal, district } = req.query;
+
+  let providers = db.data.providers.filter(p => p.category === categoryId);
+
+  if (mandal && mandal.trim()) {
+    const qMandal = mandal.trim().toLowerCase();
+    providers.sort((a, b) => {
+      const aMatch = (a.mandal || a.shopMandal || '').toLowerCase() === qMandal;
+      const bMatch = (b.mandal || b.shopMandal || '').toLowerCase() === qMandal;
+      if (aMatch && !bMatch) return -1;
+      if (!aMatch && bMatch) return 1;
+      return (b.rating || 0) - (a.rating || 0);
+    });
+  } else {
+    providers.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+  }
+
+  const safeProviders = providers.map(p => {
+    return {
+      id: p.id,
+      name: p.name,
+      phone: p.phone,
+      category: p.category,
+      categoryName: p.categoryName || 'Specialist',
+      subCategoryId: p.subCategoryId,
+      subCategoryName: p.subCategoryName,
+      selectedChildServices: p.selectedChildServices || [],
+      experience: p.experience || '3+ Years',
+      rating: p.rating || 4.9,
+      jobsCompleted: p.jobsCompleted || 12,
+      isOnline: Boolean(p.isOnline),
+      kycStatus: p.kycStatus || 'pending',
+      subscriptionStatus: p.subscriptionStatus || 'unpaid',
+      district: p.district || p.shopDistrict || 'Anakapalli',
+      mandal: p.mandal || p.shopMandal || 'Chodavaram',
+      village: p.village || p.shopVillage || 'Chodavaram Town',
+      serviceRadius: p.serviceRadius || '10 KM',
+      avatarUrl: p.avatarUrl || null,
+      shopName: p.shopName || null
+    };
+  });
+
+  res.json({
+    success: true,
+    count: safeProviders.length,
+    providers: safeProviders
   });
 };
 

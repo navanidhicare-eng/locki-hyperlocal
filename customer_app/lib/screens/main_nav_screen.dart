@@ -3,6 +3,7 @@ import '../core/constants.dart';
 import 'home_screen.dart';
 import 'my_orders_screen.dart';
 import 'profile_screen.dart';
+import 'quick_request_screen.dart';
 
 class MainNavScreen extends StatefulWidget {
   const MainNavScreen({Key? key}) : super(key: key);
@@ -16,6 +17,7 @@ class _MainNavScreenState extends State<MainNavScreen> {
 
   final List<Widget> _pages = const [
     HomeScreen(),
+    QuickRequestScreen(),
     MyOrdersScreen(),
     ProfileScreen(),
   ];
@@ -42,8 +44,8 @@ class _MainNavScreenState extends State<MainNavScreen> {
           onTap: (index) => setState(() => _currentIndex = index),
           selectedItemColor: AppConstants.primary,
           unselectedItemColor: AppConstants.textDim,
-          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-          unselectedLabelStyle: const TextStyle(fontSize: 12),
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11),
+          unselectedLabelStyle: const TextStyle(fontSize: 11),
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.white,
           elevation: 0,
@@ -52,6 +54,11 @@ class _MainNavScreenState extends State<MainNavScreen> {
               icon: Icon(Icons.home_outlined),
               activeIcon: Icon(Icons.home),
               label: 'Explore',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.flash_on_outlined, color: AppConstants.primary),
+              activeIcon: Icon(Icons.flash_on_rounded, color: AppConstants.primary),
+              label: 'Quick Request',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.receipt_long_outlined),

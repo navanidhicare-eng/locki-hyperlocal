@@ -20,6 +20,7 @@ class _PartnerHomeScreenState extends State<PartnerHomeScreen> {
   final PartnerApiService _api = PartnerApiService();
   bool _isOnline = false;
   List<PartnerOrder> _orders = [];
+  List<dynamic> _categories = [];
   bool _loading = true;
   int _cancelledJobsCount = 1;
   final Set<String> _expandedOrderIds = {};
@@ -73,9 +74,11 @@ class _PartnerHomeScreenState extends State<PartnerHomeScreen> {
     }
     await _api.fetchProfile();
     final list = await _api.fetchPartnerOrders();
+    final cats = await _api.fetchCategories();
     final profileCancelled = (_api.profile?['cancelledJobs'] as num?)?.toInt() ?? 1;
     setState(() {
       _orders = list;
+      _categories = cats;
       _isOnline = _api.profile?['isOnline'] ?? false;
       if (profileCancelled > _cancelledJobsCount) {
         _cancelledJobsCount = profileCancelled;
@@ -91,15 +94,28 @@ class _PartnerHomeScreenState extends State<PartnerHomeScreen> {
   }
 
   void _toggleDuty() async {
+    final kycStatus = (_api.profile?['kycStatus'] ?? 'pending').toString().toLowerCase();
+    final bool isApproved = kycStatus == 'approved' || kycStatus == 'verified';
     final isProfileComplete = _api.profile?['isProfileComplete'] == true;
+
     if (!isProfileComplete) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Please create your profile first before going online!'),
+          content: Text('Please complete your profile and submit KYC first!'),
           backgroundColor: Colors.orange,
         ),
       );
       _openProfileScreen();
+      return;
+    }
+
+    if (!isApproved) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Cannot go online: Your account is pending Admin approval!'),
+          backgroundColor: Colors.orange,
+        ),
+      );
       return;
     }
 
@@ -140,6 +156,9 @@ class _PartnerHomeScreenState extends State<PartnerHomeScreen> {
       'isProfileComplete': false,
     };
 
+    final String kycStatus = (profile['kycStatus'] ?? 'pending').toString().toLowerCase();
+    final bool isApproved = kycStatus == 'approved' || kycStatus == 'verified';
+    final bool isRejected = kycStatus == 'rejected';
     final bool isProfileComplete = profile['isProfileComplete'] == true;
 
     return Scaffold(
@@ -182,19 +201,29 @@ class _PartnerHomeScreenState extends State<PartnerHomeScreen> {
                       Row(
                         children: [
                           Icon(
-                            isProfileComplete ? Icons.verified : Icons.assignment_ind_outlined,
-                            color: isProfileComplete ? PartnerConstants.primary : const Color(0xFFD97706),
+                            isApproved
+                                ? Icons.verified
+                                : (isProfileComplete ? Icons.hourglass_top_rounded : Icons.assignment_ind_outlined),
+                            color: isApproved
+                                ? PartnerConstants.primary
+                                : (isRejected ? Colors.red : const Color(0xFFD97706)),
                             size: 12,
                           ),
                           const SizedBox(width: 3),
                           Flexible(
                             child: Text(
-                              isProfileComplete ? (profile['serviceName'] ?? 'Verified Specialist') : 'Profile Pending',
+                              isApproved
+                                  ? (profile['serviceName'] ?? 'Verified Specialist')
+                                  : (isProfileComplete
+                                      ? (isRejected ? 'KYC Rejected' : 'Approval Pending')
+                                      : 'Profile Incomplete'),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontSize: 11,
-                                color: isProfileComplete ? PartnerConstants.primary : const Color(0xFFD97706),
+                                color: isApproved
+                                    ? PartnerConstants.primary
+                                    : (isRejected ? Colors.red : const Color(0xFFD97706)),
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -213,20 +242,34 @@ class _PartnerHomeScreenState extends State<PartnerHomeScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
             decoration: BoxDecoration(
-              color: isProfileComplete ? PartnerConstants.accentGold.withOpacity(0.15) : const Color(0xFFFEF3C7),
+              color: isApproved
+                  ? PartnerConstants.accentGold.withOpacity(0.15)
+                  : (isRejected ? const Color(0xFFFEE2E2) : const Color(0xFFFEF3C7)),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
               children: [
                 Icon(
-                  isProfileComplete ? Icons.star : Icons.info_outline,
-                  color: isProfileComplete ? PartnerConstants.accentGold : const Color(0xFFD97706),
+                  isApproved
+                      ? Icons.star
+                      : (isRejected ? Icons.error_outline_rounded : Icons.hourglass_top_rounded),
+                  color: isApproved
+                      ? PartnerConstants.accentGold
+                      : (isRejected ? const Color(0xFFDC2626) : const Color(0xFFD97706)),
                   size: 13,
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  isProfileComplete ? '${profile['rating'] ?? 4.8}' : 'New',
-                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.black87),
+                  isApproved
+                      ? '${profile['rating'] ?? 5.0}'
+                      : (isRejected ? 'Rejected' : 'Review Pending'),
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    color: isApproved
+                        ? Colors.black87
+                        : (isRejected ? const Color(0xFFDC2626) : const Color(0xFFB45309)),
+                  ),
                 ),
               ],
             ),
@@ -282,9 +325,11 @@ class _PartnerHomeScreenState extends State<PartnerHomeScreen> {
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.all(16),
-                child: isProfileComplete
-                    ? _buildActivePartnerDashboard(profile)
-                    : _buildNewPartnerDashboard(profile),
+                child: !isProfileComplete
+                    ? _buildNewPartnerDashboard(profile)
+                    : (isApproved
+                        ? _buildActivePartnerDashboard(profile)
+                        : _buildPendingApprovalDashboard(profile)),
               ),
             ),
     );
@@ -297,7 +342,9 @@ class _PartnerHomeScreenState extends State<PartnerHomeScreen> {
     final service = profile['serviceName'] ?? 'Service Specialist';
     final phone = profile['phone'] ?? '+91 98765 22222';
     final walletBal = profile['walletBalance'] ?? 4250;
-    final isVerified = profile['isProfileComplete'] == true;
+    final String drawerKyc = (profile['kycStatus'] ?? 'pending').toString().toLowerCase();
+    final bool isApproved = drawerKyc == 'approved' || drawerKyc == 'verified';
+    final isVerified = isApproved;
 
     return Drawer(
       backgroundColor: Colors.white,
@@ -479,8 +526,8 @@ class _PartnerHomeScreenState extends State<PartnerHomeScreen> {
                 _buildDrawerItem(
                   icon: Icons.person_outline_rounded,
                   title: 'My Profile & KYC Documents',
-                  badge: isVerified ? 'Verified' : 'Pending',
-                  badgeColor: isVerified ? PartnerConstants.statusOnline : const Color(0xFFD97706),
+                  badge: isApproved ? 'Verified' : (profile['isProfileComplete'] == true ? 'Under Review' : 'Incomplete'),
+                  badgeColor: isApproved ? PartnerConstants.statusOnline : const Color(0xFFD97706),
                   onTap: () {
                     Navigator.pop(context);
                     _openProfileScreen();
@@ -643,13 +690,155 @@ class _PartnerHomeScreenState extends State<PartnerHomeScreen> {
     );
   }
 
+  Widget _buildPlanOptionTile({
+    required String title,
+    required String duration,
+    required int price,
+    required String tag,
+    required Color tagColor,
+    required Color tagBg,
+    bool isBestValue = false,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: isBestValue ? const Color(0xFFFFFBEB) : const Color(0xFFF8FAFC),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isBestValue ? const Color(0xFFF59E0B) : const Color(0xFFE2E8F0),
+          width: isBestValue ? 1.5 : 1.0,
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(7),
+            decoration: BoxDecoration(
+              color: isBestValue ? const Color(0xFFFEF3C7) : const Color(0xFFE2E8F0),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              isBestValue ? Icons.workspace_premium_rounded : Icons.calendar_month_rounded,
+              color: isBestValue ? const Color(0xFFD97706) : const Color(0xFF64748B),
+              size: 16,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                        color: isBestValue ? const Color(0xFF92400E) : const Color(0xFF1E293B),
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                      decoration: BoxDecoration(
+                        color: tagBg,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        tag,
+                        style: TextStyle(
+                          fontSize: 9,
+                          fontWeight: FontWeight.bold,
+                          color: tagColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'Duration: $duration • 0% Commission',
+                  style: const TextStyle(fontSize: 11, color: Color(0xFF64748B)),
+                ),
+              ],
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                '₹$price',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w900,
+                  color: isBestValue ? const Color(0xFFD97706) : const Color(0xFF0F172A),
+                ),
+              ),
+              const Text(
+                'Fee',
+                style: TextStyle(fontSize: 10, color: Color(0xFF94A3B8)),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   void _showSubscriptionPlanDialog(BuildContext context) {
+    final profile = _api.profile ?? {};
+    final bool isSubActive = profile['subscriptionStatus'] == 'active';
+    final String expiryStr = profile['subscriptionExpiresAt'] != null
+        ? profile['subscriptionExpiresAt'].toString().substring(0, 10)
+        : 'Pending Activation';
+    final String planName = profile['subscriptionPlanName'] ?? (isSubActive ? '1-Year Annual Pro' : 'Yearly 0% Cut Plan');
+    final String subName = profile['subCategoryName'] ?? profile['serviceName'] ?? 'Service Specialist';
+    final String partnerSubId = (profile['subCategoryId'] ?? profile['subCategory'] ?? '').toString();
+
+    // Look up exact pricing plans for this partner's sub-category
+    Map<String, dynamic>? matchedSub;
+    for (final cat in _categories) {
+      if (cat is Map) {
+        final subs = cat['subCategories'];
+        if (subs is List) {
+          for (final s in subs) {
+            if (s is Map) {
+              final sid = s['id']?.toString() ?? '';
+              final sname = s['name']?.toString() ?? '';
+              if ((partnerSubId.isNotEmpty && sid == partnerSubId) ||
+                  (subName.isNotEmpty && sname.toLowerCase() == subName.toLowerCase())) {
+                matchedSub = Map<String, dynamic>.from(s);
+                break;
+              }
+            }
+          }
+        }
+      }
+      if (matchedSub != null) break;
+    }
+
+    final Map<String, dynamic> plans = (matchedSub != null && matchedSub['subscriptionPlans'] is Map)
+        ? Map<String, dynamic>.from(matchedSub['subscriptionPlans'])
+        : {
+            '1_month': 199,
+            '3_months': 499,
+            '6_months': 899,
+            '1_year': 1499,
+          };
+
+    final int p1m = plans['1_month'] ?? 199;
+    final int p3m = plans['3_months'] ?? 499;
+    final int p6m = plans['6_months'] ?? 899;
+    final int p1y = plans['1_year'] ?? 1499;
+
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         titlePadding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-        contentPadding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
+        contentPadding: const EdgeInsets.fromLTRB(20, 14, 20, 16),
         title: Row(
           children: [
             Container(
@@ -662,84 +851,155 @@ class _PartnerHomeScreenState extends State<PartnerHomeScreen> {
               child: const Icon(Icons.workspace_premium_rounded, color: Color(0xFFD97706), size: 24),
             ),
             const SizedBox(width: 12),
-            const Expanded(
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Yearly Subscription Plan', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  Text('Loki 0% Commission Model', style: TextStyle(fontSize: 11, color: Color(0xFF059669), fontWeight: FontWeight.bold)),
+                  const Text('Loki 0% Commission Plans', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text('$subName Pricing Plans', style: const TextStyle(fontSize: 11, color: Color(0xFF059669), fontWeight: FontWeight.bold)),
                 ],
               ),
             ),
           ],
         ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Status Card
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF8FAFC),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFFE2E8F0)),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text('CURRENT MEMBERSHIP', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF64748B))),
-                      SizedBox(height: 2),
-                      Text('Annual Pro Specialist', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))),
-                      Text('Renews: Nov 05, 2027 (365 Days Left)', style: TextStyle(fontSize: 11, color: Color(0xFF059669))),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 1. Current Membership Status Card
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: isSubActive ? const Color(0xFFF0FDF4) : const Color(0xFFFEF2F2),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: isSubActive ? const Color(0xFFBBF7D0) : const Color(0xFFFECACA)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('CURRENT MEMBERSHIP', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF64748B))),
+                          const SizedBox(height: 2),
+                          Text(isSubActive ? planName : 'Pending Activation', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))),
+                          Text(isSubActive ? 'Valid Till: $expiryStr' : 'Pay to Admin to Activate', style: TextStyle(fontSize: 11, color: isSubActive ? const Color(0xFF059669) : const Color(0xFFDC2626))),
+                        ],
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: isSubActive ? const Color(0xFF059669) : const Color(0xFFDC2626),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(isSubActive ? 'ACTIVE' : 'UNPAID', style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
+                      ),
                     ],
                   ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF059669),
-                      borderRadius: BorderRadius.circular(12),
+                ),
+                const SizedBox(height: 14),
+
+                // 2. ALL 4 AVAILABLE SUBSCRIPTION PLANS
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Available Plans ($subName)',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF1E293B)),
                     ),
-                    child: const Text('ACTIVE', style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
+                    const Text(
+                      '0% Platform Cut',
+                      style: TextStyle(fontSize: 11, color: Color(0xFF059669), fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+
+                // Plan 1: 1 Month
+                _buildPlanOptionTile(
+                  title: '1 Month Trial',
+                  duration: '30 Days',
+                  price: p1m,
+                  tag: 'Trial',
+                  tagColor: const Color(0xFF475569),
+                  tagBg: const Color(0xFFF1F5F9),
+                ),
+
+                // Plan 2: 3 Months
+                _buildPlanOptionTile(
+                  title: '3 Months Quarter',
+                  duration: '90 Days',
+                  price: p3m,
+                  tag: 'Popular',
+                  tagColor: const Color(0xFF1D4ED8),
+                  tagBg: const Color(0xFFEFF6FF),
+                ),
+
+                // Plan 3: 6 Months
+                _buildPlanOptionTile(
+                  title: '6 Months Half-Year',
+                  duration: '180 Days',
+                  price: p6m,
+                  tag: 'Save 20%',
+                  tagColor: const Color(0xFF065F46),
+                  tagBg: const Color(0xFFECFDF5),
+                ),
+
+                // Plan 4: 1 Year (Best Value)
+                _buildPlanOptionTile(
+                  title: '1 Year Annual Pro',
+                  duration: '365 Days',
+                  price: p1y,
+                  tag: '⭐ Best Value',
+                  tagColor: const Color(0xFFB45309),
+                  tagBg: const Color(0xFFFEF3C7),
+                  isBestValue: true,
+                ),
+
+                const SizedBox(height: 12),
+
+                // 3. Why Loki Subscription
+                const Text('Why Loki Subscription?', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF1E293B))),
+                const SizedBox(height: 8),
+                _buildBenefitRow(Icons.money_off_csred_rounded, '0% Commission on Every Job', 'No 20%-30% per-order cuts like other apps. Keep 100% of customer pay.'),
+                const SizedBox(height: 6),
+                _buildBenefitRow(Icons.all_inclusive_rounded, 'Unlimited Customer Leads', 'No pay-per-lead charges. Accept unlimited nearby customer bookings.'),
+                const SizedBox(height: 6),
+                _buildBenefitRow(Icons.payments_outlined, 'Direct Customer Cash/UPI', 'Customers pay you directly upon service completion.'),
+                const SizedBox(height: 6),
+                _buildBenefitRow(Icons.verified_rounded, 'Verified Specialist Badge', 'Priority placement in local customer searches & instant alerts.'),
+
+                const SizedBox(height: 12),
+
+                // 4. Admin Payment Guidance Note
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFF7ED),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: const Color(0xFFFFEDD5)),
                   ),
-                ],
-              ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Icon(Icons.info_outline_rounded, color: Color(0xFFEA580C), size: 16),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Payment is collected directly by Loki Admin via Cash or QR/UPI. Once Admin confirms payment, your subscription activates immediately.',
+                          style: TextStyle(fontSize: 11, color: Color(0xFF9A3412), height: 1.3),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 14),
-
-            const Text('Why Loki Yearly Subscription?', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF1E293B))),
-            const SizedBox(height: 8),
-
-            _buildBenefitRow(Icons.money_off_csred_rounded, '0% Commission on Every Job', 'No 20%-30% per-order cuts like other apps. Keep 100% of customer pay.'),
-            const SizedBox(height: 8),
-            _buildBenefitRow(Icons.all_inclusive_rounded, 'Unlimited Customer Leads', 'No pay-per-lead charges. Accept unlimited nearby customer bookings.'),
-            const SizedBox(height: 8),
-            _buildBenefitRow(Icons.payments_outlined, 'Direct Customer Cash/UPI', 'Customers pay you directly upon service completion.'),
-            const SizedBox(height: 8),
-            _buildBenefitRow(Icons.verified_rounded, 'Verified Specialist Badge', 'Priority placement in local customer searches & instant alerts.'),
-            const SizedBox(height: 14),
-
-            // Plan Cost Info
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFFF7ED),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: const Color(0xFFFFEDD5)),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text('Annual Membership Fee', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Color(0xFF9A3412))),
-                  Text('₹2,999 / Year', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFFC2410C))),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
         actions: [
           TextButton(
@@ -838,7 +1098,459 @@ class _PartnerHomeScreenState extends State<PartnerHomeScreen> {
     );
   }
 
-  // DASHBOARD FOR NEW PARTNER (SHOWS BIG "CREATE YOUR PROFILE" CARD)
+  // DASHBOARD FOR PARTNERS WHO COMPLETED PROFILE BUT AWAITING ADMIN APPROVAL
+  Widget _buildSubscriptionBanner(Map<String, dynamic> profile) {
+    final bool isSubActive = profile['subscriptionStatus'] == 'active';
+    final String expiryStr = profile['subscriptionExpiresAt'] != null
+        ? profile['subscriptionExpiresAt'].toString().substring(0, 10)
+        : '365 Days Remaining';
+    final int amount = profile['subscriptionAmount'] ?? 1999;
+    final String subName = profile['subCategoryName'] ?? profile['serviceName'] ?? 'Service Specialist';
+
+    return InkWell(
+      onTap: () => _showSubscriptionPlanDialog(context),
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: isSubActive
+                ? const [Color(0xFFFFFBEB), Color(0xFFFEF3C7)]
+                : const [Color(0xFFFFF7ED), Color(0xFFFFEDD5)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isSubActive ? const Color(0xFFFDE68A) : const Color(0xFFFED7AA),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: (isSubActive ? Colors.amber : Colors.orange).withOpacity(0.12),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: isSubActive ? const Color(0xFFD97706) : const Color(0xFFEA580C),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(
+                isSubActive ? Icons.workspace_premium_rounded : Icons.card_membership_rounded,
+                color: Colors.white,
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          isSubActive
+                              ? 'Yearly Subscription Active'
+                              : '$subName Plan (Unpaid)',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                            color: isSubActive ? const Color(0xFF92400E) : const Color(0xFF9A3412),
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        isSubActive ? '• 0% Cut' : '• Payment Pending',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 11,
+                          color: isSubActive ? const Color(0xFF059669) : const Color(0xFFD97706),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 3),
+                  Row(
+                    children: [
+                      Icon(
+                        isSubActive ? Icons.calendar_month_outlined : Icons.payment_rounded,
+                        size: 12,
+                        color: isSubActive ? const Color(0xFFB45309) : const Color(0xFFC2410C),
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          isSubActive
+                              ? 'Valid Till: $expiryStr'
+                              : 'Fee: ₹$amount/yr • Click to view Sub-category plans',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                            color: isSubActive ? const Color(0xFFB45309) : const Color(0xFFC2410C),
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right, size: 18, color: Color(0xFFB45309)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPendingApprovalDashboard(Map<String, dynamic> profile) {
+    final name = profile['name'] ?? 'Partner';
+    final category = profile['categoryName'] ?? profile['serviceName'] ?? 'Service Specialist';
+    final district = profile['district'] ?? 'Anakapalli';
+    final mandal = profile['mandal'] ?? '';
+    final isRejected = (profile['kycStatus'] ?? '').toString().toLowerCase() == 'rejected';
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // HERO CARD: UNDER ADMIN REVIEW
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(22),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: isRejected
+                  ? [const Color(0xFFFEF2F2), Colors.white]
+                  : [const Color(0xFFFFFBEB), Colors.white],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(
+              color: isRejected ? const Color(0xFFF87171) : const Color(0xFFFBBF24),
+              width: 1.5,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: (isRejected ? Colors.red : Colors.amber).withOpacity(0.1),
+                blurRadius: 16,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: isRejected ? const Color(0xFFFEE2E2) : const Color(0xFFFEF3C7),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      isRejected ? Icons.error_outline_rounded : Icons.hourglass_top_rounded,
+                      color: isRejected ? const Color(0xFFDC2626) : const Color(0xFFD97706),
+                      size: 28,
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: isRejected ? const Color(0xFFFEE2E2) : const Color(0xFFFEF3C7),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            isRejected ? 'KYC REJECTED' : 'KYC UNDER ADMIN REVIEW',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w800,
+                              color: isRejected ? const Color(0xFFDC2626) : const Color(0xFFB45309),
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          isRejected
+                              ? 'Verification Action Required'
+                              : 'Admin Approval Pending',
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF1E293B),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                isRejected
+                    ? 'మీ డాక్యుమెంట్లలో కొన్ని లోపాలు గుర్తించబడ్డాయి. దయచేసి ప్రొఫైల్ వివరాలు సరిచూసి మళ్లీ సబ్మిట్ చేయండి.'
+                    : 'నమస్కారం ${name} గారూ, మీ ప్రొఫైల్ మరియు KYC డాక్యుమెంట్లు విజయవంతంగా సబ్మిట్ అయ్యాయి. Admin వెరిఫికేషన్ పూర్తయ్యే వరకు వేచి ఉండండి.',
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: Color(0xFF475569),
+                  height: 1.5,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 14),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFFE2E8F0)),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.info_outline_rounded, color: Color(0xFFD97706), size: 20),
+                    const SizedBox(width: 10),
+                    const Expanded(
+                      child: Text(
+                        'Admin అప్రూవల్ పూర్తయిన వెంటనే మీ అకౌంట్ ఆటోమేటిక్‌గా Active అవుతుంది. అప్పుడు మీరు On-Duty స్విచ్ ఆన్ చేసి కస్టమర్ ఆర్డర్లు తీసుకోవచ్చు.',
+                        style: TextStyle(fontSize: 12, color: Color(0xFF334155), height: 1.4),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: _openProfileScreen,
+                      icon: const Icon(Icons.edit_note_rounded, size: 18),
+                      label: const Text('View / Edit Profile'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: const Color(0xFF1E293B),
+                        side: const BorderSide(color: Color(0xFFCBD5E1)),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        _initData();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Checking latest approval status from Admin...'),
+                            duration: Duration(seconds: 1),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.refresh_rounded, size: 18),
+                      label: const Text('Refresh Status'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: PartnerConstants.primary,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 14),
+
+        // SUBSCRIPTION STATUS BANNER
+        _buildSubscriptionBanner(profile),
+        const SizedBox(height: 20),
+
+        // 3-STEP APPROVAL ROADMAP
+        const Text(
+          'Verification Progress',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)),
+        ),
+        const SizedBox(height: 10),
+        _buildVerificationStepTile(
+          step: '1',
+          title: 'Profile & Documents Submitted',
+          subtitle: 'Aadhaar, Trade details & Live Photo saved',
+          status: 'Done',
+          isDone: true,
+        ),
+        _buildVerificationStepTile(
+          step: '2',
+          title: 'Admin Verification & Screening',
+          subtitle: 'Loki Super Admin is reviewing your KYC proofs',
+          status: isRejected ? 'Rejected' : 'In Progress',
+          isDone: false,
+          isInProgress: !isRejected,
+          isRejected: isRejected,
+        ),
+        _buildVerificationStepTile(
+          step: '3',
+          title: 'Account Activation & Duty On',
+          subtitle: 'Go live on radar and start earning daily income',
+          status: 'Locked',
+          isDone: false,
+        ),
+        const SizedBox(height: 20),
+
+        // SUBMITTED DETAILS SUMMARY
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: const Color(0xFFE2E8F0)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Submitted Details Overview',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)),
+              ),
+              const Divider(height: 20, color: Color(0xFFF1F5F9)),
+              _buildSummaryRow('Trade Profession', category),
+              if (profile['subCategoryName'] != null && profile['subCategoryName'].toString().isNotEmpty)
+                _buildSummaryRow('Sub-Category', profile['subCategoryName'].toString()),
+              _buildSummaryRow('Operating Location', '${mandal.isNotEmpty ? '$mandal, ' : ''}$district'),
+              _buildSummaryRow('Working Shift', profile['workingHours'] ?? 'Full-Time'),
+              _buildSummaryRow('Service Radius', profile['serviceRadius'] ?? '10 KM'),
+              _buildSummaryRow('Physical Shop', profile['hasPhysicalShop'] == true ? 'Registered' : 'No Shop (Doorstep)'),
+              _buildSummaryRow('Live Photo Match', profile['livePhotoVerificationStatus'] ?? 'Verified'),
+              _buildSummaryRow(
+                'Subscription Plan',
+                profile['subscriptionStatus'] == 'active'
+                    ? 'Active (0% Commission)'
+                    : 'Unpaid • ₹${profile['subscriptionAmount'] ?? 1999}/yr',
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 30),
+      ],
+    );
+  }
+
+  Widget _buildVerificationStepTile({
+    required String step,
+    required String title,
+    required String subtitle,
+    required String status,
+    required bool isDone,
+    bool isInProgress = false,
+    bool isRejected = false,
+  }) {
+    Color bg = isDone
+        ? const Color(0xFFECFDF5)
+        : isInProgress
+            ? const Color(0xFFFFFBEB)
+            : isRejected
+                ? const Color(0xFFFEF2F2)
+                : const Color(0xFFF8FAFC);
+    Color border = isDone
+        ? const Color(0xFFA7F3D0)
+        : isInProgress
+            ? const Color(0xFFFDE68A)
+            : isRejected
+                ? const Color(0xFFFECACA)
+                : const Color(0xFFE2E8F0);
+    Color stepColor = isDone
+        ? const Color(0xFF059669)
+        : isInProgress
+            ? const Color(0xFFD97706)
+            : isRejected
+                ? const Color(0xFFDC2626)
+                : const Color(0xFF94A3B8);
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: border),
+      ),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 14,
+            backgroundColor: stepColor,
+            child: isDone
+                ? const Icon(Icons.check, size: 16, color: Colors.white)
+                : Text(
+                    step,
+                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: const TextStyle(fontSize: 11, color: Color(0xFF64748B)),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: border),
+            ),
+            child: Text(
+              status,
+              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: stepColor),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSummaryRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: const TextStyle(fontSize: 12, color: Color(0xFF64748B))),
+          Text(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Color(0xFF1E293B))),
+        ],
+      ),
+    );
+  }
+
   Widget _buildNewPartnerDashboard(Map<String, dynamic> profile) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1255,71 +1967,8 @@ class _PartnerHomeScreenState extends State<PartnerHomeScreen> {
         ),
         const SizedBox(height: 16),
 
-        // Yearly Plan & 0% Commission Active Banner
-        InkWell(
-          onTap: () => _showSubscriptionPlanDialog(context),
-          borderRadius: BorderRadius.circular(16),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFFFFFBEB), Color(0xFFFEF3C7)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFFDE68A)),
-              boxShadow: [
-                BoxShadow(color: Colors.amber.withOpacity(0.1), blurRadius: 8, offset: const Offset(0, 3)),
-              ],
-            ),
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFD97706),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(Icons.workspace_premium_rounded, color: Colors.white, size: 20),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Row(
-                        children: const [
-                          Text(
-                            'Yearly Subscription Active',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF92400E)),
-                          ),
-                          SizedBox(width: 6),
-                          Text(
-                            '• 0% Cut',
-                            style: TextStyle(fontWeight: FontWeight.w800, fontSize: 11, color: Color(0xFF059669)),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 3),
-                      Row(
-                        children: const [
-                          Icon(Icons.calendar_month_outlined, size: 12, color: Color(0xFFB45309)),
-                          SizedBox(width: 4),
-                          Text(
-                            'Valid Till: 05 Nov 2027 (365 Days Remaining)',
-                            style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFFB45309)),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const Icon(Icons.chevron_right, size: 18, color: Color(0xFFB45309)),
-              ],
-            ),
-          ),
-        ),
+        // Yearly Plan & 0% Commission Banner
+        _buildSubscriptionBanner(profile),
         const SizedBox(height: 16),
 
         // Quick Stats Row (Total Received vs Accepted & Completed)
