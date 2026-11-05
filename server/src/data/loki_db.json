@@ -503,7 +503,31 @@
       "createdAt": "2026-11-02T05:37:25.343Z"
     }
   ],
-  "providers": [],
+  "providers": [
+    {
+      "id": "prv_76fcc359",
+      "name": "gandepalli prasad",
+      "email": "9010737882@partner.loki",
+      "phone": "9010737882",
+      "passwordHash": "$2a$10$jFwsbLvh.7uitW75fEYTBekVlKzk0C.Z4sFgEVf49NwcwbqhOPtpi",
+      "role": "provider",
+      "category": "services",
+      "serviceName": "Service Specialist",
+      "rating": 5,
+      "jobsCompleted": 0,
+      "isOnline": false,
+      "kycStatus": "pending",
+      "isProfileComplete": false,
+      "aadhaarNumber": "576972607113",
+      "vehicleNumber": "N/A",
+      "currentLocation": {
+        "lat": 17.4435,
+        "lng": 78.3772
+      },
+      "walletBalance": 0,
+      "createdAt": "2026-11-05T11:13:46.468Z"
+    }
+  ],
   "orders": [],
   "locations": [
     {

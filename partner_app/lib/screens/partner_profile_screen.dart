@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../core/constants.dart';
+import '../core/anakapalli_locations.dart';
 import '../services/partner_api_service.dart';
 
 class PartnerProfileScreen extends StatefulWidget {
@@ -25,19 +26,19 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
   late TextEditingController _emergencyRelationController;
   late TextEditingController _emailController;
 
-  // 2. Current Address State & Controllers
-  String _selectedDistrict = 'Hyderabad';
-  String _selectedMandal = 'Serilingampally / Madhapur';
-  String _selectedVillage = 'Ayyappa Society';
+  // 2. Current Address State & Controllers (Dynamic from Admin Location Management)
+  String _selectedDistrict = 'Anakapalli';
+  String _selectedMandal = 'Anakapalli';
+  String _selectedVillage = 'Anakapalle Town';
   late TextEditingController _doorStreetController;
   late TextEditingController _pincodeController;
 
   // Physical Shop / Workshop Details
   bool _hasPhysicalShop = false;
   late TextEditingController _shopNameController;
-  String _selectedShopDistrict = 'Hyderabad';
-  String _selectedShopMandal = 'Serilingampally / Madhapur';
-  String _selectedShopVillage = 'Madhapur Main Road';
+  String _selectedShopDistrict = 'Anakapalli';
+  String _selectedShopMandal = 'Anakapalli';
+  String _selectedShopVillage = 'Anakapalle Town';
   late TextEditingController _shopDoorStreetController;
   late TextEditingController _shopGstController;
   bool _shopFrontPhotoUploaded = false;
@@ -67,12 +68,12 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
   late TextEditingController _upiController;
 
   // Document Upload States
-  bool _aadhaarFrontUploaded = true;
-  bool _aadhaarBackUploaded = true;
-  bool _panCardUploaded = true;
-  bool _drivingLicenseUploaded = true;
-  bool _skillCertificateUploaded = true;
-  bool _livePhotoVerified = true;
+  bool _aadhaarFrontUploaded = false;
+  bool _aadhaarBackUploaded = false;
+  bool _panCardUploaded = false;
+  bool _drivingLicenseUploaded = false;
+  bool _skillCertificateUploaded = false;
+  bool _livePhotoVerified = false;
 
   bool _isLoading = false;
 
@@ -88,258 +89,9 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
     {'id': 'cat_painting', 'name': '🎨 Painting & Waterproofing'},
   ];
 
-  // Comprehensive District -> Mandal -> Village / Landmark Hierarchy for AP & TS
-  static const Map<String, Map<String, List<String>>> _addressHierarchy = {
-    'Hyderabad': {
-      'Serilingampally / Madhapur': [
-        'Madhapur Main Road',
-        'Hitec City Cyber Towers',
-        'Gachibowli Junction',
-        'Kondapur Signal',
-        'Ayyappa Society',
-        'Financial District',
-        'Kothaguda X Roads',
-      ],
-      'Khairatabad': [
-        'Khairatabad Junction',
-        'Somajiguda Circle',
-        'Raj Bhavan Road',
-        'Punjagutta Central',
-        'Lakdikapul Metro',
-      ],
-      'Jubilee Hills / Shaikpet': [
-        'Jubilee Hills Checkpost',
-        'Road No. 36 & 45',
-        'Film Nagar Temple Road',
-        'Shaikpet Nala',
-        'Tolichowki Cross Road',
-      ],
-      'Kukatpally': [
-        'KPHB Colony Phase 1-6',
-        'JNTU University Road',
-        'Kukatpally Y Junction',
-        'Pragathi Nagar',
-        'Nizampet X Road',
-      ],
-      'Secunderabad': [
-        'Paradise Circle',
-        'Clock Tower Center',
-        'Trimulgherry X Road',
-        'West Marredpally',
-        'Patny Junction',
-      ],
-      'Ameerpet': [
-        'Ameerpet Cross Roads',
-        'SR Nagar Metro',
-        'Mythrivanam Complex',
-        'Sanjeeva Reddy Nagar',
-        'Yellareddyguda',
-      ],
-      'Charminar / Old City': [
-        'Charminar Historical Gate',
-        'Nayapul Madina',
-        'Shah Ali Banda',
-        'Chandrayangutta Ring Road',
-        'Falaknuma Palace Road',
-      ],
-      'Malkajgiri': [
-        'Anandbagh Junction',
-        'Neredmet X Roads',
-        'Safilguda Lake Park',
-        'Moula Ali Industrial Area',
-        'ECIL Cross Roads',
-      ],
-    },
-    'Rangareddy': {
-      'Gandipet / Narsingi': [
-        'Narsingi Junction',
-        'Kokapet SEZ Neopolis',
-        'Gandipet Lake View',
-        'Manikonda Marrichettu',
-        'Puppalguda Alkapur Township',
-      ],
-      'Rajendranagar': [
-        'Attapur Ring Road Pillar 140',
-        'Aramghar Junction',
-        'Budvel Railway Station',
-        'Upperpally Pillar 190',
-        'Hyderguda Pillar 120',
-      ],
-      'Shamshabad': [
-        'Airport Approach Road',
-        'Shamshabad Bus Terminal',
-        'Tondupally Toll Plaza',
-        'Kotwalguda Nursery Zone',
-      ],
-      'Ibrahimpatnam': [
-        'Ibrahimpatnam Bus Stand',
-        'Adibatla Aerospace IT SEZ',
-        'Kongara Kalan Collectorate',
-        'Bongloor ORR Junction',
-      ],
-      'Maheshwaram': [
-        'Hardware & IT Park',
-        'Fab City SEZ',
-        'Mankhal Industrial Hub',
-        'Maheshwaram Gate',
-      ],
-    },
-    'Medchal-Malkajgiri': {
-      'Quthbullapur / Kompally': [
-        'Suchitra Circle',
-        'Kompally Big Bazaar',
-        'Jeedimetla Industrial Area',
-        'Chintal Bus Stop',
-        'Shapur Nagar Main Road',
-      ],
-      'Medchal': [
-        'Medchal Checkpost',
-        'Kandlakoya Oxygen Park',
-        'Athvelly Junction',
-        'Gundlapochampally',
-      ],
-      'Alwal': [
-        'Alwal Hills',
-        'Old Alwal Temple Road',
-        'Lothkunta Military Area',
-        'Venkatapuram',
-      ],
-      'Uppal': [
-        'Uppal Ring Road & Metro',
-        'Ramanthapur Poly-Technic',
-        'Boduppal Main Road',
-        'Peerzadiguda Kaman',
-        'Habsiguda X Roads',
-      ],
-      'Ghatkesar': [
-        'Ghatkesar Railway Station',
-        'Pocharam Infosys Campus',
-        'Annojiguda ORR Toll',
-        'Narapally Junction',
-      ],
-    },
-    'Visakhapatnam': {
-      'Visakhapatnam Urban': [
-        'RTC Complex & Dwaraka Nagar',
-        'Siripuram Circle',
-        'Jagadamba Junction',
-        'MVP Colony Sector 1-12',
-        'Asilmetta Junction',
-      ],
-      'Gajuwaka': [
-        'Gajuwaka Junction',
-        'Steel Plant Main Gate',
-        'Kurmannapalem Highway',
-        'Auto Nagar Phase 1-3',
-      ],
-      'Madhurawada': [
-        'Madhurawada Car Shed',
-        'ACA-VDCA Cricket Stadium',
-        'Kommadi Junction',
-        'Rushikonda IT SEZ',
-      ],
-      'Bheemunipatnam': [
-        'Bheemili Beach Road',
-        'Tagarapuvalasa Center',
-        'Thimmapuram Light House',
-      ],
-      'Anakapalle': [
-        'Anakapalle Ring Road',
-        'Jaggayyapalem',
-        'Lankelapalem Junction',
-      ],
-    },
-    'Vijayawada (NTR)': {
-      'Vijayawada Urban': [
-        'Benz Circle Flyover',
-        'MG Road (Bandar Road)',
-        'Governorpet Center',
-        'Besant Road Market',
-        'Suryaraopet',
-      ],
-      'Gunadala': [
-        'Gunadala Center / Mary Shrine',
-        'Ramavarappadu Ring',
-        'Machavaram Down',
-      ],
-      'Bhavanipuram': [
-        'Bhavanipuram Main Road',
-        'Gollapudi Bypass Junction',
-        'Vidyadharapuram Depot',
-      ],
-      'Penamaluru': [
-        'Penamaluru Center',
-        'Poranki Center',
-        'Tadigadapa 100ft Road',
-        'Kanuru Bus Stand',
-      ],
-      'Gannavaram': [
-        'Airport Terminal Gate',
-        'Gannavaram Bus Stand',
-        'Kesarapalli HCL SEZ',
-      ],
-    },
-    'Guntur': {
-      'Guntur Urban': [
-        'Arundelpet Main Road',
-        'Brodipet Broad Way',
-        'Lakshmipuram Main Road',
-        'Kothapet Market',
-      ],
-      'Tenali': [
-        'Tenali Gandhi Chowk',
-        'Chenchupet Center',
-        'Ithanagar Canal Road',
-      ],
-      'Mangalagiri': [
-        'Mangalagiri Temple Town',
-        'AIIMS Hospital Highway Road',
-        'Atmakur Junction',
-      ],
-      'Narasaraopet': [
-        'Clock Tower Center',
-        'Palnadu Road',
-        'Station Road',
-      ],
-    },
-    'Warangal': {
-      'Hanamkonda': [
-        'Hanamkonda Bus Station',
-        'Subedari Collectorate Road',
-        'Kakatiya University Gate',
-        'Naimnagar Cross Road',
-      ],
-      'Warangal Urban': [
-        'Chowrasta Market',
-        'MGM Hospital Circle',
-        'Kashibugga Center',
-        'Under Bridge Road',
-      ],
-      'Kazipet': [
-        'Kazipet Railway Colony',
-        'Fathimanagar Circle',
-        'Madikonda IT SEZ',
-      ],
-    },
-    'Tirupati': {
-      'Tirupati Urban': [
-        'Alipiri Footpath Gateway',
-        'RTC Central Bus Stand',
-        'Railway Station Circle',
-        'Bhavani Nagar Center',
-      ],
-      'Chandragiri': [
-        'Chandragiri Fort Road',
-        'Srinivasa Mangapuram',
-        'A.Rangampet Area',
-      ],
-      'Renigunta': [
-        'Renigunta Airport Road',
-        'Railway Junction Circle',
-        'Gajulamandyam Industrial Area',
-      ],
-    },
-  };
+  // Dynamic Location Hierarchy (Loaded from Admin Location Management API / api/locations)
+  Map<String, Map<String, List<String>>> _addressHierarchy = Map.from(kDefaultAddressHierarchy);
+  Map<String, String> _villagePincodes = Map.from(kDefaultVillagePincodes);
 
   List<String> get _districts => _addressHierarchy.keys.toList();
 
@@ -349,6 +101,73 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
 
   List<String> _getVillagesForMandal(String district, String mandal) {
     return _addressHierarchy[district]?[mandal] ?? [];
+  }
+
+  // Fetch real-time locations configured in Admin Location Management
+  Future<void> _loadLocationsFromBackend() async {
+    final list = await _api.fetchLocations();
+    if (list.isNotEmpty && mounted) {
+      final Map<String, Map<String, List<String>>> dynamicMap = {};
+      final Map<String, String> pincodeMap = {};
+
+      for (final dist in list) {
+        final distName = dist['name']?.toString() ?? '';
+        if (distName.isEmpty) continue;
+        dynamicMap[distName] = {};
+
+        final mandals = dist['mandals'] as List<dynamic>? ?? [];
+        for (final m in mandals) {
+          final mandalName = m['name']?.toString() ?? '';
+          if (mandalName.isEmpty) continue;
+          dynamicMap[distName]![mandalName] = [];
+
+          final villages = m['villages'] as List<dynamic>? ?? [];
+          for (final v in villages) {
+            final vName = v['name']?.toString() ?? '';
+            final pin = v['pincode']?.toString() ?? '';
+            if (vName.isNotEmpty) {
+              dynamicMap[distName]![mandalName]!.add(vName);
+              if (pin.isNotEmpty) {
+                pincodeMap['${distName}_${mandalName}_$vName'] = pin;
+              }
+            }
+          }
+        }
+      }
+
+      if (dynamicMap.isNotEmpty) {
+        setState(() {
+          _addressHierarchy = dynamicMap;
+          _villagePincodes = pincodeMap;
+
+          // Revalidate current selection
+          if (!_addressHierarchy.containsKey(_selectedDistrict)) {
+            _selectedDistrict = _addressHierarchy.keys.first;
+          }
+          final mandals = _getMandalsForDistrict(_selectedDistrict);
+          if (!mandals.contains(_selectedMandal)) {
+            _selectedMandal = mandals.isNotEmpty ? mandals.first : '';
+          }
+          final villages = _getVillagesForMandal(_selectedDistrict, _selectedMandal);
+          if (!villages.contains(_selectedVillage)) {
+            _selectedVillage = villages.isNotEmpty ? villages.first : '';
+          }
+
+          // Shop revalidation
+          if (!_addressHierarchy.containsKey(_selectedShopDistrict)) {
+            _selectedShopDistrict = _addressHierarchy.keys.first;
+          }
+          final shopMandals = _getMandalsForDistrict(_selectedShopDistrict);
+          if (!shopMandals.contains(_selectedShopMandal)) {
+            _selectedShopMandal = shopMandals.isNotEmpty ? shopMandals.first : '';
+          }
+          final shopVillages = _getVillagesForMandal(_selectedShopDistrict, _selectedShopMandal);
+          if (!shopVillages.contains(_selectedShopVillage)) {
+            _selectedShopVillage = shopVillages.isNotEmpty ? shopVillages.first : '';
+          }
+        });
+      }
+    }
   }
 
   final List<String> _experienceOptions = const [
@@ -378,22 +197,22 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
     super.initState();
     final profile = _api.profile ?? {};
 
-    // 1. Personal & Family Information
-    _nameController = TextEditingController(text: profile['name'] ?? 'Ramesh Kumar');
-    _fatherNameController = TextEditingController(text: profile['fatherName'] ?? 'Anand Kumar');
-    _motherNameController = TextEditingController(text: profile['motherName'] ?? 'Lakshmi Devi');
-    _dobController = TextEditingController(text: profile['dob'] ?? '15/08/1992');
-    _ageController = TextEditingController(text: profile['age'] ?? '32');
-    _phoneController = TextEditingController(text: profile['phone'] ?? '+91 98765 22222');
-    _emergencyContactController = TextEditingController(text: profile['emergencyContact'] ?? '+91 98765 00112');
-    _emergencyRelationController = TextEditingController(text: profile['emergencyRelation'] ?? 'Spouse / Brother');
-    _emailController = TextEditingController(text: profile['email'] ?? 'ramesh@loki.com');
+    // 1. Personal & Family Information (Clean - only populated with partner's real saved info)
+    _nameController = TextEditingController(text: profile['name'] ?? '');
+    _fatherNameController = TextEditingController(text: profile['fatherName'] ?? '');
+    _motherNameController = TextEditingController(text: profile['motherName'] ?? '');
+    _dobController = TextEditingController(text: profile['dob'] ?? '');
+    _ageController = TextEditingController(text: profile['age'] ?? '');
+    _phoneController = TextEditingController(text: profile['phone'] ?? '');
+    _emergencyContactController = TextEditingController(text: profile['emergencyContact'] ?? '');
+    _emergencyRelationController = TextEditingController(text: profile['emergencyRelation'] ?? '');
+    _emailController = TextEditingController(text: profile['email'] ?? '');
 
     // 2. Current Address Hierarchy Init
     if (profile['district'] != null && _addressHierarchy.containsKey(profile['district'])) {
       _selectedDistrict = profile['district'];
     } else {
-      _selectedDistrict = 'Hyderabad';
+      _selectedDistrict = _districts.isNotEmpty ? _districts.first : 'Anakapalli';
     }
 
     final mandals = _getMandalsForDistrict(_selectedDistrict);
@@ -411,18 +230,20 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
     }
 
     _doorStreetController = TextEditingController(
-      text: profile['currentAddress'] ?? profile['address'] ?? 'Flat 204, Sai Residency, Ayyappa Society Main Road',
+      text: profile['doorStreet'] ?? profile['currentAddress'] ?? profile['address'] ?? '',
     );
-    _pincodeController = TextEditingController(text: profile['pincode'] ?? '500081');
+    _pincodeController = TextEditingController(
+      text: profile['pincode'] ?? _villagePincodes['${_selectedDistrict}_${_selectedMandal}_$_selectedVillage'] ?? '531001',
+    );
 
     // Physical Shop Hierarchy Init
     _hasPhysicalShop = profile['hasPhysicalShop'] == true || profile['hasPhysicalShop'] == 'true';
-    _shopNameController = TextEditingController(text: profile['shopName'] ?? 'Ramesh Electrical & Sanitary Works');
+    _shopNameController = TextEditingController(text: profile['shopName'] ?? '');
 
     if (profile['shopDistrict'] != null && _addressHierarchy.containsKey(profile['shopDistrict'])) {
       _selectedShopDistrict = profile['shopDistrict'];
     } else {
-      _selectedShopDistrict = 'Hyderabad';
+      _selectedShopDistrict = _selectedDistrict;
     }
 
     final shopMandals = _getMandalsForDistrict(_selectedShopDistrict);
@@ -440,14 +261,14 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
     }
 
     _shopDoorStreetController = TextEditingController(
-      text: profile['shopAddress'] ?? 'Shop No. 12, Main Bazaar Road, Near Hanuman Temple',
+      text: profile['shopDoorStreet'] ?? profile['shopAddress'] ?? '',
     );
-    _shopGstController = TextEditingController(text: profile['shopGstNumber'] ?? '36AAAAA0000A1Z5');
-    _shopFrontPhotoUploaded = profile['shopFrontPhotoUrl'] != null || true;
-    _shopInsidePhotoUploaded = profile['shopInsidePhotoUrl'] != null || true;
+    _shopGstController = TextEditingController(text: profile['shopGstNumber'] ?? '');
+    _shopFrontPhotoUploaded = profile['shopFrontPhotoUrl'] != null;
+    _shopInsidePhotoUploaded = profile['shopInsidePhotoUrl'] != null;
 
     // 3. Service Trade & Profession
-    _serviceNameController = TextEditingController(text: profile['serviceName'] ?? 'Master Plumber');
+    _serviceNameController = TextEditingController(text: profile['serviceName'] ?? '');
     if (profile['category'] != null && _categories.any((c) => c['id'] == profile['category'])) {
       _selectedCategory = profile['category'];
     }
@@ -467,26 +288,29 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
     }
 
     // 5. KYC Government IDs
-    _aadhaarController = TextEditingController(text: profile['aadhaarNumber'] ?? '5412-8890-4521');
-    _panNumberController = TextEditingController(text: profile['panNumber'] ?? 'ABCDE1234F');
-    _drivingLicenseController = TextEditingController(text: profile['drivingLicenseNumber'] ?? 'TS09 20210004512');
-    _skillCertificatesController = TextEditingController(text: profile['skillCertificates'] ?? 'Govt. ITI Plumbing & Sanitary Certificate');
+    _aadhaarController = TextEditingController(text: profile['aadhaarNumber'] ?? '');
+    _panNumberController = TextEditingController(text: profile['panNumber'] ?? '');
+    _drivingLicenseController = TextEditingController(text: profile['drivingLicenseNumber'] ?? '');
+    _skillCertificatesController = TextEditingController(text: profile['skillCertificates'] ?? '');
 
     // 6. Local Guarantor / Reference
-    _guarantorNameController = TextEditingController(text: profile['guarantorName'] ?? 'K. Venkat Rao');
-    _guarantorRelationController = TextEditingController(text: profile['guarantorRelation'] ?? 'Senior Contractor / Reference');
-    _guarantorPhoneController = TextEditingController(text: profile['guarantorPhone'] ?? '+91 94401 23456');
+    _guarantorNameController = TextEditingController(text: profile['guarantorName'] ?? '');
+    _guarantorRelationController = TextEditingController(text: profile['guarantorRelation'] ?? '');
+    _guarantorPhoneController = TextEditingController(text: profile['guarantorPhone'] ?? '');
 
     // 7. Payout
-    _upiController = TextEditingController(text: profile['upiId'] ?? '9876522222@ybl');
+    _upiController = TextEditingController(text: profile['upiId'] ?? '');
 
     // Document Upload flags
-    _aadhaarFrontUploaded = profile['aadhaarFrontUrl'] != null || true;
-    _aadhaarBackUploaded = profile['aadhaarBackUrl'] != null || true;
-    _panCardUploaded = profile['panCardUrl'] != null || true;
-    _drivingLicenseUploaded = profile['drivingLicenseUrl'] != null || true;
-    _skillCertificateUploaded = profile['skillCertificatesUrl'] != null || true;
-    _livePhotoVerified = profile['livePhotoVerificationStatus'] != 'Pending';
+    _aadhaarFrontUploaded = profile['aadhaarFrontUrl'] != null;
+    _aadhaarBackUploaded = profile['aadhaarBackUrl'] != null;
+    _panCardUploaded = profile['panCardUrl'] != null;
+    _drivingLicenseUploaded = profile['drivingLicenseUrl'] != null;
+    _skillCertificateUploaded = profile['skillCertificatesUrl'] != null;
+    _livePhotoVerified = profile['livePhotoVerificationStatus'] == 'Verified' || profile['livePhotoVerified'] == true;
+
+    // Load dynamic real-time locations from backend
+    _loadLocationsFromBackend();
   }
 
   @override
@@ -1017,7 +841,13 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
                             items: _getVillagesForMandal(_selectedDistrict, _selectedMandal),
                             onChanged: (val) {
                               if (val != null) {
-                                setState(() => _selectedVillage = val);
+                                setState(() {
+                                _selectedVillage = val;
+                                final autoPin = _villagePincodes['${_selectedDistrict}_${_selectedMandal}_$val'];
+                                if (autoPin != null && autoPin.isNotEmpty) {
+                                  _pincodeController.text = autoPin;
+                                }
+                              });
                               }
                             },
                           ),
@@ -1151,7 +981,13 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
                                     items: _getVillagesForMandal(_selectedShopDistrict, _selectedShopMandal),
                                     onChanged: (val) {
                                       if (val != null) {
-                                        setState(() => _selectedShopVillage = val);
+                                        setState(() {
+                                          _selectedShopVillage = val;
+                                          final autoPin = _villagePincodes['${_selectedShopDistrict}_${_selectedShopMandal}_$val'];
+                                          if (autoPin != null && autoPin.isNotEmpty && _pincodeController.text.isEmpty) {
+                                            _pincodeController.text = autoPin;
+                                          }
+                                        });
                                       }
                                     },
                                   ),

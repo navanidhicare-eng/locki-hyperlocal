@@ -133,6 +133,22 @@ class PartnerApiService {
     }
   }
 
+  // Fetch Locations (Districts -> Mandals -> Villages) configured in Admin Location Management
+  Future<List<dynamic>> fetchLocations() async {
+    try {
+      final res = await http.get(Uri.parse('${PartnerConstants.baseUrl}/locations'));
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+        if (data['success'] == true && data['locations'] is List) {
+          return data['locations'];
+        }
+      }
+    } catch (e) {
+      print('Fetch locations error: $e');
+    }
+    return [];
+  }
+
   // Toggle online status
   Future<bool?> toggleOnline(bool targetStatus) async {
     if (_authToken == null) return null;
