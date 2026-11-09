@@ -505,17 +505,19 @@ class _RentalMarketplaceScreenState extends State<RentalMarketplaceScreen> with 
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _openPostPropertyModal,
-        backgroundColor: AppConstants.primary,
-        foregroundColor: Colors.white,
-        elevation: 4,
-        icon: const Icon(Icons.add_home_rounded, size: 21),
-        label: const Text(
-          'Post Property / List Rental',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-        ),
-      ),
+      floatingActionButton: _activeTabIndex == 1
+          ? null
+          : FloatingActionButton.extended(
+              onPressed: _openPostPropertyModal,
+              backgroundColor: AppConstants.primary,
+              foregroundColor: Colors.white,
+              elevation: 4,
+              icon: const Icon(Icons.add_home_rounded, size: 21),
+              label: const Text(
+                'Post Property / List Rental',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+              ),
+            ),
       body: Column(
         children: [
           // 1. Dual Main Navigation Segment Switcher: Properties vs Store Rentals
