@@ -5,11 +5,12 @@ import 'package:url_launcher/url_launcher.dart';
 import '../core/constants.dart';
 
 class AppUpdateService {
-  static const String currentVersion = '1.0.0';
-  static const int currentBuildNumber = 1;
+  static const String currentVersion = '1.0.1';
+  static const int currentBuildNumber = 2;
   static const String appId = 'customer_app';
 
   static bool _dialogShowing = false;
+  static int? _dismissedBuildNumber;
 
   /// Check for updates silently on launch
   static Future<void> checkForUpdates(BuildContext context, {bool showNoUpdateToast = false}) async {
@@ -18,7 +19,13 @@ class AppUpdateService {
       final res = await http.get(uri).timeout(const Duration(seconds: 4));
       if (res.statusCode == 200) {
         final data = jsonDecode(res.body);
+        final latestBuild = data['latestBuildNumber'] as int?;
+        final isForce = data['isForceUpdate'] == true;
+
         if (data['success'] == true && data['hasUpdate'] == true && !_dialogShowing) {
+          if (!isForce && _dismissedBuildNumber != null && _dismissedBuildNumber == latestBuild && !showNoUpdateToast) {
+            return;
+          }
           if (!context.mounted) return;
           _showUpdateDialog(context, data);
         } else if (showNoUpdateToast && context.mounted) {
@@ -101,6 +108,7 @@ class AppUpdateService {
               TextButton(
                 onPressed: () {
                   _dialogShowing = false;
+                  _dismissedBuildNumber = updateData['latestBuildNumber'] as int?;
                   Navigator.pop(ctx);
                 },
                 child: const Text('తర్వాత (Later)', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
