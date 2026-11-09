@@ -130,3 +130,4 @@ class AppUpdateService {
     ).then((_) => _dialogShowing = false);
   }
 }
+

@@ -11,3 +11,4 @@ router.get('/download/:appId', appUpdateController.downloadApk);
 router.post('/release', appUpdateController.releaseUpdate);
 
 module.exports = router;
+

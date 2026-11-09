@@ -34,3 +34,7 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 
+# Release APK outputs
+release_apks/
+server/uploads/apks/
+
