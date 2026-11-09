@@ -2,12 +2,12 @@
   "customer_app": {
     "appId": "customer_app",
     "appName": "Locki Customer",
-    "version": "1.0.1",
-    "buildNumber": 2,
+    "version": "1.0.2",
+    "buildNumber": 3,
     "apkFileName": "customer_app.apk",
-    "changelog": "Store Rentals లో అనవసరపు బటన్ తొలగింపు, UI క్లీనప్ & సూపర్ స్పీడ్ ఆప్టిమైజేషన్.",
+    "changelog": "English update dialog, ultra-fast performance, UI fixes & verified listings.",
     "isForceUpdate": false,
-    "updatedAt": "2026-11-09T09:18:00.000Z"
+    "updatedAt": "2026-11-09T09:50:00.000Z"
   },
   "partner_app": {
     "appId": "partner_app",

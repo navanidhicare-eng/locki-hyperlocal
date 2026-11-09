@@ -69,8 +69,8 @@ class AppUpdateService {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('పార్ట్‌నర్ యాప్ అప్‌డేట్ అందుబాటులో ఉంది!', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                    Text('Partner App v$latestVer', style: const TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.w600)),
+                    const Text('Partner App Update Available!', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                    Text('Version v$latestVer', style: const TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.w600)),
                   ],
                 ),
               ),
@@ -80,7 +80,7 @@ class AppUpdateService {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('వాట్ ఈజ్ న్యూ (What\'s New):', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87)),
+              const Text('What\'s New:', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87)),
               const SizedBox(height: 6),
               Container(
                 width: double.infinity,
@@ -97,7 +97,7 @@ class AppUpdateService {
               ),
               const SizedBox(height: 10),
               const Text(
-                'మీ ఆర్డర్‌లు & బిజినెస్ సరిగ్గా పనిచేయడానికి ఇప్పుడే అప్‌డేట్ చేయండి.',
+                'Please update to ensure seamless orders and business tools.',
                 style: TextStyle(fontSize: 11, color: Colors.grey),
               ),
             ],
@@ -111,11 +111,11 @@ class AppUpdateService {
                   _dismissedBuildNumber = updateData['latestBuildNumber'] as int?;
                   Navigator.pop(ctx);
                 },
-                child: const Text('తర్వాత (Later)', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+                child: const Text('Later', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
               ),
             ElevatedButton.icon(
               icon: const Icon(Icons.download_rounded, size: 18, color: Colors.white),
-              label: const Text('ఇప్పుడే అప్‌డేట్ చేయండి (Update Now)', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
+              label: const Text('Update Now', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
               style: ElevatedButton.styleFrom(
                 backgroundColor: PartnerConstants.primary,
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
