@@ -770,6 +770,21 @@
       "role": "customer",
       "address": "Station Road, Chodavaram Town",
       "createdAt": "2026-11-05T15:30:35.962Z"
+    },
+    {
+      "id": "usr_0cefeed6",
+      "name": "prasad",
+      "email": "9951194299@customer.loki",
+      "phone": "9951194299",
+      "passwordHash": "$2a$10$kh92ps.tCRdVYEmAE1vln.dyDvjFrqyAiFSCahRg5K0sOvqGwXYXq",
+      "role": "customer",
+      "address": "Rcm",
+      "coordinates": {
+        "lat": 17.4435,
+        "lng": 78.3772
+      },
+      "walletBalance": 200,
+      "createdAt": "2026-11-09T09:11:09.916Z"
     }
   ],
   "providers": [

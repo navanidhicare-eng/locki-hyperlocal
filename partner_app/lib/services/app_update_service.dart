@@ -118,8 +118,12 @@ class AppUpdateService {
                 Navigator.pop(ctx);
                 if (apkUrl.isNotEmpty) {
                   final uri = Uri.parse(apkUrl);
-                  if (await canLaunchUrl(uri)) {
+                  try {
                     await launchUrl(uri, mode: LaunchMode.externalApplication);
+                  } catch (_) {
+                    try {
+                      await launchUrl(uri);
+                    } catch (_) {}
                   }
                 }
               },
