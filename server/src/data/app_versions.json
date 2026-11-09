@@ -2,12 +2,12 @@
   "customer_app": {
     "appId": "customer_app",
     "appName": "Locki Customer",
-    "version": "1.0.2",
-    "buildNumber": 3,
+    "version": "1.0.3",
+    "buildNumber": 4,
     "apkFileName": "customer_app.apk",
-    "changelog": "English update dialog, ultra-fast performance, UI fixes & verified listings.",
+    "changelog": "Direct In-App download with live progress & instant automatic installation.",
     "isForceUpdate": false,
-    "updatedAt": "2026-11-09T09:50:00.000Z"
+    "updatedAt": "2026-11-09T10:00:00.000Z"
   },
   "partner_app": {
     "appId": "partner_app",
