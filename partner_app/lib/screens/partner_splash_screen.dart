@@ -112,7 +112,11 @@ class _PartnerSplashScreenState extends State<PartnerSplashScreen> with TickerPr
     _navTimer = Timer(const Duration(milliseconds: 2400), _navigateNext);
   }
 
-  void _navigateNext() {
+  void _navigateNext() async {
+    if (!mounted) return;
+    if (!PartnerApiService().isLoggedIn) {
+      await PartnerApiService().initAuth();
+    }
     if (!mounted) return;
     final loggedIn = PartnerApiService().isLoggedIn;
 

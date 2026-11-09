@@ -151,6 +151,13 @@ exports.createQuickRequest = (req, res) => {
       });
     }
 
+    if (!targetProvider && matchedProviders.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'No verified specialists are currently active in this category for your area. We are onboarding specialists soon!'
+      });
+    }
+
     const newOrder = {
       id: orderId,
       customerId,
@@ -167,7 +174,7 @@ exports.createQuickRequest = (req, res) => {
       childTaskName: childTaskName || null,
       problemDescription: problemDescription || '',
       serviceName: childTaskName || (subCategory ? subCategory.name : (category ? category.name : 'Service Request')),
-      amount: amount || (subCategory?.basePrice || 299),
+      amount: amount != null ? Number(amount) : (subCategory?.basePrice || 0),
       paymentMethod: paymentMethod || 'Cash on Service / UPI',
       paymentStatus: 'PENDING',
       orderStatus: targetProvider ? 'PENDING_DIRECT' : 'PENDING',

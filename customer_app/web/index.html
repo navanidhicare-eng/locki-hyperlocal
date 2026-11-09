@@ -18,19 +18,129 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="description" content="Locki - Instant Doorstep Services & Hyperlocal Delivery">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="customer_app">
+  <meta name="apple-mobile-web-app-title" content="Locki">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>customer_app</title>
+  <title>Locki - Hyperlocal Services</title>
   <link rel="manifest" href="manifest.json">
+
+  <script>
+    // Camera capture, gallery picker and HTML canvas compression utility
+    window.lokiPickAndCompressImage = function(sourceType, callback) {
+      try {
+        let isHandled = false;
+        const input = document.createElement('input');
+        input.type = 'file';
+
+        if (sourceType === 'camera') {
+          // Rear camera for property/room pictures
+          input.accept = 'image/*';
+          input.capture = 'environment';
+        } else {
+          // Gallery / Files (Image)
+          input.accept = 'image/*';
+        }
+
+        input.style.position = 'fixed';
+        input.style.left = '-9999px';
+        input.style.top = '-9999px';
+        document.body.appendChild(input);
+
+        function cleanupAndReturn(res) {
+          if (isHandled) return;
+          isHandled = true;
+          try { window.removeEventListener('focus', onWindowFocus); } catch (e) {}
+          try { document.body.removeChild(input); } catch (err) {}
+          callback(JSON.stringify(res));
+        }
+
+        // Standard HTML5 cancel event (fires when user closes file dialog or presses Esc)
+        input.oncancel = function() {
+          cleanupAndReturn({ success: false, cancelled: true, message: 'Cancelled by user' });
+        };
+
+        // Window focus fallback for browsers where oncancel might not fire
+        function onWindowFocus() {
+          setTimeout(function() {
+            if (!isHandled) {
+              if (!input.files || input.files.length === 0) {
+                cleanupAndReturn({ success: false, cancelled: true, message: 'Cancelled by user' });
+              }
+            }
+          }, 600);
+        }
+        window.addEventListener('focus', onWindowFocus, { once: true });
+
+        input.onchange = function(e) {
+          const file = e.target.files && e.target.files[0];
+          if (!file) {
+            cleanupAndReturn({ success: false, cancelled: true });
+            return;
+          }
+
+          // Compress using HTML Canvas to reduce size (max 1024px, JPEG 0.72)
+          const reader = new FileReader();
+          reader.onload = function(evt) {
+            const img = new Image();
+            img.onload = function() {
+              const maxDim = 1024;
+              let width = img.width;
+              let height = img.height;
+
+              if (width > maxDim || height > maxDim) {
+                if (width > height) {
+                  height = Math.round((height * maxDim) / width);
+                  width = maxDim;
+                } else {
+                  width = Math.round((width * maxDim) / height);
+                  height = maxDim;
+                }
+              }
+
+              const canvas = document.createElement('canvas');
+              canvas.width = width;
+              canvas.height = height;
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0, width, height);
+
+              // Compress to JPEG with 0.72 quality
+              const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.72);
+              const approxSizeKb = Math.round((compressedDataUrl.length * 3) / 4 / 1024);
+
+              cleanupAndReturn({
+                success: true,
+                fileName: file.name,
+                originalSizeKb: Math.round(file.size / 1024),
+                fileSizeKb: approxSizeKb,
+                dataUrl: compressedDataUrl
+              });
+            };
+            img.onerror = function() {
+              cleanupAndReturn({ success: false, message: 'Failed to process image' });
+            };
+            img.src = evt.target.result;
+          };
+          reader.onerror = function() {
+            cleanupAndReturn({ success: false, message: 'Failed to read image file' });
+          };
+          reader.readAsDataURL(file);
+        };
+
+        input.click();
+      } catch (err) {
+        console.error('lokiPickAndCompressImage error:', err);
+        callback(JSON.stringify({ success: false, message: err.message }));
+      }
+    };
+  </script>
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>

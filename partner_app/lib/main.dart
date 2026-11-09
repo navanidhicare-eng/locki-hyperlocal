@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'core/constants.dart';
+import 'services/partner_api_service.dart';
+import 'services/background_service.dart';
 import 'screens/partner_splash_screen.dart';
-import 'screens/partner_auth_screen.dart';
-import 'screens/partner_main_nav_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  BackgroundServiceHelper.initCommunicationPort();
+  await PartnerApiService().initAuth();
+  await BackgroundServiceHelper.initService();
   runApp(const LokiPartnerApp());
 }
 

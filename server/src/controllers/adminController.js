@@ -102,7 +102,7 @@ exports.updateKycStatus = (req, res) => {
 
 exports.updateProviderSubscription = (req, res) => {
   const { id } = req.params;
-  const { status, paymentMethod = 'cash', amount = 1999, months = 12 } = req.body;
+  const { status, paymentMethod = 'cash', amount = 1999, months = 12, listingQuota = null, topUpQuota = 0 } = req.body;
 
   const provider = db.data.providers.find(p => p.id === id);
   if (!provider) {
@@ -119,6 +119,13 @@ exports.updateProviderSubscription = (req, res) => {
     const expiry = new Date();
     expiry.setMonth(expiry.getMonth() + parseInt(months));
     provider.subscriptionExpiresAt = expiry.toISOString();
+    if (listingQuota !== null) {
+      provider.listingQuota = parseInt(listingQuota);
+    }
+    if (topUpQuota) {
+      provider.topUpQuota = (provider.topUpQuota || 0) + parseInt(topUpQuota);
+      provider.listingQuota = (provider.listingQuota || 0) + parseInt(topUpQuota);
+    }
   } else {
     provider.subscriptionStatus = 'unpaid';
     provider.subscriptionExpiresAt = null;
@@ -285,5 +292,58 @@ exports.getAllOrders = (req, res) => {
     success: true,
     count: db.data.orders.length,
     orders: db.data.orders
+  });
+};
+
+// GET /api/admin/business-requests
+exports.getAllBusinessRequests = (req, res) => {
+  const requests = [];
+  (db.data.providers || []).forEach(p => {
+    if (p.businesses && Array.isArray(p.businesses)) {
+      p.businesses.forEach(b => {
+        requests.push({
+          ...b,
+          partnerId: p.id,
+          partnerName: p.name,
+          partnerPhone: p.phone,
+          partnerCode: p.partnerCode || p.id
+        });
+      });
+    }
+  });
+
+  res.json({
+    success: true,
+    count: requests.length,
+    data: requests,
+    requests
+  });
+};
+
+// PATCH /api/admin/business-requests/:partnerId/:bizId/status
+exports.updateBusinessRequestStatus = (req, res) => {
+  const { partnerId, bizId } = req.params;
+  const { status, reason } = req.body;
+
+  const provider = (db.data.providers || []).find(p => p.id === partnerId);
+  if (!provider) {
+    return res.status(404).json({ success: false, message: 'Partner not found' });
+  }
+
+  const business = (provider.businesses || []).find(b => b.id === bizId);
+  if (!business) {
+    return res.status(404).json({ success: false, message: 'Business request not found' });
+  }
+
+  business.status = status || 'approved';
+  if (reason) business.rejectReason = reason;
+  business.updatedAt = new Date().toISOString();
+
+  db.save();
+
+  res.json({
+    success: true,
+    message: `Business profile '${business.name}' has been ${business.status.toUpperCase()}!`,
+    business
   });
 };

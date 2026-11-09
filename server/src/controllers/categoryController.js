@@ -10,7 +10,7 @@ exports.getAllCategories = (req, res) => {
 };
 
 exports.createCategory = (req, res) => {
-  const { name, icon, iconUrl, color, description, requiredDocuments, subCategories } = req.body;
+  const { name, icon, iconUrl, color, description, businessType, requiredDocuments, subCategories } = req.body;
   if (!name) {
     return res.status(400).json({ success: false, message: 'Category name is required' });
   }
@@ -21,6 +21,7 @@ exports.createCategory = (req, res) => {
     icon: icon || 'wrench',
     iconUrl: iconUrl || '',
     color: color || '#3B82F6',
+    businessType: businessType || 'service', // 'service' | 'shop' | 'rental'
     description: description || '',
     requiredDocuments: requiredDocuments || ['aadhaar'],
     subCategories: subCategories || [],
@@ -190,6 +191,11 @@ exports.addChildCategory = (req, res) => {
   sub.childCategories.push(newChild);
   db.save();
 
+  const io = req.app.get('io');
+  if (io) {
+    io.emit('categories_updated', { categoryId: id, subId, childCategory: newChild });
+  }
+
   res.status(201).json({
     success: true,
     message: 'Child category added successfully',
@@ -213,6 +219,11 @@ exports.deleteChildCategory = (req, res) => {
 
   sub.childCategories = sub.childCategories.filter(ch => ch.id !== childId);
   db.save();
+
+  const io = req.app.get('io');
+  if (io) {
+    io.emit('categories_updated', { categoryId: id, subId, deletedChildId: childId });
+  }
 
   res.json({
     success: true,

@@ -45,7 +45,9 @@ import {
   Edit,
   Eye,
   UploadCloud,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Store,
+  CheckSquare
 } from 'lucide-react';
 
 const API_BASE = 'http://localhost:5000/api';
@@ -75,6 +77,8 @@ export default function App() {
   const [partnerSearch, setPartnerSearch] = useState('');
   const [partnerFilter, setPartnerFilter] = useState('all'); // 'all' | 'approved' | 'pending' | 'online'
   const [showAddPartnerModal, setShowAddPartnerModal] = useState(false);
+  const [selectedPartnerId, setSelectedPartnerId] = useState(null);
+  const selectedPartner = partners.find(p => p.id === selectedPartnerId) || null;
   const [partnerNameInput, setPartnerNameInput] = useState('');
   const [partnerPhoneInput, setPartnerPhoneInput] = useState('');
   const [partnerEmailInput, setPartnerEmailInput] = useState('');
@@ -118,12 +122,17 @@ export default function App() {
   const [sub3mInput, setSub3mInput] = useState(499);
   const [sub6mInput, setSub6mInput] = useState(899);
   const [sub1yInput, setSub1yInput] = useState(1499);
+  const [subItemLimitInput, setSubItemLimitInput] = useState(10);
+  const [subTopUp5Input, setSubTopUp5Input] = useState(99);
+  const [subTopUp10Input, setSubTopUp10Input] = useState(179);
+  const [subTopUpPerItemInput, setSubTopUpPerItemInput] = useState(15);
 
   // Partner Subscription Payment Modal
   const [paySubModal, setPaySubModal] = useState(null); // { partner, cat, sub, plans }
   const [payPlanDuration, setPayPlanDuration] = useState('1_year');
   const [payCustomAmount, setPayCustomAmount] = useState('');
   const [payMethod, setPayMethod] = useState('cash');
+  const [payExtraTopUpQuota, setPayExtraTopUpQuota] = useState(0);
 
   const [targetCat, setTargetCat] = useState(null);
   const [targetSub, setTargetSub] = useState(null);
@@ -150,9 +159,20 @@ export default function App() {
   const [promoActive, setPromoActive] = useState(true);
   const [promoPriority, setPromoPriority] = useState(1);
 
+  // Multi-Business Requests & Lease/Rentals State
+  const [businessRequests, setBusinessRequests] = useState([]);
+  const [bizRequestFilter, setBizRequestFilter] = useState('all'); // 'all' | 'pending' | 'approved'
+  const [bizRequestSearch, setBizRequestSearch] = useState('');
+
+  const [rentals, setRentals] = useState([]);
+  const [rentalFilter, setRentalFilter] = useState('all');
+  const [rentalTypeFilter, setRentalTypeFilter] = useState('all'); // 'all' | 'owner' | 'store'
+  const [rentalSearch, setRentalSearch] = useState('');
+
   // Simplified form inputs
   const [editingCategory, setEditingCategory] = useState(null);
   const [catNameInput, setCatNameInput] = useState('');
+  const [catBusinessTypeInput, setCatBusinessTypeInput] = useState('service'); // 'service' | 'shop' | 'rental'
   const [catIconUrlInput, setCatIconUrlInput] = useState('');
   const [catIconPreview, setCatIconPreview] = useState('');
   const [catColorInput, setCatColorInput] = useState('#DE4915');
@@ -264,6 +284,22 @@ export default function App() {
           const promoJson = await promoRes.json();
           if (promoJson.success) setPromotions(promoJson.data || []);
         }
+
+        // Fetch Multi-Business Requests
+        const bizRes = await fetch(`${API_BASE}/admin/business-requests`, {
+          headers: { Authorization: `Bearer ${token}` }
+        }).catch(() => null);
+        if (bizRes && bizRes.ok) {
+          const bizJson = await bizRes.json();
+          if (bizJson.success) setBusinessRequests(bizJson.data || bizJson.requests || []);
+        }
+
+        // Fetch Lease & Rentals Marketplace Listings
+        const rentRes = await fetch(`${API_BASE}/rentals`).catch(() => null);
+        if (rentRes && rentRes.ok) {
+          const rentJson = await rentRes.json();
+          if (rentJson.success) setRentals(rentJson.data || []);
+        }
       }
     } catch (err) {
       console.error('Failed to load dashboard data:', err);
@@ -277,6 +313,45 @@ export default function App() {
     const interval = setInterval(loadData, 12000);
     return () => clearInterval(interval);
   }, []);
+
+  // Multi-Business & Rental Handlers
+  const handleApproveBusinessRequest = async (partnerId, bizId, status) => {
+    try {
+      const token = await getAdminToken();
+      const res = await fetch(`${API_BASE}/admin/business-requests/${partnerId}/${bizId}/status`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ status })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert(status === 'approved' ? '✓ Business Profile Approved! Partner can now switch.' : 'Business Request Rejected.');
+        loadData();
+      } else {
+        alert('Failed: ' + (data.message || 'Unknown error'));
+      }
+    } catch (err) {
+      alert('Error updating business request: ' + err.message);
+    }
+  };
+
+  const handleDeleteRental = async (rentalId) => {
+    if (!window.confirm('Are you sure you want to delete this rental listing?')) return;
+    try {
+      const res = await fetch(`${API_BASE}/rentals/${rentalId}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        loadData();
+      } else {
+        alert('Failed: ' + (data.message || 'Unknown error'));
+      }
+    } catch (err) {
+      alert('Error deleting rental listing: ' + err.message);
+    }
+  };
 
   // Promotions Handlers
   const resetPromoForm = () => {
@@ -397,6 +472,7 @@ export default function App() {
     setCatIconUrlInput('');
     setCatIconPreview('');
     setCatColorInput('#DE4915');
+    setCatBusinessTypeInput('service');
     setEditingCategory(null);
   };
 
@@ -411,6 +487,7 @@ export default function App() {
     setCatIconUrlInput(cat.iconUrl || '');
     setCatIconPreview(cat.iconUrl || '');
     setCatColorInput(cat.color || '#DE4915');
+    setCatBusinessTypeInput(cat.businessType || 'service');
     setShowAddCatModal(true);
   };
 
@@ -470,7 +547,8 @@ export default function App() {
           body: JSON.stringify({
             name: catNameInput.trim(),
             iconUrl: catIconUrlInput || catIconPreview || '',
-            color: catColorInput || '#DE4915'
+            color: catColorInput || '#DE4915',
+            businessType: catBusinessTypeInput || 'service'
           })
         });
         const data = await res.json();
@@ -493,6 +571,7 @@ export default function App() {
             icon: 'layers',
             iconUrl: catIconUrlInput || catIconPreview || '',
             color: catColorInput || '#DE4915',
+            businessType: catBusinessTypeInput || 'service',
             description: '',
             subCategories: []
           })
@@ -903,7 +982,7 @@ export default function App() {
   };
 
   // Subscription Status Handler
-  const handleSubscriptionStatus = async (providerId, status, paymentMethod = 'cash', amount = 1499, months = 12) => {
+  const handleSubscriptionStatus = async (providerId, status, paymentMethod = 'cash', amount = 1499, months = 12, listingQuota = null, topUpQuota = 0) => {
     try {
       const token = await getAdminToken();
       const res = await fetch(`${API_BASE}/admin/providers/${providerId}/subscription`, {
@@ -912,7 +991,7 @@ export default function App() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({ status, paymentMethod, amount, months })
+        body: JSON.stringify({ status, paymentMethod, amount, months, listingQuota, topUpQuota })
       });
       const data = await res.json();
       if (data.success) {
@@ -931,6 +1010,10 @@ export default function App() {
     setSub3mInput(sub.subscriptionPlans?.['3_months'] || 499);
     setSub6mInput(sub.subscriptionPlans?.['6_months'] || 899);
     setSub1yInput(sub.subscriptionPlans?.['1_year'] || 1499);
+    setSubItemLimitInput(sub.subscriptionPlans?.listingLimit || sub.listingLimit || 10);
+    setSubTopUp5Input(sub.subscriptionPlans?.topUpPacks?.['+5'] || sub.topUpPacks?.['+5'] || 99);
+    setSubTopUp10Input(sub.subscriptionPlans?.topUpPacks?.['+10'] || sub.topUpPacks?.['+10'] || 179);
+    setSubTopUpPerItemInput(sub.subscriptionPlans?.topUpPerItem || sub.topUpPerItem || 15);
   };
 
   const handleSaveSubPricing = async () => {
@@ -944,11 +1027,23 @@ export default function App() {
           Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
+          listingLimit: Number(subItemLimitInput) || 10,
+          topUpPerItem: Number(subTopUpPerItemInput) || 15,
+          topUpPacks: {
+            '+5': Number(subTopUp5Input) || 99,
+            '+10': Number(subTopUp10Input) || 179
+          },
           subscriptionPlans: {
             '1_month': Number(sub1mInput) || 199,
             '3_months': Number(sub3mInput) || 499,
             '6_months': Number(sub6mInput) || 899,
-            '1_year': Number(sub1yInput) || 1499
+            '1_year': Number(sub1yInput) || 1499,
+            listingLimit: Number(subItemLimitInput) || 10,
+            topUpPerItem: Number(subTopUpPerItemInput) || 15,
+            topUpPacks: {
+              '+5': Number(subTopUp5Input) || 99,
+              '+10': Number(subTopUp10Input) || 179
+            }
           }
         })
       });
@@ -972,11 +1067,12 @@ export default function App() {
     setPayPlanDuration('1_year');
     setPayCustomAmount(plans['1_year'] || 1499);
     setPayMethod('cash');
+    setPayExtraTopUpQuota(0);
   };
 
   const handleConfirmSubscriptionPayment = async () => {
     if (!paySubModal) return;
-    const { partner, plans } = paySubModal;
+    const { partner, plans, sub } = paySubModal;
     let months = 12;
     let amount = plans['1_year'] || 1499;
 
@@ -994,7 +1090,10 @@ export default function App() {
       months = 12;
     }
 
-    await handleSubscriptionStatus(partner.id, 'active', payMethod, amount, months);
+    const baseQuota = sub?.listingLimit || plans?.listingLimit || 10;
+    const topUp = Number(payExtraTopUpQuota) || 0;
+
+    await handleSubscriptionStatus(partner.id, 'active', payMethod, amount, months, baseQuota, topUp);
     setPaySubModal(null);
   };
 
@@ -1363,6 +1462,53 @@ export default function App() {
             </span>
           </button>
 
+          <button
+            onClick={() => setActiveTab('business-approvals')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '10px 14px',
+              borderRadius: 8,
+              background: activeTab === 'business-approvals' ? '#FFF4EF' : 'transparent',
+              color: activeTab === 'business-approvals' ? '#DE4915' : '#475569',
+              border: activeTab === 'business-approvals' ? '1px solid #FFD3C2' : '1px solid transparent',
+              fontWeight: activeTab === 'business-approvals' ? 700 : 500,
+              fontSize: '0.86rem',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <CheckSquare size={18} color={activeTab === 'business-approvals' ? '#DE4915' : '#64748B'} />
+              <span>Business Requests</span>
+            </div>
+            {businessRequests.filter(b => b.status === 'pending').length > 0 ? (
+              <span style={{
+                fontSize: '0.68rem',
+                fontWeight: 800,
+                padding: '2px 7px',
+                borderRadius: 10,
+                background: '#FEF3C7',
+                color: '#D97706'
+              }}>
+                {businessRequests.filter(b => b.status === 'pending').length} Pending
+              </span>
+            ) : (
+              <span style={{
+                fontSize: '0.68rem',
+                fontWeight: 700,
+                padding: '2px 7px',
+                borderRadius: 10,
+                background: '#F1F5F9',
+                color: '#64748B'
+              }}>
+                {businessRequests.length}
+              </span>
+            )}
+          </button>
+
           {/* Section 4: MARKETING & MONETIZATION */}
           <div style={{ padding: '16px 10px 4px', fontSize: '0.68rem', fontWeight: 700, color: '#94A3B8', letterSpacing: '0.06em' }}>
             MARKETING & MONETIZATION
@@ -1399,6 +1545,40 @@ export default function App() {
               color: activeTab === 'promotions' ? '#B8350B' : '#64748B'
             }}>
               {promotions.filter(p => p.active).length} Active
+            </span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('rentals')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '10px 14px',
+              borderRadius: 8,
+              background: activeTab === 'rentals' ? '#FFF4EF' : 'transparent',
+              color: activeTab === 'rentals' ? '#DE4915' : '#475569',
+              border: activeTab === 'rentals' ? '1px solid #FFD3C2' : '1px solid transparent',
+              fontWeight: activeTab === 'rentals' ? 700 : 500,
+              fontSize: '0.86rem',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <Store size={18} color={activeTab === 'rentals' ? '#DE4915' : '#64748B'} />
+              <span>Lease & Rentals</span>
+            </div>
+            <span style={{
+              fontSize: '0.68rem',
+              fontWeight: 700,
+              padding: '2px 7px',
+              borderRadius: 10,
+              background: activeTab === 'rentals' ? '#FFD3C2' : '#F1F5F9',
+              color: activeTab === 'rentals' ? '#B8350B' : '#64748B'
+            }}>
+              {rentals.length} Items
             </span>
           </button>
         </nav>
@@ -1444,6 +1624,10 @@ export default function App() {
                 ? 'Executive Overview'
                 : activeTab === 'promotions'
                 ? 'Ads & Promotions Manager'
+                : activeTab === 'business-approvals'
+                ? 'Multi-Business Profile Approvals'
+                : activeTab === 'rentals'
+                ? 'Lease & Rental Marketplace Manager'
                 : activeTab === 'locations'
                 ? 'Location & Territory Management'
                 : activeTab === 'customers'
@@ -1457,6 +1641,10 @@ export default function App() {
                 ? 'Real-Time GMV, Active Fleet, KYC Queue & Verticals Performance'
                 : activeTab === 'promotions'
                 ? 'Manage Top Carousel Banners, Local Spotlight Billboards, Sponsored Deals & Login Popups'
+                : activeTab === 'business-approvals'
+                ? 'Review and approve secondary partner businesses (Tent Houses, Rentals & Shops) for single-app switching'
+                : activeTab === 'rentals'
+                ? 'Direct Owner ("🏠 Direct Owner") and Verified Store ("⭐ Verified Store") Rental Marketplace Listings'
                 : activeTab === 'locations'
                 ? 'District ➔ Mandal ➔ Village / Ward Coverage System'
                 : activeTab === 'customers'
@@ -1945,9 +2133,22 @@ export default function App() {
                                 <p style={{ fontWeight: 700, fontSize: '0.88rem', color: isSelected ? '#DE4915' : 'var(--text-main)', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
                                   {cat.name}
                                 </p>
-                                <p style={{ fontSize: '0.72rem', color: isSelected ? '#DE4915' : 'var(--text-muted)' }}>
-                                  {cat.subCategories?.length || 0} Sub-categories
-                                </p>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 2 }}>
+                                  <span style={{ fontSize: '0.72rem', color: isSelected ? '#DE4915' : 'var(--text-muted)' }}>
+                                    {cat.subCategories?.length || 0} Sub-categories
+                                  </span>
+                                  <span style={{
+                                    fontSize: '0.64rem',
+                                    fontWeight: 700,
+                                    padding: '1px 6px',
+                                    borderRadius: 4,
+                                    background: cat.businessType === 'rental' ? '#FAF5FF' : cat.businessType === 'shop' ? '#ECFDF5' : '#EFF6FF',
+                                    color: cat.businessType === 'rental' ? '#7E22CE' : cat.businessType === 'shop' ? '#047857' : '#1D4ED8',
+                                    border: `1px solid ${cat.businessType === 'rental' ? '#E9D5FF' : cat.businessType === 'shop' ? '#A7F3D0' : '#BFDBFE'}`
+                                  }}>
+                                    {cat.businessType === 'rental' ? '🏠 Rental' : cat.businessType === 'shop' ? '🏪 Shop' : '🛠️ Service'}
+                                  </span>
+                                </div>
                               </div>
                             </div>
 
@@ -2256,6 +2457,21 @@ export default function App() {
                                   {p.label}: ₹{p.val}
                                 </span>
                               ))}
+                              {((selectedCat?.businessType === 'shop' || selectedCat?.businessType === 'rental') && (sub.listingLimit || sub.subscriptionPlans?.listingLimit)) && (
+                                <span
+                                  style={{
+                                    fontSize: '0.67rem',
+                                    padding: '2px 6px',
+                                    borderRadius: 4,
+                                    fontWeight: 700,
+                                    background: '#F0FDF4',
+                                    color: '#15803D',
+                                    border: '1px solid #BBF7D0'
+                                  }}
+                                >
+                                  📦 Limit: {sub.listingLimit || sub.subscriptionPlans?.listingLimit} Items
+                                </span>
+                              )}
                             </div>
                           </div>
                         );
@@ -3373,7 +3589,6 @@ export default function App() {
                           <th style={{ padding: '14px 16px', fontWeight: 700, color: 'var(--text-muted)', fontSize: '0.75rem', letterSpacing: '0.04em' }}>CONTACT INFO</th>
                           <th style={{ padding: '14px 16px', fontWeight: 700, color: 'var(--text-muted)', fontSize: '0.75rem', letterSpacing: '0.04em' }}>AADHAAR / VEHICLE</th>
                           <th style={{ padding: '14px 16px', fontWeight: 700, color: 'var(--text-muted)', fontSize: '0.75rem', letterSpacing: '0.04em' }}>DUTY STATUS</th>
-                          <th style={{ padding: '14px 16px', fontWeight: 700, color: 'var(--text-muted)', fontSize: '0.75rem', letterSpacing: '0.04em' }}>EARNINGS</th>
                           <th style={{ padding: '14px 16px', fontWeight: 700, color: 'var(--text-muted)', fontSize: '0.75rem', letterSpacing: '0.04em' }}>SUBSCRIPTION</th>
                           <th style={{ padding: '14px 16px', fontWeight: 700, color: 'var(--text-muted)', fontSize: '0.75rem', letterSpacing: '0.04em' }}>KYC STATUS</th>
                           <th style={{ padding: '14px 20px', fontWeight: 700, color: 'var(--text-muted)', fontSize: '0.75rem', letterSpacing: '0.04em', textAlign: 'right' }}>ACTIONS</th>
@@ -3391,7 +3606,11 @@ export default function App() {
                           >
                             {/* 1. Partner Name & Rating */}
                             <td style={{ padding: '14px 20px' }}>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                              <div
+                                onClick={() => setSelectedPartnerId(prov.id)}
+                                title="Click to view full partner profile, documents & business requests"
+                                style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }}
+                              >
                                 <div style={{
                                   width: 38,
                                   height: 38,
@@ -3501,19 +3720,7 @@ export default function App() {
                               </button>
                             </td>
 
-                            {/* 6. Earnings & Jobs */}
-                            <td style={{ padding: '14px 16px' }}>
-                              <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                                <span style={{ fontWeight: 700, color: '#059669', fontSize: '0.88rem' }}>
-                                  ₹{prov.earnings ?? prov.walletBalance ?? 0}
-                                </span>
-                                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                                  {prov.completedJobs ?? 0} completed jobs
-                                </span>
-                              </div>
-                            </td>
-
-                            {/* 7. Subscription Column */}
+                            {/* 6. Subscription Column */}
                             <td style={{ padding: '14px 16px' }}>
                               <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                                 {prov.subscriptionStatus === 'active' ? (
@@ -3654,27 +3861,49 @@ export default function App() {
                               )}
                             </td>
 
-                            {/* 8. Actions */}
+                            {/* 8. Actions (Full View & Delete) */}
                             <td style={{ padding: '14px 20px', textAlign: 'right' }}>
-                              <button
-                                onClick={() => handleDeletePartner(prov.id, prov.name)}
-                                title="Remove Partner"
-                                style={{
-                                  background: '#FEF2F2',
-                                  border: '1px solid #FECACA',
-                                  color: '#DC2626',
-                                  padding: '6px 9px',
-                                  borderRadius: 6,
-                                  cursor: 'pointer',
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
-                                  gap: 4,
-                                  fontSize: '0.75rem',
-                                  fontWeight: 600
-                                }}
-                              >
-                                <Trash2 size={13} /> Delete
-                              </button>
+                              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                                <button
+                                  onClick={() => setSelectedPartnerId(prov.id)}
+                                  title="View Full Profile, Documents & Business Requests"
+                                  style={{
+                                    background: 'linear-gradient(135deg, #DE4915 0%, #C23807 100%)',
+                                    color: '#fff',
+                                    border: 'none',
+                                    padding: '6px 12px',
+                                    borderRadius: 6,
+                                    cursor: 'pointer',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: 5,
+                                    fontSize: '0.75rem',
+                                    fontWeight: 700,
+                                    boxShadow: '0 2px 6px rgba(222, 73, 21, 0.25)'
+                                  }}
+                                >
+                                  <Eye size={13} /> Full View
+                                </button>
+                                <button
+                                  onClick={() => handleDeletePartner(prov.id, prov.name)}
+                                  title="Remove Partner"
+                                  style={{
+                                    background: '#FEF2F2',
+                                    border: '1px solid #FECACA',
+                                    color: '#DC2626',
+                                    padding: '6px 9px',
+                                    borderRadius: 6,
+                                    cursor: 'pointer',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: 4,
+                                    fontSize: '0.75rem',
+                                    fontWeight: 600
+                                  }}
+                                >
+                                  <Trash2 size={13} /> Delete
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         ))}
@@ -4065,6 +4294,645 @@ export default function App() {
               )}
             </div>
           )}
+
+          {/* TAB 7: MULTI-BUSINESS PROFILE APPROVALS */}
+          {activeTab === 'business-approvals' && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+              {/* Metric KPI Cards */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: 18 }}>
+                <div className="glass-panel" style={{ padding: '20px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>TOTAL BUSINESS PROFILES</p>
+                    <div style={{ width: 36, height: 36, borderRadius: 10, background: '#FFF4EF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Briefcase size={19} color="#DE4915" />
+                    </div>
+                  </div>
+                  <h3 style={{ fontSize: '1.8rem', fontWeight: 800, marginTop: 10, color: 'var(--text-main)' }}>
+                    {businessRequests.length}
+                  </h3>
+                  <p style={{ fontSize: '0.75rem', color: '#DE4915', fontWeight: 600, marginTop: 8 }}>
+                    Primary & Secondary profiles across fleet
+                  </p>
+                </div>
+
+                <div className="glass-panel" style={{ padding: '20px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>PENDING ADMIN APPROVAL</p>
+                    <div style={{ width: 36, height: 36, borderRadius: 10, background: '#FEF3C7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Clock size={19} color="#D97706" />
+                    </div>
+                  </div>
+                  <h3 style={{ fontSize: '1.8rem', fontWeight: 800, marginTop: 10, color: businessRequests.filter(b => b.status === 'pending').length > 0 ? '#D97706' : '#059669' }}>
+                    {businessRequests.filter(b => b.status === 'pending').length}
+                  </h3>
+                  <p style={{ fontSize: '0.75rem', color: businessRequests.filter(b => b.status === 'pending').length > 0 ? '#D97706' : '#059669', fontWeight: 600, marginTop: 8 }}>
+                    {businessRequests.filter(b => b.status === 'pending').length > 0 ? 'Review & Approve to activate' : 'All profiles reviewed'}
+                  </p>
+                </div>
+
+                <div className="glass-panel" style={{ padding: '20px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>APPROVED & ACTIVE</p>
+                    <div style={{ width: 36, height: 36, borderRadius: 10, background: '#ECFDF5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <CheckCircle2 size={19} color="#059669" />
+                    </div>
+                  </div>
+                  <h3 style={{ fontSize: '1.8rem', fontWeight: 800, marginTop: 10, color: '#059669' }}>
+                    {businessRequests.filter(b => b.status === 'approved' || b.status === 'active').length}
+                  </h3>
+                  <p style={{ fontSize: '0.75rem', color: '#059669', fontWeight: 600, marginTop: 8 }}>
+                    Can switch instantly on Partner App
+                  </p>
+                </div>
+
+                <div className="glass-panel" style={{ padding: '20px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>RENTAL MERCHANT STORES</p>
+                    <div style={{ width: 36, height: 36, borderRadius: 10, background: '#EFF6FF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Store size={19} color="#2563EB" />
+                    </div>
+                  </div>
+                  <h3 style={{ fontSize: '1.8rem', fontWeight: 800, marginTop: 10, color: '#2563EB' }}>
+                    {businessRequests.filter(b => b.businessType === 'rental').length}
+                  </h3>
+                  <p style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: 600, marginTop: 8 }}>
+                    Tent houses, vehicles & tool rental shops
+                  </p>
+                </div>
+              </div>
+
+              {/* Filter & Search Bar */}
+              <div className="glass-panel" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 14 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1, minWidth: 260 }}>
+                  <Search size={16} color="#64748B" />
+                  <input
+                    type="text"
+                    placeholder="Search by Business Name, Partner Name, Phone or Address..."
+                    value={bizRequestSearch}
+                    onChange={(e) => setBizRequestSearch(e.target.value)}
+                    style={{
+                      border: 'none',
+                      outline: 'none',
+                      background: 'transparent',
+                      width: '100%',
+                      fontSize: '0.88rem',
+                      color: 'var(--text-main)'
+                    }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', gap: 8 }}>
+                  {['all', 'pending', 'approved'].map((f) => (
+                    <button
+                      key={f}
+                      onClick={() => setBizRequestFilter(f)}
+                      style={{
+                        padding: '6px 14px',
+                        borderRadius: 20,
+                        border: '1px solid',
+                        borderColor: bizRequestFilter === f ? '#DE4915' : '#E2E8F0',
+                        background: bizRequestFilter === f ? '#FFF4EF' : '#FFFFFF',
+                        color: bizRequestFilter === f ? '#DE4915' : '#64748B',
+                        fontSize: '0.8rem',
+                        fontWeight: 700,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {f === 'all' ? 'All Requests' : f === 'pending' ? '⏳ Pending Approval' : '✓ Approved Profiles'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Requests List */}
+              {businessRequests
+                .filter(b => {
+                  if (bizRequestFilter === 'pending') return b.status === 'pending';
+                  if (bizRequestFilter === 'approved') return b.status === 'approved' || b.status === 'active';
+                  return true;
+                })
+                .filter(b => {
+                  if (!bizRequestSearch.trim()) return true;
+                  const q = bizRequestSearch.toLowerCase();
+                  return (
+                    (b.businessName || '').toLowerCase().includes(q) ||
+                    (b.partnerName || '').toLowerCase().includes(q) ||
+                    (b.phone || '').toLowerCase().includes(q) ||
+                    (b.address || '').toLowerCase().includes(q) ||
+                    (b.category || '').toLowerCase().includes(q)
+                  );
+                }).length === 0 ? (
+                <div className="glass-panel" style={{ padding: '60px 20px', textAlign: 'center' }}>
+                  <Briefcase size={40} color="#94A3B8" style={{ margin: '0 auto 12px' }} />
+                  <h4 style={{ margin: 0, color: 'var(--text-main)', fontSize: '1.1rem' }}>No business requests found</h4>
+                  <p style={{ margin: '6px 0 0', color: 'var(--text-muted)', fontSize: '0.82rem' }}>
+                    When partners submit requests for secondary shops or rental dashboards, they appear here for Admin review.
+                  </p>
+                </div>
+              ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: 18 }}>
+                  {businessRequests
+                    .filter(b => {
+                      if (bizRequestFilter === 'pending') return b.status === 'pending';
+                      if (bizRequestFilter === 'approved') return b.status === 'approved' || b.status === 'active';
+                      return true;
+                    })
+                    .filter(b => {
+                      if (!bizRequestSearch.trim()) return true;
+                      const q = bizRequestSearch.toLowerCase();
+                      return (
+                        (b.businessName || '').toLowerCase().includes(q) ||
+                        (b.partnerName || '').toLowerCase().includes(q) ||
+                        (b.phone || '').toLowerCase().includes(q) ||
+                        (b.address || '').toLowerCase().includes(q) ||
+                        (b.category || '').toLowerCase().includes(q)
+                      );
+                    })
+                    .map((req) => {
+                      const isPending = req.status === 'pending';
+                      const isApproved = req.status === 'approved' || req.status === 'active';
+                      const isRental = req.businessType === 'rental';
+
+                      return (
+                        <div
+                          key={req.id}
+                          className="glass-panel"
+                          style={{
+                            padding: '20px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'space-between',
+                            border: isPending ? '2px solid #FDE68A' : '1px solid #E2E8F0',
+                            background: isPending ? '#FFFDF5' : '#FFFFFF'
+                          }}
+                        >
+                          <div>
+                            {/* Card Top */}
+                            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                                <div style={{
+                                  width: 44,
+                                  height: 44,
+                                  borderRadius: 12,
+                                  background: isRental ? '#FEF3C7' : '#E0F2FE',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  flexShrink: 0
+                                }}>
+                                  {isRental ? <Store size={22} color="#D97706" /> : <Wrench size={22} color="#0284C7" />}
+                                </div>
+                                <div>
+                                  <span style={{
+                                    fontSize: '0.68rem',
+                                    fontWeight: 800,
+                                    padding: '2px 7px',
+                                    borderRadius: 4,
+                                    background: isRental ? '#F59E0B' : '#0284C7',
+                                    color: '#FFFFFF'
+                                  }}>
+                                    {isRental ? 'RENTAL MERCHANT STORE' : 'SERVICE TECHNICIAN'}
+                                  </span>
+                                  <h4 style={{ margin: '4px 0 0', fontSize: '1.05rem', fontWeight: 800, color: 'var(--text-main)' }}>
+                                    {req.businessName}
+                                  </h4>
+                                </div>
+                              </div>
+
+                              {isPending ? (
+                                <span style={{ background: '#FEF3C7', color: '#B45309', border: '1px solid #FCD34D', padding: '3px 8px', borderRadius: 6, fontSize: '0.72rem', fontWeight: 800 }}>
+                                  ⏳ PENDING
+                                </span>
+                              ) : isApproved ? (
+                                <span style={{ background: '#DCFCE7', color: '#15803D', border: '1px solid #86EFAC', padding: '3px 8px', borderRadius: 6, fontSize: '0.72rem', fontWeight: 800 }}>
+                                  ✓ APPROVED
+                                </span>
+                              ) : (
+                                <span style={{ background: '#FEE2E2', color: '#DC2626', border: '1px solid #FCA5A5', padding: '3px 8px', borderRadius: 6, fontSize: '0.72rem', fontWeight: 800 }}>
+                                  ✕ REJECTED
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Details List */}
+                            <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 8, fontSize: '0.82rem', color: '#475569' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <span style={{ color: '#94A3B8' }}>Partner / Owner:</span>
+                                <span style={{ fontWeight: 700, color: '#1E293B' }}>{req.partnerName || 'Gandepalli Prasad'}</span>
+                              </div>
+                              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <span style={{ color: '#94A3B8' }}>Phone Contact:</span>
+                                <span style={{ fontWeight: 600 }}>{req.phone || req.partnerPhone || '9010737882'}</span>
+                              </div>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                <span style={{ color: '#94A3B8' }}>Category & Tier:</span>
+                                <span style={{ fontWeight: 600, color: '#0F766E', textAlign: 'right', maxWidth: '65%' }}>
+                                  {req.tradeCategoryName || req.category || 'General'}
+                                  {req.subCategoryName ? ` ➔ ${req.subCategoryName}` : ''}
+                                  {req.childCategoryName ? ` ➔ ${req.childCategoryName}` : ''}
+                                </span>
+                              </div>
+                              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <span style={{ color: '#94A3B8' }}>Shop Address:</span>
+                                <span style={{ fontWeight: 500, textAlign: 'right', maxWidth: '60%' }}>{req.address || 'Anakapalli'}</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Action Footer */}
+                          <div style={{ marginTop: 18, paddingTop: 14, borderTop: '1px solid #F1F5F9' }}>
+                            {isPending ? (
+                              <div style={{ display: 'flex', gap: 10 }}>
+                                <button
+                                  onClick={() => handleApproveBusinessRequest(req.partnerId, req.id, 'approved')}
+                                  style={{
+                                    flex: 1,
+                                    padding: '9px 14px',
+                                    borderRadius: 8,
+                                    background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                                    color: '#fff',
+                                    fontWeight: 700,
+                                    fontSize: '0.82rem',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    boxShadow: '0 3px 8px rgba(16, 185, 129, 0.28)'
+                                  }}
+                                >
+                                  ✓ Approve & Activate
+                                </button>
+                                <button
+                                  onClick={() => handleApproveBusinessRequest(req.partnerId, req.id, 'rejected')}
+                                  style={{
+                                    padding: '9px 14px',
+                                    borderRadius: 8,
+                                    background: '#FEF2F2',
+                                    color: '#DC2626',
+                                    border: '1px solid #FECACA',
+                                    fontWeight: 700,
+                                    fontSize: '0.82rem',
+                                    cursor: 'pointer'
+                                  }}
+                                >
+                                  Reject
+                                </button>
+                              </div>
+                            ) : (
+                              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <span style={{ fontSize: '0.78rem', color: '#059669', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+                                  <CheckCircle2 size={15} /> Live in Partner Switcher
+                                </span>
+                                <span style={{ fontSize: '0.72rem', color: '#94A3B8' }}>
+                                  ID: {req.id}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* TAB 8: LEASE & RENTALS MARKETPLACE MANAGER */}
+          {activeTab === 'rentals' && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+              {/* Metric KPI Cards */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: 18 }}>
+                <div className="glass-panel" style={{ padding: '20px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>TOTAL RENTAL LISTINGS</p>
+                    <div style={{ width: 36, height: 36, borderRadius: 10, background: '#FFF4EF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Store size={19} color="#DE4915" />
+                    </div>
+                  </div>
+                  <h3 style={{ fontSize: '1.8rem', fontWeight: 800, marginTop: 10, color: 'var(--text-main)' }}>
+                    {rentals.length}
+                  </h3>
+                  <p style={{ fontSize: '0.75rem', color: '#DE4915', fontWeight: 600, marginTop: 8 }}>
+                    Active marketplace rental items
+                  </p>
+                </div>
+
+                <div className="glass-panel" style={{ padding: '20px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>DIRECT OWNER POSTS</p>
+                    <div style={{ width: 36, height: 36, borderRadius: 10, background: '#EFF6FF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Users size={19} color="#2563EB" />
+                    </div>
+                  </div>
+                  <h3 style={{ fontSize: '1.8rem', fontWeight: 800, marginTop: 10, color: '#2563EB' }}>
+                    {rentals.filter(r => r.listingType === 'owner' || !r.listingType).length}
+                  </h3>
+                  <p style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: 600, marginTop: 8 }}>
+                    🏠 Houses, cots & appliances (0% Brokerage)
+                  </p>
+                </div>
+
+                <div className="glass-panel" style={{ padding: '20px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>VERIFIED STORE POSTS</p>
+                    <div style={{ width: 36, height: 36, borderRadius: 10, background: '#ECFDF5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <CheckCircle2 size={19} color="#059669" />
+                    </div>
+                  </div>
+                  <h3 style={{ fontSize: '1.8rem', fontWeight: 800, marginTop: 10, color: '#059669' }}>
+                    {rentals.filter(r => r.listingType === 'store').length}
+                  </h3>
+                  <p style={{ fontSize: '0.75rem', color: '#059669', fontWeight: 600, marginTop: 8 }}>
+                    ⭐ Commercial Tent Houses, Cars & Tools
+                  </p>
+                </div>
+
+                <div className="glass-panel" style={{ padding: '20px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>READY TO RENT</p>
+                    <div style={{ width: 36, height: 36, borderRadius: 10, background: '#FEF9C3', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Package size={19} color="#CA8A04" />
+                    </div>
+                  </div>
+                  <h3 style={{ fontSize: '1.8rem', fontWeight: 800, marginTop: 10, color: '#CA8A04' }}>
+                    {rentals.filter(r => r.status !== 'rented').length}
+                  </h3>
+                  <p style={{ fontSize: '0.75rem', color: '#CA8A04', fontWeight: 600, marginTop: 8 }}>
+                    Currently available for customer booking
+                  </p>
+                </div>
+              </div>
+
+              {/* Filter & Search Bar */}
+              <div className="glass-panel" style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 14 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1, minWidth: 260 }}>
+                    <Search size={16} color="#64748B" />
+                    <input
+                      type="text"
+                      placeholder="Search rentals by title, location, category, owner name or phone..."
+                      value={rentalSearch}
+                      onChange={(e) => setRentalSearch(e.target.value)}
+                      style={{
+                        border: 'none',
+                        outline: 'none',
+                        background: 'transparent',
+                        width: '100%',
+                        fontSize: '0.88rem',
+                        color: 'var(--text-main)'
+                      }}
+                    />
+                  </div>
+
+                  {/* Listing Type Pills */}
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    {[
+                      { key: 'all', label: 'All Listings' },
+                      { key: 'owner', label: '🏠 Direct Owner / Customers' },
+                      { key: 'store', label: '⭐ Verified Stores & Dealers' }
+                    ].map((t) => (
+                      <button
+                        key={t.key}
+                        onClick={() => setRentalTypeFilter(t.key)}
+                        style={{
+                          padding: '6px 14px',
+                          borderRadius: 20,
+                          border: '1px solid',
+                          borderColor: rentalTypeFilter === t.key ? '#DE4915' : '#E2E8F0',
+                          background: rentalTypeFilter === t.key ? '#FFF4EF' : '#FFFFFF',
+                          color: rentalTypeFilter === t.key ? '#DE4915' : '#64748B',
+                          fontSize: '0.8rem',
+                          fontWeight: 700,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        {t.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Category Pills */}
+                <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4 }}>
+                  {['all', 'Properties', 'Furniture', 'Appliances', 'Vehicles', 'Events', 'Tools'].map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => setRentalFilter(cat.toLowerCase())}
+                      style={{
+                        padding: '4px 12px',
+                        borderRadius: 16,
+                        border: '1px solid',
+                        borderColor: rentalFilter === cat.toLowerCase() ? '#0F766E' : '#E2E8F0',
+                        background: rentalFilter === cat.toLowerCase() ? '#F0FDFA' : '#F8FAFC',
+                        color: rentalFilter === cat.toLowerCase() ? '#0F766E' : '#64748B',
+                        fontSize: '0.76rem',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        whiteSpace: 'nowrap'
+                      }}
+                    >
+                      {cat === 'all' ? 'All Categories' : cat}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Rental Items Grid */}
+              {rentals
+                .filter(r => {
+                  if (rentalTypeFilter === 'owner') return r.listingType === 'owner' || !r.listingType;
+                  if (rentalTypeFilter === 'store') return r.listingType === 'store';
+                  return true;
+                })
+                .filter(r => {
+                  if (rentalFilter === 'all') return true;
+                  return (r.category || '').toLowerCase().includes(rentalFilter);
+                })
+                .filter(r => {
+                  if (!rentalSearch.trim()) return true;
+                  const q = rentalSearch.toLowerCase();
+                  return (
+                    (r.title || '').toLowerCase().includes(q) ||
+                    (r.locality || '').toLowerCase().includes(q) ||
+                    (r.userName || '').toLowerCase().includes(q) ||
+                    (r.businessName || '').toLowerCase().includes(q) ||
+                    (r.phone || '').toLowerCase().includes(q)
+                  );
+                }).length === 0 ? (
+                <div className="glass-panel" style={{ padding: '60px 20px', textAlign: 'center' }}>
+                  <Store size={40} color="#94A3B8" style={{ margin: '0 auto 12px' }} />
+                  <h4 style={{ margin: 0, color: 'var(--text-main)', fontSize: '1.1rem' }}>No rental listings match your filter</h4>
+                  <p style={{ margin: '6px 0 0', color: 'var(--text-muted)', fontSize: '0.82rem' }}>
+                    Items posted by customers or verified partner stores will appear here.
+                  </p>
+                </div>
+              ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 18 }}>
+                  {rentals
+                    .filter(r => {
+                      if (rentalTypeFilter === 'owner') return r.listingType === 'owner' || !r.listingType;
+                      if (rentalTypeFilter === 'store') return r.listingType === 'store';
+                      return true;
+                    })
+                    .filter(r => {
+                      if (rentalFilter === 'all') return true;
+                      return (r.category || '').toLowerCase().includes(rentalFilter);
+                    })
+                    .filter(r => {
+                      if (!rentalSearch.trim()) return true;
+                      const q = rentalSearch.toLowerCase();
+                      return (
+                        (r.title || '').toLowerCase().includes(q) ||
+                        (r.locality || '').toLowerCase().includes(q) ||
+                        (r.userName || '').toLowerCase().includes(q) ||
+                        (r.businessName || '').toLowerCase().includes(q) ||
+                        (r.phone || '').toLowerCase().includes(q)
+                      );
+                    })
+                    .map((item) => {
+                      const isStore = item.listingType === 'store';
+                      const isAvailable = item.status !== 'rented';
+
+                      return (
+                        <div
+                          key={item.id}
+                          className="glass-panel"
+                          style={{
+                            overflow: 'hidden',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            borderRadius: 14,
+                            border: '1px solid #E2E8F0',
+                            background: '#FFFFFF'
+                          }}
+                        >
+                          {/* Image Thumbnail */}
+                          <div style={{ position: 'relative', width: '100%', height: 160, background: '#F1F5F9' }}>
+                            <img
+                              src={item.imageUrl || 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&auto=format&fit=crop'}
+                              alt={item.title}
+                              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                              onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&auto=format&fit=crop'; }}
+                            />
+                            {/* Top Badges */}
+                            <div style={{ position: 'absolute', top: 10, left: 10, display: 'flex', gap: 6 }}>
+                              <span style={{
+                                padding: '3px 8px',
+                                borderRadius: 6,
+                                background: isStore ? '#059669' : '#2563EB',
+                                color: '#fff',
+                                fontSize: '0.72rem',
+                                fontWeight: 800,
+                                boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                              }}>
+                                {isStore ? '⭐ Verified Store' : '🏠 Direct Owner'}
+                              </span>
+                            </div>
+
+                            <div style={{ position: 'absolute', top: 10, right: 10 }}>
+                              <span style={{
+                                padding: '3px 8px',
+                                borderRadius: 6,
+                                background: isAvailable ? 'rgba(16, 185, 129, 0.9)' : 'rgba(100, 116, 139, 0.9)',
+                                color: '#fff',
+                                fontSize: '0.72rem',
+                                fontWeight: 800
+                              }}>
+                                {isAvailable ? 'AVAILABLE' : 'RENTED'}
+                              </span>
+                            </div>
+
+                            <div style={{ position: 'absolute', bottom: 10, left: 10 }}>
+                              <span style={{
+                                padding: '3px 8px',
+                                borderRadius: 6,
+                                background: 'rgba(15, 23, 42, 0.75)',
+                                color: '#fff',
+                                fontSize: '0.72rem',
+                                fontWeight: 700
+                              }}>
+                                {item.category}
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Content */}
+                          <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 10, flex: 1 }}>
+                            <div>
+                              <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 800, color: '#1E293B', lineHeight: 1.3 }}>
+                                {item.title}
+                              </h4>
+                              <p style={{ margin: '4px 0 0', fontSize: '0.78rem', color: '#64748B', display: 'flex', alignItems: 'center', gap: 4 }}>
+                                <MapPin size={12} /> {item.locality || 'Anakapalli'}
+                              </p>
+                            </div>
+
+                            {/* Pricing Box */}
+                            <div style={{
+                              display: 'flex',
+                              alignItems: 'baseline',
+                              justifyContent: 'space-between',
+                              background: '#F8FAFC',
+                              padding: '8px 12px',
+                              borderRadius: 8
+                            }}>
+                              <div>
+                                <span style={{ fontSize: '1.15rem', fontWeight: 900, color: '#DE4915' }}>
+                                  ₹{item.rentPrice}
+                                </span>
+                                <span style={{ fontSize: '0.75rem', color: '#64748B', fontWeight: 600 }}>
+                                  {' '}/ {item.rentPeriod || 'Day'}
+                                </span>
+                              </div>
+                              {item.deposit > 0 && (
+                                <span style={{ fontSize: '0.74rem', color: '#475569', fontWeight: 600 }}>
+                                  ₹{item.deposit} Adv
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Posted By Details */}
+                            <div style={{ fontSize: '0.78rem', color: '#475569', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <span style={{ color: '#94A3B8' }}>Posted by:</span>
+                                <span style={{ fontWeight: 700, color: '#1E293B' }}>{item.userName || item.businessName || 'Owner'}</span>
+                              </div>
+                              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <span style={{ color: '#94A3B8' }}>Contact:</span>
+                                <span style={{ fontWeight: 600 }}>{item.phone || '9010737882'}</span>
+                              </div>
+                            </div>
+
+                            {/* Footer / Delete */}
+                            <div style={{ marginTop: 'auto', paddingTop: 12, borderTop: '1px solid #F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                              <span style={{ fontSize: '0.7rem', color: '#94A3B8' }}>
+                                Ref: {item.id}
+                              </span>
+                              <button
+                                onClick={() => handleDeleteRental(item.id)}
+                                style={{
+                                  padding: '6px 12px',
+                                  borderRadius: 6,
+                                  background: '#FEF2F2',
+                                  border: '1px solid #FECACA',
+                                  color: '#DC2626',
+                                  fontSize: '0.74rem',
+                                  fontWeight: 700,
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: 4
+                                }}
+                              >
+                                <Trash2 size={12} /> Remove Listing
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </main>
 
@@ -4118,6 +4986,50 @@ export default function App() {
                   onChange={(e) => setCatNameInput(e.target.value)}
                   style={{ width: '100%', padding: '10px 14px', marginTop: 6, borderRadius: 8, background: '#F8FAFC', color: 'var(--text-main)', border: '1px solid #CBD5E1', outline: 'none', fontSize: '0.9rem', fontWeight: 600 }}
                 />
+              </div>
+
+              {/* Category Type / Business Model */}
+              <div>
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-main)', fontWeight: 700, display: 'block', marginBottom: 6 }}>
+                  Category Type / Business Model *
+                </label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
+                  {[
+                    { id: 'service', label: 'Service', desc: 'On-Demand Works', icon: '🛠️', bg: '#EFF6FF', border: '#3B82F6', activeColor: '#1D4ED8' },
+                    { id: 'shop', label: 'Shop / Retail', desc: 'Store & Products', icon: '🏪', bg: '#ECFDF5', border: '#10B981', activeColor: '#047857' },
+                    { id: 'rental', label: 'Lease & Rental', desc: 'Rentals & Assets', icon: '🏠', bg: '#FAF5FF', border: '#8B5CF6', activeColor: '#6D28D9' }
+                  ].map(m => {
+                    const isCurrent = (catBusinessTypeInput || 'service') === m.id;
+                    return (
+                      <button
+                        key={m.id}
+                        type="button"
+                        onClick={() => setCatBusinessTypeInput(m.id)}
+                        style={{
+                          padding: '10px 6px',
+                          borderRadius: 10,
+                          border: isCurrent ? `2px solid ${m.border}` : '1.5px solid #CBD5E1',
+                          background: isCurrent ? m.bg : '#F8FAFC',
+                          cursor: 'pointer',
+                          textAlign: 'center',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          gap: 3,
+                          transition: 'all 0.15s ease'
+                        }}
+                      >
+                        <span style={{ fontSize: '1.2rem' }}>{m.icon}</span>
+                        <span style={{ fontSize: '0.78rem', fontWeight: 700, color: isCurrent ? m.activeColor : '#334155' }}>
+                          {m.label}
+                        </span>
+                        <span style={{ fontSize: '0.66rem', color: '#64748B' }}>
+                          {m.desc}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Category Icon / Image Upload */}
@@ -5247,6 +6159,122 @@ export default function App() {
               </div>
             </div>
 
+            {/* Allowed Listing / Products Quota & Top-Up Rates (ONLY for Shops & Rentals) */}
+            {(() => {
+              const currentModalCat = categories.find(c => c.id === subPricingModal.catId);
+              const isProductOrRental = currentModalCat?.businessType === 'shop' || currentModalCat?.businessType === 'rental';
+
+              if (!isProductOrRental) {
+                return (
+                  <div style={{ background: '#EFF6FF', padding: '12px 16px', borderRadius: 12, border: '1px solid #BFDBFE', marginBottom: 18, display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <span style={{ fontSize: '1.4rem' }}>🛠️</span>
+                    <div>
+                      <p style={{ margin: 0, fontSize: '0.82rem', fontWeight: 700, color: '#1D4ED8' }}>
+                        Service Technician Trade (100% Leads & Direct Bookings)
+                      </p>
+                      <p style={{ margin: '3px 0 0', fontSize: '0.73rem', color: '#3B82F6', lineHeight: 1.4 }}>
+                        This is an on-demand service trade. Technicians receive verified customer bookings and retain 100% earnings. Product listing quotas apply only to Shops & Rental categories.
+                      </p>
+                    </div>
+                  </div>
+                );
+              }
+
+              return (
+                <div style={{ background: '#F8FAFC', padding: '14px 16px', borderRadius: 12, border: '1px solid #E2E8F0', marginBottom: 18 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+                    <label style={{ fontSize: '0.82rem', fontWeight: 700, color: '#1E293B', display: 'flex', alignItems: 'center', gap: 6 }}>
+                      📦 Base Plan Products / Listings Quota
+                    </label>
+                    <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#059669', background: '#ECFDF5', padding: '2px 8px', borderRadius: 6, border: '1px solid #A7F3D0' }}>
+                      For Shops & Rentals
+                    </span>
+                  </div>
+                  <p style={{ margin: '0 0 10px', fontSize: '0.74rem', color: '#64748B' }}>
+                    Base number of products (for Retail stores) or rental items (for Rental merchants) included with the subscription.
+                  </p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+                    <input
+                      type="number"
+                      min="1"
+                      max="1000"
+                      value={subItemLimitInput}
+                      onChange={(e) => setSubItemLimitInput(e.target.value)}
+                      style={{ width: 100, padding: '7px 10px', borderRadius: 8, border: '1px solid #CBD5E1', fontSize: '0.92rem', fontWeight: 700, color: '#1E293B' }}
+                    />
+                    <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#475569' }}>
+                      Items / Listings included in base plan
+                    </span>
+                  </div>
+
+                  {/* Top-Up Quota Packs */}
+                  <div style={{ paddingTop: 12, borderTop: '1px dashed #CBD5E1' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+                      <label style={{ fontSize: '0.78rem', fontWeight: 700, color: '#D97706', display: 'flex', alignItems: 'center', gap: 6 }}>
+                        ⚡ Extra Products Top-Up Rates (Optional Add-on Quota)
+                      </label>
+                      <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#B45309', background: '#FEF3C7', padding: '1px 6px', borderRadius: 4 }}>
+                        Top-Up Recharge
+                      </span>
+                    </div>
+                    <p style={{ margin: '0 0 10px', fontSize: '0.72rem', color: '#64748B' }}>
+                      When base quota is not enough, partners can buy extra products quota using these top-up rates:
+                    </p>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+                      <div style={{ background: '#FFFBEB', padding: '8px 10px', borderRadius: 8, border: '1px solid #FDE68A' }}>
+                        <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#B45309', marginBottom: 4 }}>
+                          +5 Items Pack (₹)
+                        </label>
+                        <div style={{ position: 'relative' }}>
+                          <span style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', fontWeight: 700, color: '#D97706', fontSize: '0.8rem' }}>₹</span>
+                          <input
+                            type="number"
+                            min="1"
+                            value={subTopUp5Input}
+                            onChange={(e) => setSubTopUp5Input(e.target.value)}
+                            style={{ width: '100%', padding: '6px 8px 6px 20px', borderRadius: 6, border: '1px solid #FCD34D', fontSize: '0.88rem', fontWeight: 700, color: '#1E293B' }}
+                          />
+                        </div>
+                      </div>
+
+                      <div style={{ background: '#FFFBEB', padding: '8px 10px', borderRadius: 8, border: '1px solid #FDE68A' }}>
+                        <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#B45309', marginBottom: 4 }}>
+                          +10 Items Pack (₹)
+                        </label>
+                        <div style={{ position: 'relative' }}>
+                          <span style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', fontWeight: 700, color: '#D97706', fontSize: '0.8rem' }}>₹</span>
+                          <input
+                            type="number"
+                            min="1"
+                            value={subTopUp10Input}
+                            onChange={(e) => setSubTopUp10Input(e.target.value)}
+                            style={{ width: '100%', padding: '6px 8px 6px 20px', borderRadius: 6, border: '1px solid #FCD34D', fontSize: '0.88rem', fontWeight: 700, color: '#1E293B' }}
+                          />
+                        </div>
+                      </div>
+
+                      <div style={{ background: '#F8FAFC', padding: '8px 10px', borderRadius: 8, border: '1px solid #E2E8F0' }}>
+                        <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#475569', marginBottom: 4 }}>
+                          Per Item (₹/item)
+                        </label>
+                        <div style={{ position: 'relative' }}>
+                          <span style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', fontWeight: 700, color: '#94A3B8', fontSize: '0.8rem' }}>₹</span>
+                          <input
+                            type="number"
+                            min="1"
+                            value={subTopUpPerItemInput}
+                            onChange={(e) => setSubTopUpPerItemInput(e.target.value)}
+                            style={{ width: '100%', padding: '6px 8px 6px 20px', borderRadius: 6, border: '1px solid #CBD5E1', fontSize: '0.88rem', fontWeight: 700, color: '#1E293B' }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
             <div style={{ background: '#FEF3C7', padding: '10px 14px', borderRadius: 10, marginBottom: 20, display: 'flex', alignItems: 'center', gap: 10 }}>
               <span style={{ fontSize: '1.1rem' }}>💡</span>
               <p style={{ margin: 0, fontSize: '0.78rem', color: '#92400E', lineHeight: 1.4 }}>
@@ -5370,7 +6398,7 @@ export default function App() {
             <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: 8 }}>
               Payment Received Mode:
             </label>
-            <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
+            <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
               {[
                 { id: 'cash', label: '💵 Cash in Hand' },
                 { id: 'upi', label: '📱 Direct UPI / QR' },
@@ -5397,6 +6425,52 @@ export default function App() {
               ))}
             </div>
 
+            {/* Optional Extra Quota Top-Up */}
+            <div style={{ background: '#FFFBEB', padding: '10px 14px', borderRadius: 10, border: '1px solid #FDE68A', marginBottom: 20 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+                <label style={{ fontSize: '0.78rem', fontWeight: 700, color: '#B45309', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  ⚡ Add Extra Products Top-Up Quota (Recharge Pack)
+                </label>
+                <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#92400E' }}>
+                  Base: {paySubModal.sub?.listingLimit || paySubModal.plans?.listingLimit || 10} Items
+                </span>
+              </div>
+              <p style={{ margin: '0 0 8px', fontSize: '0.72rem', color: '#92400E' }}>
+                If partner paid extra for more products/listings quota, select or enter the top-up amount:
+              </p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                {[0, 5, 10, 20].map(cnt => (
+                  <button
+                    key={cnt}
+                    type="button"
+                    onClick={() => setPayExtraTopUpQuota(cnt)}
+                    style={{
+                      padding: '4px 10px',
+                      borderRadius: 6,
+                      border: payExtraTopUpQuota === cnt ? '2px solid #D97706' : '1px solid #FCD34D',
+                      background: payExtraTopUpQuota === cnt ? '#D97706' : '#fff',
+                      color: payExtraTopUpQuota === cnt ? '#fff' : '#92400E',
+                      fontSize: '0.75rem',
+                      fontWeight: 700,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {cnt === 0 ? 'No Top-Up' : `+${cnt} Extra`}
+                  </button>
+                ))}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginLeft: 'auto' }}>
+                  <span style={{ fontSize: '0.72rem', color: '#92400E', fontWeight: 600 }}>Custom:</span>
+                  <input
+                    type="number"
+                    min="0"
+                    value={payExtraTopUpQuota}
+                    onChange={(e) => setPayExtraTopUpQuota(Number(e.target.value) || 0)}
+                    style={{ width: 60, padding: '4px 6px', borderRadius: 6, border: '1px solid #FCD34D', fontSize: '0.8rem', fontWeight: 700, color: '#B45309' }}
+                  />
+                </div>
+              </div>
+            </div>
+
             <div style={{ display: 'flex', gap: 10 }}>
               <button
                 type="button"
@@ -5411,6 +6485,526 @@ export default function App() {
                 style={{ flex: 1.5, padding: '11px', borderRadius: 8, background: 'linear-gradient(135deg, #059669 0%, #047857 100%)', color: '#fff', fontWeight: 700, cursor: 'pointer', border: 'none', boxShadow: '0 4px 14px rgba(5, 150, 105, 0.3)' }}
               >
                 ✓ Confirm & Activate Plan
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ================= PARTNER FULL VIEW & REQUESTS MODAL ================= */}
+      {selectedPartner && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(15, 23, 42, 0.72)',
+          backdropFilter: 'blur(5px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1200,
+          padding: 20
+        }}>
+          <div style={{
+            background: '#FFFFFF',
+            borderRadius: 16,
+            width: '100%',
+            maxWidth: 900,
+            maxHeight: '92vh',
+            display: 'flex',
+            flexDirection: 'column',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.35)',
+            border: '1px solid #E2E8F0',
+            overflow: 'hidden'
+          }}>
+            {/* Modal Header */}
+            <div style={{
+              padding: '20px 24px',
+              background: 'linear-gradient(135deg, #1E293B 0%, #0F172A 100%)',
+              color: '#FFFFFF',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              borderBottom: '1px solid #334155'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                <div style={{
+                  width: 52,
+                  height: 52,
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #DE4915 0%, #F97316 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.4rem',
+                  fontWeight: 800,
+                  color: '#FFFFFF',
+                  boxShadow: '0 4px 12px rgba(222, 73, 21, 0.4)',
+                  flexShrink: 0
+                }}>
+                  {selectedPartner.name ? selectedPartner.name.charAt(0).toUpperCase() : 'P'}
+                </div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                    <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.02em' }}>
+                      {selectedPartner.name}
+                    </h3>
+                    <span style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 3,
+                      background: '#FEF9C3',
+                      color: '#854D0E',
+                      fontSize: '0.72rem',
+                      fontWeight: 800,
+                      padding: '2px 7px',
+                      borderRadius: 12
+                    }}>
+                      <Star size={11} fill="#CA8A04" color="#CA8A04" /> {selectedPartner.rating || 5.0} Rating
+                    </span>
+                    <span style={{
+                      background: 'rgba(255,255,255,0.15)',
+                      color: '#E2E8F0',
+                      fontSize: '0.72rem',
+                      fontWeight: 700,
+                      padding: '2px 8px',
+                      borderRadius: 6,
+                      border: '1px solid rgba(255,255,255,0.2)'
+                    }}>
+                      ID: {selectedPartner.partnerCode || (selectedPartner.id?.startsWith('prv_') ? `LP-${selectedPartner.id.slice(-4).toUpperCase()}` : selectedPartner.id)}
+                    </span>
+                  </div>
+                  <p style={{ margin: '4px 0 0', fontSize: '0.8rem', color: '#94A3B8' }}>
+                    Registered Service Partner & Multi-Business Owner
+                  </p>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                {/* On Duty Toggle Button */}
+                <button
+                  onClick={() => handleTogglePartnerOnline(selectedPartner.id)}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    padding: '6px 12px',
+                    borderRadius: 20,
+                    background: selectedPartner.isOnline ? '#065F46' : '#334155',
+                    border: selectedPartner.isOnline ? '1px solid #10B981' : '1px solid #475569',
+                    color: selectedPartner.isOnline ? '#34D399' : '#94A3B8',
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    cursor: 'pointer'
+                  }}
+                >
+                  <span style={{ width: 8, height: 8, borderRadius: '50%', background: selectedPartner.isOnline ? '#10B981' : '#64748B' }} />
+                  {selectedPartner.isOnline ? 'ON DUTY' : 'OFFLINE'}
+                </button>
+
+                {/* Close Button */}
+                <button
+                  onClick={() => setSelectedPartnerId(null)}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    borderRadius: 8,
+                    width: 34,
+                    height: 34,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#CBD5E1',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <X size={18} />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Scrollable Body */}
+            <div style={{ padding: '24px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 20 }}>
+              {/* Quick Status Bar */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))',
+                gap: 12,
+                background: '#F8FAFC',
+                padding: '14px 16px',
+                borderRadius: 12,
+                border: '1px solid #E2E8F0'
+              }}>
+                <div>
+                  <span style={{ fontSize: '0.7rem', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>KYC Verification</span>
+                  <div style={{ marginTop: 4, display: 'flex', alignItems: 'center', gap: 8 }}>
+                    {selectedPartner.kycStatus === 'verified' || selectedPartner.kycStatus === 'approved' ? (
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: '#059669', fontWeight: 700, fontSize: '0.82rem' }}>
+                        <CheckCircle2 size={14} /> Approved
+                      </span>
+                    ) : (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <span style={{ color: '#D97706', fontWeight: 700, fontSize: '0.82rem' }}>⏳ Pending</span>
+                        <button
+                          onClick={() => handleKycStatus(selectedPartner.id, 'verified')}
+                          style={{ background: '#059669', color: '#fff', border: 'none', padding: '2px 8px', borderRadius: 4, fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer' }}
+                        >
+                          Approve
+                        </button>
+                        <button
+                          onClick={() => handleKycStatus(selectedPartner.id, 'rejected')}
+                          style={{ background: '#EF4444', color: '#fff', border: 'none', padding: '2px 6px', borderRadius: 4, fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer' }}
+                        >
+                          Reject
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <span style={{ fontSize: '0.7rem', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>Subscription Model</span>
+                  <div style={{ marginTop: 4, display: 'flex', alignItems: 'center', gap: 8 }}>
+                    {selectedPartner.subscriptionStatus === 'active' ? (
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: '#059669', fontWeight: 700, fontSize: '0.82rem' }}>
+                        <CheckCircle2 size={14} /> {selectedPartner.subscriptionPlanName || 'Active (0% Commission)'}
+                      </span>
+                    ) : (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <span style={{ color: '#DC2626', fontWeight: 700, fontSize: '0.82rem' }}>Unpaid</span>
+                        <button
+                          onClick={() => {
+                            const p = selectedPartner;
+                            setSelectedPartnerId(null);
+                            handleOpenPaySubModal(p);
+                          }}
+                          style={{ background: '#F97316', color: '#fff', border: 'none', padding: '2px 8px', borderRadius: 4, fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer' }}
+                        >
+                          💳 Mark Paid
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <span style={{ fontSize: '0.7rem', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>Completed Bookings</span>
+                  <div style={{ marginTop: 4, fontWeight: 700, color: '#1E293B', fontSize: '0.9rem' }}>
+                    {selectedPartner.completedJobs ?? selectedPartner.jobsCompleted ?? 0} Jobs Completed
+                  </div>
+                </div>
+
+                <div>
+                  <span style={{ fontSize: '0.7rem', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>Member Since</span>
+                  <div style={{ marginTop: 4, fontWeight: 600, color: '#475569', fontSize: '0.82rem' }}>
+                    {selectedPartner.createdAt ? new Date(selectedPartner.createdAt).toLocaleDateString() : 'Active Member'}
+                  </div>
+                </div>
+              </div>
+
+              {/* 2-Column Info Grid: Personal/ID & Location */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                {/* Personal & ID Details */}
+                <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 12, padding: 16 }}>
+                  <h4 style={{ margin: '0 0 12px', fontSize: '0.86rem', fontWeight: 800, color: '#1E293B', display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <ShieldCheck size={16} color="#DE4915" /> Personal & Verification Details
+                  </h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: '0.8rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: 6, borderBottom: '1px solid #F1F5F9' }}>
+                      <span style={{ color: '#64748B' }}>Contact Phone:</span>
+                      <strong style={{ color: '#0F172A', display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <Phone size={12} color="#DE4915" /> {selectedPartner.phone || 'N/A'}
+                      </strong>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: 6, borderBottom: '1px solid #F1F5F9' }}>
+                      <span style={{ color: '#64748B' }}>Email:</span>
+                      <strong style={{ color: '#0F172A' }}>{selectedPartner.email || 'N/A'}</strong>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: 6, borderBottom: '1px solid #F1F5F9' }}>
+                      <span style={{ color: '#64748B' }}>Aadhaar Number:</span>
+                      <strong style={{ color: '#0F172A', letterSpacing: '0.04em' }}>{selectedPartner.aadhaarNumber || 'Verified ID'}</strong>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: 6, borderBottom: '1px solid #F1F5F9' }}>
+                      <span style={{ color: '#64748B' }}>Vehicle Number:</span>
+                      <strong style={{ color: '#0F172A' }}>{selectedPartner.vehicleNumber || 'N/A'}</strong>
+                    </div>
+                    {selectedPartner.fatherName && (
+                      <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: 6, borderBottom: '1px solid #F1F5F9' }}>
+                        <span style={{ color: '#64748B' }}>Father / Guardian:</span>
+                        <strong style={{ color: '#0F172A' }}>{selectedPartner.fatherName}</strong>
+                      </div>
+                    )}
+                    {selectedPartner.emergencyContact && (
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <span style={{ color: '#64748B' }}>Emergency Contact:</span>
+                        <strong style={{ color: '#0F172A' }}>{selectedPartner.emergencyContact}</strong>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Primary Skill & Location Coverage */}
+                <div style={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 12, padding: 16 }}>
+                  <h4 style={{ margin: '0 0 12px', fontSize: '0.86rem', fontWeight: 800, color: '#1E293B', display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <MapPin size={16} color="#DE4915" /> Skill & Service Territory
+                  </h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: '0.8rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: 6, borderBottom: '1px solid #F1F5F9' }}>
+                      <span style={{ color: '#64748B' }}>Primary Vertical:</span>
+                      <strong style={{ color: '#DE4915' }}>
+                        {selectedPartner.categoryName || (selectedPartner.category ? selectedPartner.category.replace('cat_', '').replace(/_/g, ' ') : 'General')}
+                      </strong>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: 6, borderBottom: '1px solid #F1F5F9' }}>
+                      <span style={{ color: '#64748B' }}>Specialization:</span>
+                      <strong style={{ color: '#1E293B' }}>{selectedPartner.subCategoryName || selectedPartner.serviceName || 'All Services'}</strong>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: 6, borderBottom: '1px solid #F1F5F9' }}>
+                      <span style={{ color: '#64748B' }}>District / Mandal:</span>
+                      <strong style={{ color: '#1E293B' }}>{selectedPartner.district || 'Anakapalli'} / {selectedPartner.mandal || 'Chodavaram'}</strong>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: 6, borderBottom: '1px solid #F1F5F9' }}>
+                      <span style={{ color: '#64748B' }}>Village / Area:</span>
+                      <strong style={{ color: '#1E293B' }}>{selectedPartner.village || 'Chodavaram Town'}</strong>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: '#64748B' }}>Full Address:</span>
+                      <strong style={{ color: '#475569', textAlign: 'right', maxWidth: '60%', fontSize: '0.75rem' }}>
+                        {selectedPartner.address || selectedPartner.currentAddress || 'Registered Service Territory'}
+                      </strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Selected Child Skills / Tasks */}
+              {selectedPartner.selectedChildServices && selectedPartner.selectedChildServices.length > 0 && (
+                <div style={{ background: '#F8FAFC', padding: 14, borderRadius: 10, border: '1px solid #E2E8F0' }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#475569', display: 'block', marginBottom: 8 }}>
+                    🛠️ Verified Tasks & Skills ({selectedPartner.selectedChildServices.length}):
+                  </span>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                    {selectedPartner.selectedChildServices.map((task, i) => (
+                      <span
+                        key={i}
+                        style={{
+                          background: '#ECFDF5',
+                          color: '#065F46',
+                          border: '1px solid #A7F3D0',
+                          padding: '3px 8px',
+                          borderRadius: 6,
+                          fontSize: '0.72rem',
+                          fontWeight: 600
+                        }}
+                      >
+                        ✓ {typeof task === 'string' ? task : (task.name || task.id)}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Multi-Business Profiles & Incoming Requests */}
+              <div style={{ background: '#FFFFFF', border: '1.5px solid #FED7AA', borderRadius: 14, padding: 18 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <div style={{ width: 32, height: 32, borderRadius: 8, background: '#FFF4EF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Store size={18} color="#DE4915" />
+                    </div>
+                    <div>
+                      <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 800, color: '#1E293B' }}>
+                        Multi-Business Profiles & Onboarding Requests
+                      </h4>
+                      <p style={{ margin: '2px 0 0', fontSize: '0.72rem', color: '#64748B' }}>
+                        Secondary shops, rental merchant dashboards, and extra trade profiles submitted by this partner
+                      </p>
+                    </div>
+                  </div>
+
+                  {(() => {
+                    const partnerBizList = [
+                      ...(selectedPartner.businesses || []),
+                      ...businessRequests.filter(b => (b.partnerId === selectedPartner.id || b.phone === selectedPartner.phone) && !(selectedPartner.businesses || []).some(x => x.id === b.id))
+                    ];
+                    return (
+                      <span style={{
+                        background: partnerBizList.length > 0 ? '#FFF4EF' : '#F1F5F9',
+                        color: partnerBizList.length > 0 ? '#DE4915' : '#64748B',
+                        padding: '4px 10px',
+                        borderRadius: 20,
+                        fontSize: '0.75rem',
+                        fontWeight: 800,
+                        border: '1px solid',
+                        borderColor: partnerBizList.length > 0 ? '#FFD3C2' : '#CBD5E1'
+                      }}>
+                        {partnerBizList.length} Registered {partnerBizList.length === 1 ? 'Profile' : 'Profiles'}
+                      </span>
+                    );
+                  })()}
+                </div>
+
+                {(() => {
+                  const partnerBizList = [
+                    ...(selectedPartner.businesses || []),
+                    ...businessRequests.filter(b => (b.partnerId === selectedPartner.id || b.phone === selectedPartner.phone) && !(selectedPartner.businesses || []).some(x => x.id === b.id))
+                  ];
+
+                  if (partnerBizList.length === 0) {
+                    return (
+                      <div style={{ padding: '24px', textAlign: 'center', background: '#F8FAFC', borderRadius: 10, border: '1px dashed #CBD5E1' }}>
+                        <Briefcase size={28} color="#94A3B8" style={{ margin: '0 auto 8px' }} />
+                        <h5 style={{ margin: 0, color: '#475569', fontSize: '0.88rem', fontWeight: 700 }}>No Secondary Business Profiles Submitted</h5>
+                        <p style={{ margin: '4px 0 0', color: '#94A3B8', fontSize: '0.75rem' }}>
+                          This partner is currently operating on their primary service trade ({selectedPartner.categoryName || 'General'}). When they submit a new shop or rental profile from the Partner App, it will appear here for instant Admin review.
+                        </p>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                      {partnerBizList.map((biz) => {
+                        const isPending = biz.status === 'pending';
+                        const isApproved = biz.status === 'approved' || biz.status === 'active';
+                        const isRental = biz.businessType === 'rental';
+
+                        return (
+                          <div
+                            key={biz.id}
+                            style={{
+                              background: isPending ? '#FFFDF5' : '#F8FAFC',
+                              border: isPending ? '1.5px solid #FCD34D' : '1px solid #E2E8F0',
+                              borderRadius: 10,
+                              padding: 14,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              gap: 14,
+                              flexWrap: 'wrap'
+                            }}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                              <div style={{
+                                width: 40,
+                                height: 40,
+                                borderRadius: 10,
+                                background: isRental ? '#FEF3C7' : '#E0F2FE',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexShrink: 0
+                              }}>
+                                {isRental ? <Store size={20} color="#D97706" /> : <Wrench size={20} color="#0284C7" />}
+                              </div>
+                              <div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                  <strong style={{ fontSize: '0.9rem', color: '#0F172A' }}>{biz.businessName || biz.name}</strong>
+                                  <span style={{
+                                    fontSize: '0.65rem',
+                                    fontWeight: 800,
+                                    padding: '1px 6px',
+                                    borderRadius: 4,
+                                    background: isRental ? '#F59E0B' : '#0284C7',
+                                    color: '#FFFFFF'
+                                  }}>
+                                    {isRental ? 'RENTAL MERCHANT' : 'SERVICE PROFILE'}
+                                  </span>
+                                </div>
+                                <div style={{ fontSize: '0.74rem', color: '#64748B', marginTop: 2 }}>
+                                  <span style={{ color: '#0F766E', fontWeight: 600 }}>
+                                    {biz.tradeCategoryName || biz.category || 'General'}
+                                    {biz.subCategoryName ? ` ➔ ${biz.subCategoryName}` : ''}
+                                    {biz.childCategoryName ? ` ➔ ${biz.childCategoryName}` : ''}
+                                  </span>
+                                  {biz.address && <span> • 📍 {biz.address}</span>}
+                                </div>
+                              </div>
+                            </div>
+
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                              {isPending ? (
+                                <>
+                                  <span style={{ background: '#FEF3C7', color: '#B45309', border: '1px solid #FCD34D', padding: '3px 8px', borderRadius: 6, fontSize: '0.72rem', fontWeight: 800 }}>
+                                    ⏳ PENDING APPROVAL
+                                  </span>
+                                  <button
+                                    onClick={() => handleApproveBusinessRequest(selectedPartner.id, biz.id, 'approved')}
+                                    style={{
+                                      background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                                      color: '#fff',
+                                      border: 'none',
+                                      padding: '6px 12px',
+                                      borderRadius: 6,
+                                      fontSize: '0.75rem',
+                                      fontWeight: 700,
+                                      cursor: 'pointer'
+                                    }}
+                                  >
+                                    ✓ Approve Profile
+                                  </button>
+                                  <button
+                                    onClick={() => handleApproveBusinessRequest(selectedPartner.id, biz.id, 'rejected')}
+                                    style={{
+                                      background: '#EF4444',
+                                      color: '#fff',
+                                      border: 'none',
+                                      padding: '6px 10px',
+                                      borderRadius: 6,
+                                      fontSize: '0.75rem',
+                                      fontWeight: 700,
+                                      cursor: 'pointer'
+                                    }}
+                                  >
+                                    ✕ Reject
+                                  </button>
+                                </>
+                              ) : isApproved ? (
+                                <span style={{ background: '#DCFCE7', color: '#15803D', border: '1px solid #86EFAC', padding: '4px 10px', borderRadius: 6, fontSize: '0.75rem', fontWeight: 800 }}>
+                                  ✓ ACTIVE & APPROVED
+                                </span>
+                              ) : (
+                                <span style={{ background: '#FEE2E2', color: '#DC2626', border: '1px solid #FCA5A5', padding: '4px 10px', borderRadius: 6, fontSize: '0.75rem', fontWeight: 800 }}>
+                                  ✕ REJECTED
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                })()}
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div style={{
+              padding: '14px 24px',
+              background: '#F8FAFC',
+              borderTop: '1px solid #E2E8F0',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}>
+              <span style={{ fontSize: '0.75rem', color: '#64748B' }}>
+                Service partner ID: <strong>{selectedPartner.id}</strong>
+              </span>
+              <button
+                onClick={() => setSelectedPartnerId(null)}
+                style={{
+                  padding: '8px 20px',
+                  borderRadius: 8,
+                  background: '#0F172A',
+                  color: '#FFFFFF',
+                  fontWeight: 700,
+                  fontSize: '0.8rem',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                Close View
               </button>
             </div>
           </div>

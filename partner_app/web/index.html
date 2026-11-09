@@ -18,18 +18,18 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="description" content="Locki Partner - Dedicated Specialist & Service Fleet App">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="partner_app">
+  <meta name="apple-mobile-web-app-title" content="Locki Partner">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>partner_app</title>
+  <title>Locki Partner - Specialist Portal</title>
   <link rel="manifest" href="manifest.json">
   <script>
     var _lokiAudioCtx = null;
@@ -351,6 +351,7 @@
 
     window.lokiPickAndCompressImage = function(sourceType, callback) {
       try {
+        let isHandled = false;
         const input = document.createElement('input');
         input.type = 'file';
 
@@ -372,11 +373,35 @@
         input.style.top = '-9999px';
         document.body.appendChild(input);
 
+        function cleanupAndReturn(res) {
+          if (isHandled) return;
+          isHandled = true;
+          try { window.removeEventListener('focus', onWindowFocus); } catch (e) {}
+          try { document.body.removeChild(input); } catch (err) {}
+          callback(JSON.stringify(res));
+        }
+
+        // Standard HTML5 cancel event (fires when user closes file dialog or presses Esc)
+        input.oncancel = function() {
+          cleanupAndReturn({ success: false, cancelled: true, message: 'Cancelled by user' });
+        };
+
+        // Window focus fallback for browsers where oncancel might not fire
+        function onWindowFocus() {
+          setTimeout(function() {
+            if (!isHandled) {
+              if (!input.files || input.files.length === 0) {
+                cleanupAndReturn({ success: false, cancelled: true, message: 'Cancelled by user' });
+              }
+            }
+          }, 600);
+        }
+        window.addEventListener('focus', onWindowFocus, { once: true });
+
         input.onchange = function(e) {
           const file = e.target.files && e.target.files[0];
           if (!file) {
-            try { document.body.removeChild(input); } catch (err) {}
-            callback(JSON.stringify({ success: false, cancelled: true }));
+            cleanupAndReturn({ success: false, cancelled: true });
             return;
           }
 
@@ -384,18 +409,16 @@
           if (file.type === 'application/pdf') {
             const reader = new FileReader();
             reader.onload = function(evt) {
-              try { document.body.removeChild(input); } catch (err) {}
-              callback(JSON.stringify({
+              cleanupAndReturn({
                 success: true,
                 isPdf: true,
                 fileName: file.name,
                 fileSizeKb: Math.round(file.size / 1024),
                 dataUrl: evt.target.result
-              }));
+              });
             };
             reader.onerror = function() {
-              try { document.body.removeChild(input); } catch (err) {}
-              callback(JSON.stringify({ success: false, message: 'Failed to read PDF file' }));
+              cleanupAndReturn({ success: false, message: 'Failed to read PDF file' });
             };
             reader.readAsDataURL(file);
             return;
@@ -430,25 +453,22 @@
               const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.72);
               const approxSizeKb = Math.round((compressedDataUrl.length * 3) / 4 / 1024);
 
-              try { document.body.removeChild(input); } catch (err) {}
-              callback(JSON.stringify({
+              cleanupAndReturn({
                 success: true,
                 isPdf: false,
                 fileName: file.name,
                 originalSizeKb: Math.round(file.size / 1024),
                 fileSizeKb: approxSizeKb,
                 dataUrl: compressedDataUrl
-              }));
+              });
             };
             img.onerror = function() {
-              try { document.body.removeChild(input); } catch (err) {}
-              callback(JSON.stringify({ success: false, message: 'Failed to process image' }));
+              cleanupAndReturn({ success: false, message: 'Failed to process image' });
             };
             img.src = evt.target.result;
           };
           reader.onerror = function() {
-            try { document.body.removeChild(input); } catch (err) {}
-            callback(JSON.stringify({ success: false, message: 'Failed to read image file' }));
+            cleanupAndReturn({ success: false, message: 'Failed to read image file' });
           };
           reader.readAsDataURL(file);
         };

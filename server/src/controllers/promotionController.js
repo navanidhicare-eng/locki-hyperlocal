@@ -248,14 +248,33 @@ exports.getAllPromotions = async (req, res) => {
     const list = ensurePromotions();
     const { type, active } = req.query;
 
+    const now = new Date();
     let filtered = [...list];
     if (type && type !== 'all') {
       filtered = filtered.filter(p => p.type === type);
     }
     if (active !== undefined) {
       const isActive = active === 'true' || active === true;
-      filtered = filtered.filter(p => p.active === isActive);
+      filtered = filtered.filter(p => {
+        if (p.active !== isActive) return false;
+        if (isActive && p.expiryDate) {
+          const exp = new Date(p.expiryDate);
+          exp.setHours(23, 59, 59, 999);
+          if (exp < now) return false; // automatically hide expired banners from active customer app views
+        }
+        return true;
+      });
     }
+
+    filtered = filtered.map(p => {
+      let isExpired = false;
+      if (p.expiryDate) {
+        const exp = new Date(p.expiryDate);
+        exp.setHours(23, 59, 59, 999);
+        isExpired = exp < now;
+      }
+      return { ...p, isExpired };
+    });
 
     // Sort by priority ascending, then createdAt descending
     filtered.sort((a, b) => (a.priority || 99) - (b.priority || 99));
@@ -300,21 +319,22 @@ exports.createPromotion = async (req, res) => {
     const newPromotion = {
       id: newId,
       type: body.type || 'deal',
-      title: body.title || 'Special Promotion',
-      tag: body.tag || 'PROMOTED',
-      badge: body.badge || 'SPECIAL',
+      title: body.title || '',
+      tag: body.tag || '',
+      badge: body.badge || '',
       offer: body.offer || '',
       subtitle: body.subtitle || '',
       description: body.description || '',
-      location: body.location || 'Hyderabad (All Localities)',
-      imageUrl: body.imageUrl || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=900&auto=format&fit=crop&q=80',
-      cta: body.cta || 'Learn More',
+      location: body.location || '',
+      imageUrl: body.imageUrl || '',
+      cta: body.cta || '',
       colors: Array.isArray(body.colors) && body.colors.length >= 2 ? body.colors : ['#1E293B', '#334155', '#475569'],
       icon: body.icon || 'sparkles',
       promoCode: body.promoCode || '',
       voucherValue: body.voucherValue || '',
       giftNote: body.giftNote || '',
       perks: Array.isArray(body.perks) ? body.perks : (body.perks ? body.perks.split(',').map(s => s.trim()) : []),
+      expiryDate: body.expiryDate || null,
       active: body.active !== undefined ? body.active : true,
       priority: Number(body.priority) || 1,
       impressions: 0,

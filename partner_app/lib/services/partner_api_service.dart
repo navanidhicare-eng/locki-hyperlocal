@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../core/constants.dart';
 import '../models/partner_order_model.dart';
 
@@ -8,12 +9,48 @@ class PartnerApiService {
   factory PartnerApiService() => _instance;
   PartnerApiService._internal();
 
+  static const String _keyToken = 'locki_partner_token';
+  static const String _keyProfile = 'locki_partner_profile';
+
   String? _authToken;
   Map<String, dynamic>? _profile;
 
   String? get authToken => _authToken;
   Map<String, dynamic>? get profile => _profile;
-  bool get isLoggedIn => _authToken != null && _profile != null;
+  bool get isLoggedIn => _authToken != null && _authToken!.isNotEmpty && _profile != null;
+
+  // Load saved partner session on startup
+  Future<void> initAuth() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString(_keyToken);
+      final profileStr = prefs.getString(_keyProfile);
+      if (token != null && token.isNotEmpty && profileStr != null && profileStr.isNotEmpty) {
+        _authToken = token;
+        _profile = jsonDecode(profileStr);
+      }
+    } catch (_) {}
+  }
+
+  Future<void> _persistAuth() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      if (_authToken != null) {
+        await prefs.setString(_keyToken, _authToken!);
+      }
+      if (_profile != null) {
+        await prefs.setString(_keyProfile, jsonEncode(_profile));
+      }
+    } catch (_) {}
+  }
+
+  Future<void> _clearPersistedAuth() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_keyToken);
+      await prefs.remove(_keyProfile);
+    } catch (_) {}
+  }
 
   // Authenticate partner with Phone/Mobile and Password
   Future<Map<String, dynamic>> loginPartner({
@@ -34,6 +71,7 @@ class PartnerApiService {
       if (res.statusCode == 200 && data['success'] == true) {
         _authToken = data['token'];
         _profile = data['user'];
+        await _persistAuth();
         return {'success': true, 'message': 'Login successful!'};
       } else {
         return {'success': false, 'message': data['message'] ?? 'Login failed. Please check your credentials.'};
@@ -73,6 +111,7 @@ class PartnerApiService {
       if ((res.statusCode == 200 || res.statusCode == 201) && data['success'] == true) {
         _authToken = data['token'];
         _profile = data['user'];
+        await _persistAuth();
         return {'success': true, 'message': 'Account created successfully!'};
       } else {
         return {'success': false, 'message': data['message'] ?? 'Registration failed.'};
@@ -87,6 +126,7 @@ class PartnerApiService {
   void logout() {
     _authToken = null;
     _profile = null;
+    _clearPersistedAuth();
   }
 
   // Update Partner Profile
@@ -233,5 +273,286 @@ class PartnerApiService {
       print('Update order status error: $e');
     }
     return false;
+  }
+
+  // Multi-Business Switcher: Fetch all business profiles for this partner
+  Future<Map<String, dynamic>> fetchBusinesses() async {
+    try {
+      final pId = _profile?['id'] ?? 'prv_76fcc359';
+      final res = await http.get(
+        Uri.parse('${PartnerConstants.baseUrl}/providers/businesses/public/$pId'),
+        headers: {
+          if (_authToken != null) 'Authorization': 'Bearer $_authToken',
+        },
+      );
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+        if (data['success'] == true) {
+          return {
+            'activeBusinessId': data['activeBusinessId'],
+            'businesses': List<Map<String, dynamic>>.from(data['businesses'] ?? []),
+          };
+        }
+      }
+    } catch (e) {
+      print('Fetch businesses error: $e');
+    }
+    return {'activeBusinessId': null, 'businesses': <Map<String, dynamic>>[]};
+  }
+
+  // Multi-Business: Request a new business profile (Pending Admin Approval)
+  Future<bool> requestNewBusiness(Map<String, dynamic> bizData) async {
+    try {
+      final pId = _profile?['id'] ?? 'prv_76fcc359';
+      final payload = {
+        'providerId': pId,
+        ...bizData,
+      };
+      final res = await http.post(
+        Uri.parse('${PartnerConstants.baseUrl}/providers/businesses/public/request'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(payload),
+      );
+      if (res.statusCode == 200 || res.statusCode == 201) {
+        final data = jsonDecode(res.body);
+        return data['success'] == true;
+      }
+    } catch (e) {
+      print('Request new business error: $e');
+    }
+    return false;
+  }
+
+  // Multi-Business: Switch active business
+  Future<bool> switchActiveBusiness(String businessId) async {
+    try {
+      final pId = _profile?['id'] ?? 'prv_76fcc359';
+      final res = await http.post(
+        Uri.parse('${PartnerConstants.baseUrl}/providers/businesses/public/switch'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'providerId': pId, 'businessId': businessId}),
+      );
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+        return data['success'] == true;
+      }
+    } catch (e) {
+      print('Switch active business error: $e');
+    }
+    return false;
+  }
+
+  // Multi-Business: Update business profile details
+  Future<bool> updateBusinessProfile(String businessId, Map<String, dynamic> updateData) async {
+    try {
+      final pId = _profile?['id'] ?? 'prv_76fcc359';
+      final payload = {
+        'providerId': pId,
+        ...updateData,
+      };
+      final res = await http.put(
+        Uri.parse('${PartnerConstants.baseUrl}/providers/businesses/public/$businessId'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(payload),
+      );
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+        return data['success'] == true;
+      }
+    } catch (e) {
+      print('Update business profile error: $e');
+    }
+    return false;
+  }
+
+  // Multi-Business: Delete closed business profile
+  Future<bool> deleteBusinessProfile(String businessId) async {
+    try {
+      final pId = _profile?['id'] ?? 'prv_76fcc359';
+      final res = await http.delete(
+        Uri.parse('${PartnerConstants.baseUrl}/providers/businesses/public/$businessId?providerId=$pId'),
+      );
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+        return data['success'] == true;
+      }
+    } catch (e) {
+      print('Delete business profile error: $e');
+    }
+    return false;
+  }
+
+  // Rental Inventory: Fetch items posted by this partner
+  Future<List<Map<String, dynamic>>> fetchPartnerRentals({String? businessId}) async {
+    try {
+      final phone = _profile?['phone'] ?? '9010737882';
+      String url = '${PartnerConstants.baseUrl}/rentals/user/$phone?role=partner';
+      if (businessId != null && businessId.isNotEmpty) {
+        url += '&businessId=$businessId';
+      }
+      final res = await http.get(Uri.parse(url));
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+        if (data['success'] == true && data['data'] is List) {
+          return List<Map<String, dynamic>>.from(data['data']);
+        }
+      }
+    } catch (e) {
+      print('Fetch partner rentals error: $e');
+    }
+    return [];
+  }
+
+  // Rental Inventory: Create new rental item
+  Future<bool> createRentalItem(Map<String, dynamic> itemData) async {
+    try {
+      final pId = _profile?['id'] ?? 'prv_76fcc359';
+      final phone = _profile?['phone'] ?? '9010737882';
+      final name = _profile?['name'] ?? 'Gandepalli Prasad';
+
+      final payload = {
+        'postedBy': 'partner',
+        'providerId': pId,
+        'userName': name,
+        'phone': phone,
+        'whatsappPhone': phone,
+        'listingType': 'store',
+        ...itemData,
+      };
+
+      final res = await http.post(
+        Uri.parse('${PartnerConstants.baseUrl}/rentals'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(payload),
+      );
+      if (res.statusCode == 200 || res.statusCode == 201) {
+        final data = jsonDecode(res.body);
+        return data['success'] == true;
+      }
+    } catch (e) {
+      print('Create rental item error: $e');
+    }
+    return false;
+  }
+
+  // Rental Inventory: Toggle status available vs rented
+  Future<bool> toggleRentalStatus(String rentalId, String targetStatus) async {
+    try {
+      final res = await http.put(
+        Uri.parse('${PartnerConstants.baseUrl}/rentals/$rentalId'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'status': targetStatus}),
+      );
+      if (res.statusCode == 200) {
+        return true;
+      }
+    } catch (e) {
+      print('Toggle rental status error: $e');
+    }
+    return false;
+  }
+
+  // Rental Inventory: Update rental item details
+  Future<bool> updateRentalItem(String rentalId, Map<String, dynamic> updateData) async {
+    try {
+      final res = await http.put(
+        Uri.parse('${PartnerConstants.baseUrl}/rentals/$rentalId'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(updateData),
+      );
+      if (res.statusCode == 200) {
+        return true;
+      }
+    } catch (e) {
+      print('Update rental item error: $e');
+    }
+    return false;
+  }
+
+  // Rental Inventory: Delete rental item
+  Future<bool> deleteRentalItem(String rentalId) async {
+    try {
+      final res = await http.delete(
+        Uri.parse('${PartnerConstants.baseUrl}/rentals/$rentalId'),
+      );
+      return res.statusCode == 200;
+    } catch (e) {
+      print('Delete rental item error: $e');
+      return false;
+    }
+  }
+
+  // Shop / Retail Products: Fetch items for this store
+  Future<List<Map<String, dynamic>>> fetchPartnerProducts({String? businessId}) async {
+    try {
+      final phone = _profile?['phone'] ?? '9010737882';
+      String url = '${PartnerConstants.baseUrl}/products/user/$phone';
+      if (businessId != null && businessId.isNotEmpty) {
+        url += '?businessId=$businessId';
+      }
+      final res = await http.get(Uri.parse(url));
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+        if (data['success'] == true && data['products'] is List) {
+          return List<Map<String, dynamic>>.from(data['products']);
+        }
+      }
+    } catch (e) {
+      print('Fetch partner products error: $e');
+    }
+    return [];
+  }
+
+  // Shop / Retail Products: Add product
+  Future<Map<String, dynamic>> createShopProduct(Map<String, dynamic> prodData) async {
+    try {
+      final pId = _profile?['id'] ?? 'prv_76fcc359';
+      final phone = _profile?['phone'] ?? '9010737882';
+
+      final payload = {
+        'providerId': pId,
+        'phone': phone,
+        ...prodData,
+      };
+
+      final res = await http.post(
+        Uri.parse('${PartnerConstants.baseUrl}/products'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(payload),
+      );
+      final data = jsonDecode(res.body);
+      return data;
+    } catch (e) {
+      print('Create shop product error: $e');
+      return {'success': false, 'message': e.toString()};
+    }
+  }
+
+  // Shop / Retail Products: Update product
+  Future<bool> updateShopProduct(String productId, Map<String, dynamic> updateData) async {
+    try {
+      final res = await http.put(
+        Uri.parse('${PartnerConstants.baseUrl}/products/$productId'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(updateData),
+      );
+      return res.statusCode == 200;
+    } catch (e) {
+      print('Update shop product error: $e');
+      return false;
+    }
+  }
+
+  // Shop / Retail Products: Delete product
+  Future<bool> deleteShopProduct(String productId) async {
+    try {
+      final res = await http.delete(
+        Uri.parse('${PartnerConstants.baseUrl}/products/$productId'),
+      );
+      return res.statusCode == 200;
+    } catch (e) {
+      print('Delete shop product error: $e');
+      return false;
+    }
   }
 }

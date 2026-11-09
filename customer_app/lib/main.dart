@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'core/constants.dart';
+import 'services/api_service.dart';
 import 'screens/splash_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await ApiService().initAuth();
   runApp(const LokiCustomerApp());
 }
 

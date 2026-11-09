@@ -5,12 +5,15 @@ import '../core/constants.dart';
 import '../models/category_model.dart';
 import '../models/service_model.dart';
 import '../services/api_service.dart';
+import '../services/app_update_service.dart';
 import 'category_detail_screen.dart';
 import 'coming_soon_screen.dart';
 import 'login_screen.dart';
 import 'my_orders_screen.dart';
 import 'profile_screen.dart';
 import 'quick_request_screen.dart';
+import 'rental_marketplace_screen.dart';
+import 'shop_marketplace_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -39,145 +42,36 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentSpotlightIndex = 0;
   Timer? _spotlightTimer;
 
-  final List<Map<String, dynamic>> _spotlightEvents = const [
-    {
-      'tag': '🌟 GRAND SHOWROOM OPENING',
-      'title': 'Sri Krishna Jewellers',
-      'offer': 'Flat 25% OFF on Making Charges + Free Gold Coin!',
-      'description': 'Exclusive 916 Hallmark Gold & Diamond Collection. Grand opening celebration live today!',
-      'location': 'Main Road, Madhapur (Opp. Metro Pillar 14)',
-      'imageUrl': 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=900&auto=format&fit=crop&q=80',
-      'badge': 'GOLD SHOP OPENING',
-      'colors': [Color(0xFF381A00), Color(0xFFB45309), Color(0xFFD97706)],
-      'cta': 'Explore Gold Offers',
-      'icon': Icons.diamond_rounded,
-    },
-    {
-      'tag': '🛍️ MEGA RETAIL LAUNCH',
-      'title': 'South India Silk & Fashion Mall',
-      'offer': 'Buy 1 Get 1 Free on Designer Silk Sarees',
-      'description': 'Celebrity ribbon-cutting & inaugural mega discounts on all wedding collections & ethnic wear.',
-      'location': 'Jubilee Hills Checkpost, Road No. 36',
-      'imageUrl': 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=900&auto=format&fit=crop&q=80',
-      'badge': 'MALL OPENING',
-      'colors': [Color(0xFF1E1B4B), Color(0xFF4338CA), Color(0xFF6366F1)],
-      'cta': 'View Collections',
-      'icon': Icons.shopping_bag_rounded,
-    },
-    {
-      'tag': '🍽️ FOOD MEGA INAUGURATION',
-      'title': 'Paradise Royal Dum Biryani',
-      'offer': 'Complimentary Dessert & Buy 2 Get 1 Free',
-      'description': 'Authentic Nizami flavors, family dining & royal ambience. Inaugural festive feast for all foodies!',
-      'location': 'Hitec City, Cyber Towers Road',
-      'imageUrl': 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=900&auto=format&fit=crop&q=80',
-      'badge': 'NEW BRANCH OPEN',
-      'colors': [Color(0xFF310B0B), Color(0xFF991B1B), Color(0xFFDC2626)],
-      'cta': 'Reserve Table / Order',
-      'icon': Icons.restaurant_rounded,
-    },
-    {
-      'tag': '⚡ SMART TECH SHOWROOM',
-      'title': 'Croma Mega Electronics',
-      'offer': 'Up to 50% OFF on 4K Smart TVs & Smartphones',
-      'description': 'Exclusive inaugural zero-cost EMI + free soundbar with select appliances. Grand opening week!',
-      'location': 'Inorbit Mall Road, Mindspace Circle',
-      'imageUrl': 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=900&auto=format&fit=crop&q=80',
-      'badge': 'TECH LAUNCH',
-      'colors': [Color(0xFF0F172A), Color(0xFF0284C7), Color(0xFF0EA5E9)],
-      'cta': 'Grab Electronics Deals',
-      'icon': Icons.devices_rounded,
-    },
-  ];
-
-  final List<Map<String, dynamic>> _adBanners = const [
-    {
-      'tag': '🔥 SPONSORED DEAL',
-      'title': 'Deep Cleaning & Pest Control Fest',
-      'subtitle': 'Up to 30% OFF on Full Home Disinfection',
-      'badge': 'CODE: CLEAN30',
-      'colors': [Color(0xFF0F172A), Color(0xFF2563EB)],
-      'cta': 'Book Offer',
-      'icon': Icons.cleaning_services_rounded,
-    },
-    {
-      'tag': '⚡ EMERGENCY FIX',
-      'title': 'Bike & Car Breakdown Assistance',
-      'subtitle': 'Mechanic reaches in 15 mins with battery jumpstart',
-      'badge': 'FLAT ₹100 OFF',
-      'colors': [Color(0xFF1E293B), Color(0xFFEF4444)],
-      'cta': 'Get Help',
-      'icon': Icons.car_repair_rounded,
-    },
-    {
-      'tag': '❄️ APPLIANCE CARE',
-      'title': 'AC Gas Refill & Jet Foam Service',
-      'subtitle': 'Pre-summer discount starts at just ₹399',
-      'badge': 'LIMITED SLOTS',
-      'colors': [Color(0xFF18181B), Color(0xFFD97706)],
-      'cta': 'Grab Deal',
-      'icon': Icons.ac_unit_rounded,
-    },
-    {
-      'tag': '🛵 INSTANT DELIVERY',
-      'title': 'Pick & Drop Anywhere in 30 Mins',
-      'subtitle': 'Medicine, documents, groceries & tiffin delivery',
-      'badge': 'FREE 1ST DROP',
-      'colors': [Color(0xFF064E3B), Color(0xFF059669)],
-      'cta': 'Order Pickup',
-      'icon': Icons.delivery_dining_rounded,
-    },
-  ];
-
-  final List<Map<String, dynamic>> _promoBanners = const [
-    {
-      'tag': '⚡ 30-MINUTES HYPERLOCAL PROMISE',
-      'title': 'Need a Fix or Quick Delivery?',
-      'subtitle': 'Verified professionals at your doorstep with safe OTP check',
-      'colors': [Color(0xFF192338), Color(0xFFDE4915)],
-      'cta': 'Book Now',
-      'icon': Icons.bolt_rounded,
-    },
-    {
-      'tag': '🎉 SPECIAL INTRO OFFER',
-      'title': 'Flat ₹150 OFF on AC & Plumbing',
-      'subtitle': 'Use coupon code LOKI150 on your first booking today',
-      'colors': [Color(0xFF0F172A), Color(0xFF0284C7)],
-      'cta': 'Claim Offer',
-      'icon': Icons.local_offer_rounded,
-    },
-    {
-      'tag': '🛡️ 100% SATISFACTION GUARANTEE',
-      'title': 'Certified & Background Verified',
-      'subtitle': 'Government Aadhaar & Police verified skilled technicians',
-      'colors': [Color(0xFF064E3B), Color(0xFF059669)],
-      'cta': 'Explore Fixes',
-      'icon': Icons.verified_user_rounded,
-    },
-    {
-      'tag': '🛍️ WORKSHOP & SPARE PARTS',
-      'title': 'Local Workshops & Kirana Stores',
-      'subtitle': 'Direct pickup or home drop from verified neighborhood workshops',
-      'colors': [Color(0xFF4C1D95), Color(0xFF7C3AED)],
-      'cta': 'View Shops',
-      'icon': Icons.storefront_rounded,
-    },
-  ];
+  List<Map<String, dynamic>> _spotlightEvents = [];
+  List<Map<String, dynamic>> _adBanners = [];
+  List<Map<String, dynamic>> _promoBanners = [];
+  Map<String, dynamic>? _popupPromo;
+  Timer? _promoSyncTimer;
 
   @override
   void initState() {
     super.initState();
     _loadData();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      AppUpdateService.checkForUpdates(context);
+    });
     _bannerController = PageController();
     _startBannerTimer();
     _adBannerController = PageController(viewportFraction: 0.78);
     _startAdTimer();
     _startSpotlightTimer();
 
-    // Show Grand Opening Clothing Shop Popup on Login / Fresh App Entry
+    // Auto-sync banners from Admin every 6 seconds
+    _promoSyncTimer = Timer.periodic(const Duration(seconds: 6), (_) {
+      if (mounted) {
+        _syncPromotions();
+      }
+    });
+
+    // Show Login Popup if active on backend
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(const Duration(milliseconds: 650), () {
-        if (mounted && !HomeScreen.hasShownLoginPromo) {
+      Future.delayed(const Duration(milliseconds: 700), () {
+        if (mounted && !HomeScreen.hasShownLoginPromo && _popupPromo != null) {
           HomeScreen.hasShownLoginPromo = true;
           _showClothingShopPopup(context);
         }
@@ -187,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _startSpotlightTimer() {
     _spotlightTimer = Timer.periodic(const Duration(seconds: 6), (timer) {
-      if (mounted) {
+      if (mounted && _spotlightEvents.length > 1) {
         setState(() {
           _currentSpotlightIndex = (_currentSpotlightIndex + 1) % _spotlightEvents.length;
         });
@@ -197,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _startBannerTimer() {
     _bannerTimer = Timer.periodic(const Duration(seconds: 4), (timer) {
-      if (_bannerController.hasClients) {
+      if (_bannerController.hasClients && _promoBanners.length > 1) {
         final next = (_currentBannerIndex + 1) % _promoBanners.length;
         _bannerController.animateToPage(
           next,
@@ -210,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _startAdTimer() {
     _adTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      if (_adBannerController.hasClients) {
+      if (_adBannerController.hasClients && _adBanners.length > 1) {
         final next = (_currentAdIndex + 1) % _adBanners.length;
         _adBannerController.animateToPage(
           next,
@@ -223,6 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
+    _promoSyncTimer?.cancel();
     _bannerTimer?.cancel();
     _bannerController.dispose();
     _adTimer?.cancel();
@@ -679,17 +574,89 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Color _parseHexColor(dynamic hex, Color fallback) {
+    if (hex == null) return fallback;
+    if (hex is Color) return hex;
+    try {
+      String str = hex.toString().replaceAll('#', '').trim();
+      if (str.length == 6) str = 'FF$str';
+      return Color(int.parse(str, radix: 16));
+    } catch (_) {
+      return fallback;
+    }
+  }
+
+  List<Color> _parseColors(dynamic colors, List<Color> fallback) {
+    if (colors is List && colors.isNotEmpty) {
+      final list = colors.map((c) => _parseHexColor(c, fallback.first)).toList();
+      if (list.length >= 2) return list;
+      if (list.length == 1) return [list.first, list.first.withOpacity(0.8)];
+    }
+    return fallback;
+  }
+
+  IconData _parseIcon(dynamic icon) {
+    if (icon is IconData) return icon;
+    final str = (icon ?? '').toString().toLowerCase();
+    if (str.contains('sparkle') || str.contains('clean')) return Icons.auto_awesome;
+    if (str.contains('camera') || str.contains('cctv')) return Icons.videocam_rounded;
+    if (str.contains('bolt') || str.contains('electric')) return Icons.electric_bolt_rounded;
+    if (str.contains('plumb') || str.contains('water')) return Icons.plumbing_rounded;
+    if (str.contains('store') || str.contains('shop') || str.contains('mall')) return Icons.storefront_rounded;
+    if (str.contains('sale') || str.contains('percent') || str.contains('offer')) return Icons.local_offer_rounded;
+    return Icons.campaign_rounded;
+  }
+
   void _loadData() async {
     setState(() => _loading = true);
     final cats = await _api.fetchCategories();
     final srvs = await _api.fetchServices();
-    await _api.fetchPromotions();
+    await _syncPromotions();
     if (mounted) {
       setState(() {
         _categories = cats;
         _trendingServices = srvs;
         _loading = false;
       });
+
+      // Show Popup Promo if active on backend and not shown yet in this session
+      if (!HomeScreen.hasShownLoginPromo && _popupPromo != null && _popupPromo!['active'] == true) {
+        HomeScreen.hasShownLoginPromo = true;
+        Future.delayed(const Duration(milliseconds: 600), () {
+          if (mounted) _showClothingShopPopup(context);
+        });
+      }
+    }
+  }
+
+  Future<void> _syncPromotions() async {
+    try {
+      final grouped = await _api.fetchPromotions();
+      if (!mounted) return;
+
+      final heroList = (grouped['hero'] as List<dynamic>?)?.map((e) => Map<String, dynamic>.from(e)).toList() ?? [];
+      final spotlightList = (grouped['spotlight'] as List<dynamic>?)?.map((e) => Map<String, dynamic>.from(e)).toList() ?? [];
+      final dealList = (grouped['deal'] as List<dynamic>?)?.map((e) => Map<String, dynamic>.from(e)).toList() ?? [];
+      final popupList = (grouped['popup'] as List<dynamic>?)?.map((e) => Map<String, dynamic>.from(e)).toList() ?? [];
+
+      setState(() {
+        _promoBanners = heroList;
+        _spotlightEvents = spotlightList;
+        _adBanners = dealList;
+        _popupPromo = popupList.isNotEmpty ? popupList.first : null;
+
+        if (_promoBanners.isNotEmpty && _currentBannerIndex >= _promoBanners.length) {
+          _currentBannerIndex = 0;
+        }
+        if (_spotlightEvents.isNotEmpty && _currentSpotlightIndex >= _spotlightEvents.length) {
+          _currentSpotlightIndex = 0;
+        }
+        if (_adBanners.isNotEmpty && _currentAdIndex >= _adBanners.length) {
+          _currentAdIndex = 0;
+        }
+      });
+    } catch (_) {
+      // keep existing promotions on network glitch
     }
   }
 
@@ -944,130 +911,94 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildScrollingBanners() {
+    if (_promoBanners.isEmpty) return const SizedBox.shrink();
+
     return Column(
       children: [
         SizedBox(
-          height: 145,
+          height: 155,
           child: PageView.builder(
             controller: _bannerController,
             itemCount: _promoBanners.length,
             onPageChanged: (idx) => setState(() => _currentBannerIndex = idx),
             itemBuilder: (ctx, idx) {
               final b = _promoBanners[idx];
+              final imgUrl = (b['imageUrl'] ?? '').toString().trim();
+              final colors = _parseColors(b['colors'], const [Color(0xFF1E293B), Color(0xFF334155), Color(0xFF475569)]);
+
               return Container(
-                margin: const EdgeInsets.symmetric(horizontal: 2),
-                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.symmetric(horizontal: 4),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: b['colors'] as List<Color>,
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
                   borderRadius: BorderRadius.circular(18),
                   boxShadow: [
                     BoxShadow(
-                      color: (b['colors'][1] as Color).withOpacity(0.25),
+                      color: Colors.black.withOpacity(0.08),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
                   ],
                 ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(18),
+                  child: imgUrl.isNotEmpty
+                      ? Image.network(
+                          imgUrl,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                          errorBuilder: (_, __, ___) => Container(
                             decoration: BoxDecoration(
-                              color: AppConstants.accentGold,
-                              borderRadius: BorderRadius.circular(6),
+                              gradient: LinearGradient(
+                                colors: colors,
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
                             ),
-                            child: Text(
-                              b['tag'] as String,
-                              style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 9.5),
+                            child: const Center(
+                              child: Icon(Icons.image_not_supported_rounded, color: Colors.white54, size: 36),
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            b['title'] as String,
-                            style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold, height: 1.2),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            b['subtitle'] as String,
-                            style: const TextStyle(color: Colors.white70, fontSize: 11),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 44,
-                          height: 44,
+                        )
+                      : Container(
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.18),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(b['icon'] as IconData, color: Colors.white, size: 24),
-                        ),
-                        const SizedBox(height: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            b['cta'] as String,
-                            style: const TextStyle(
-                              color: Color(0xFF192338),
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
+                            gradient: LinearGradient(
+                              colors: colors,
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                  ],
                 ),
               );
             },
           ),
         ),
-        const SizedBox(height: 8),
-
-        // Carousel Dot Indicators
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(
-            _promoBanners.length,
-            (idx) => AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              margin: const EdgeInsets.symmetric(horizontal: 3),
-              width: _currentBannerIndex == idx ? 18 : 6,
-              height: 6,
-              decoration: BoxDecoration(
-                color: _currentBannerIndex == idx ? AppConstants.primary : const Color(0xFFCBD5E1),
-                borderRadius: BorderRadius.circular(3),
+        if (_promoBanners.length > 1) ...[
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(
+              _promoBanners.length,
+              (idx) => AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                margin: const EdgeInsets.symmetric(horizontal: 3),
+                width: _currentBannerIndex == idx ? 18 : 6,
+                height: 6,
+                decoration: BoxDecoration(
+                  color: _currentBannerIndex == idx ? AppConstants.primary : const Color(0xFFCBD5E1),
+                  borderRadius: BorderRadius.circular(3),
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ],
     );
   }
 
   Widget _buildAdScrollingBanners() {
+    if (_adBanners.isEmpty) return const SizedBox.shrink();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1106,152 +1037,75 @@ class _HomeScreenState extends State<HomeScreen> {
             onPageChanged: (idx) => setState(() => _currentAdIndex = idx),
             itemBuilder: (ctx, idx) {
               final ad = _adBanners[idx];
+              final imgUrl = (ad['imageUrl'] ?? '').toString().trim();
+              final colors = _parseColors(ad['colors'], const [Color(0xFF1E293B), Color(0xFF334155)]);
+
               return Container(
                 margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 4),
-                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: ad['colors'] as List<Color>,
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: (ad['colors'][1] as Color).withOpacity(0.3),
+                      color: Colors.black.withOpacity(0.08),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
                   ],
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // Top row: Tag & Badge + Round Icon
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Text(
-                                ad['tag'] as String,
-                                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 9),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: imgUrl.isNotEmpty
+                      ? Image.network(
+                          imgUrl,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                          errorBuilder: (_, __, ___) => Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: colors,
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
                               ),
                             ),
-                            const SizedBox(width: 6),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                              decoration: BoxDecoration(
-                                color: AppConstants.accentGold,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Text(
-                                ad['badge'] as String,
-                                style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 9),
-                              ),
+                            child: const Center(
+                              child: Icon(Icons.image_not_supported_rounded, color: Colors.white54, size: 36),
                             ),
-                          ],
-                        ),
-                        Container(
-                          width: 36,
-                          height: 36,
+                          ),
+                        )
+                      : Container(
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.18),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(ad['icon'] as IconData, color: Colors.white, size: 20),
-                        ),
-                      ],
-                    ),
-
-                    // Middle: Bold Title & Subtitle
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          ad['title'] as String,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            height: 1.25,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 5),
-                        Text(
-                          ad['subtitle'] as String,
-                          style: const TextStyle(color: Colors.white70, fontSize: 11),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-
-                    // Bottom: CTA Pill Button
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(14),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.08),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
+                            gradient: LinearGradient(
+                              colors: colors,
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
                             ),
-                          ],
+                          ),
                         ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              ad['cta'] as String,
-                              style: const TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                                color: AppConstants.secondary,
-                              ),
-                            ),
-                            const SizedBox(width: 4),
-                            const Icon(Icons.arrow_forward_rounded, size: 12, color: AppConstants.secondary),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
                 ),
               );
             },
           ),
         ),
-        const SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(
-            _adBanners.length,
-            (idx) => AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              margin: const EdgeInsets.symmetric(horizontal: 3),
-              width: _currentAdIndex == idx ? 18 : 6,
-              height: 5,
-              decoration: BoxDecoration(
-                color: _currentAdIndex == idx ? AppConstants.primary : const Color(0xFFCBD5E1),
-                borderRadius: BorderRadius.circular(3),
+        if (_adBanners.length > 1) ...[
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(
+              _adBanners.length,
+              (idx) => AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                margin: const EdgeInsets.symmetric(horizontal: 3),
+                width: _currentAdIndex == idx ? 18 : 6,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: _currentAdIndex == idx ? AppConstants.primary : const Color(0xFFCBD5E1),
+                  borderRadius: BorderRadius.circular(3),
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ],
     );
   }
@@ -1372,7 +1226,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildSpotlightBillboard() {
+    if (_spotlightEvents.isEmpty) return const SizedBox.shrink();
+    if (_currentSpotlightIndex >= _spotlightEvents.length) {
+      _currentSpotlightIndex = 0;
+    }
     final event = _spotlightEvents[_currentSpotlightIndex];
+    final imgUrl = (event['imageUrl'] ?? '').toString().trim();
+    final colors = _parseColors(event['colors'], const [Color(0xFF1E293B), Color(0xFF334155), Color(0xFF475569)]);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1419,7 +1279,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const SizedBox(height: 12),
 
-        // Single Large Card with AnimatedSwitcher for Photos & Text Change
+        // Single Large Card with AnimatedSwitcher for Photos
         AnimatedSwitcher(
           duration: const Duration(milliseconds: 700),
           switchInCurve: Curves.easeInOut,
@@ -1433,213 +1293,67 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Container(
             key: ValueKey<int>(_currentSpotlightIndex),
             width: double.infinity,
-            height: 275,
+            height: 250,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(22),
               boxShadow: [
                 BoxShadow(
-                  color: (event['colors'][1] as Color).withOpacity(0.35),
+                  color: Colors.black.withOpacity(0.12),
                   blurRadius: 16,
                   offset: const Offset(0, 6),
                 ),
               ],
             ),
             clipBehavior: Clip.antiAlias,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                // 1. Background Image
-                Image.network(
-                  event['imageUrl'] as String,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(
+            child: imgUrl.isNotEmpty
+                ? Image.network(
+                    imgUrl,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
+                    errorBuilder: (_, __, ___) => Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: colors,
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                      ),
+                      child: const Center(
+                        child: Icon(Icons.image_not_supported_rounded, color: Colors.white54, size: 40),
+                      ),
+                    ),
+                  )
+                : Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: event['colors'] as List<Color>,
+                        colors: colors,
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
                     ),
                   ),
-                ),
-
-                // 2. Multi-layer Dark Gradient for Contrast
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.black.withOpacity(0.88),
-                        Colors.black.withOpacity(0.65),
-                        (event['colors'][0] as Color).withOpacity(0.70),
-                      ],
-                      begin: Alignment.bottomLeft,
-                      end: Alignment.topRight,
-                    ),
-                  ),
-                ),
-
-                // 3. Foreground Content
-                Padding(
-                  padding: const EdgeInsets.all(18),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Top Row: Tag badge + Live event countdown / dots
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4.5),
-                            decoration: BoxDecoration(
-                              color: AppConstants.accentGold,
-                              borderRadius: BorderRadius.circular(8),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  blurRadius: 4,
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(event['icon'] as IconData, color: Colors.black, size: 13),
-                                const SizedBox(width: 5),
-                                Text(
-                                  event['tag'] as String,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 10,
-                                    letterSpacing: 0.5,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Text(
-                              '${_currentSpotlightIndex + 1} of ${_spotlightEvents.length}',
-                              style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      // Middle Section: Name, Special Offer & Description
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            event['title'] as String,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: 0.2,
-                              height: 1.2,
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.18),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Text(
-                              event['offer'] as String,
-                              style: const TextStyle(
-                                color: Color(0xFFFDE047),
-                                fontSize: 12.5,
-                                fontWeight: FontWeight.w900,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            event['description'] as String,
-                            style: const TextStyle(color: Color(0xFFE2E8F0), fontSize: 11.5, height: 1.3),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            children: [
-                              const Icon(Icons.location_on, color: AppConstants.accentRose, size: 13),
-                              const SizedBox(width: 3),
-                              Expanded(
-                                child: Text(
-                                  event['location'] as String,
-                                  style: const TextStyle(color: Color(0xFFCBD5E1), fontSize: 11, fontWeight: FontWeight.w500),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-
-                      // Bottom Row: CTA Button + Slide Indicator Dots
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ElevatedButton.icon(
-                            onPressed: () {
-                              if (event['badge'] == 'MALL OPENING' || (event['title'] as String).contains('Silk') || (event['title'] as String).contains('Fashion')) {
-                                _showClothingShopPopup(context);
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('Opening details for ${event['title']}!'),
-                                    backgroundColor: AppConstants.primary,
-                                    behavior: SnackBarBehavior.floating,
-                                  ),
-                                );
-                              }
-                            },
-                            icon: const Icon(Icons.celebration_rounded, size: 14),
-                            label: Text(
-                              event['cta'] as String,
-                              style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: AppConstants.secondary,
-                              elevation: 2,
-                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                            ),
-                          ),
-                          Row(
-                            children: List.generate(
-                              _spotlightEvents.length,
-                              (idx) => Container(
-                                margin: const EdgeInsets.symmetric(horizontal: 2.5),
-                                width: _currentSpotlightIndex == idx ? 16 : 5,
-                                height: 5,
-                                decoration: BoxDecoration(
-                                  color: _currentSpotlightIndex == idx ? Colors.white : Colors.white38,
-                                  borderRadius: BorderRadius.circular(3),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
           ),
         ),
+        if (_spotlightEvents.length > 1) ...[
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(
+              _spotlightEvents.length,
+              (idx) => AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                margin: const EdgeInsets.symmetric(horizontal: 3),
+                width: _currentSpotlightIndex == idx ? 18 : 6,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: _currentSpotlightIndex == idx ? AppConstants.primary : const Color(0xFFCBD5E1),
+                  borderRadius: BorderRadius.circular(3),
+                ),
+              ),
+            ),
+          ),
+        ],
       ],
     );
   }
@@ -1801,7 +1515,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '⚡ Quick Service Request (త్వరిత బుకింగ్)',
+                                    '⚡ Quick Service Request',
                                     style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white, fontSize: 14),
                                   ),
                                   SizedBox(height: 2),
@@ -1838,7 +1552,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           'All Hyperlocal Services',
                           style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: AppConstants.secondary),
                         ),
-                        if (_categories.length > 12)
+                        if (_categories.length > 8)
                           InkWell(
                             onTap: () {
                               setState(() {
@@ -1882,7 +1596,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(height: 14),
 
-                    // Grid of Services (Animated Expansion for See All if > 12)
+                    // Grid of Services (2 Lines by default with Animated Expansion for See All)
                     AnimatedSize(
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeInOut,
@@ -1898,7 +1612,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         itemCount: _showAllCategories
                             ? _categories.length
-                            : (_categories.length > 12 ? 12 : _categories.length),
+                            : (_categories.length > 8 ? 8 : _categories.length),
                         itemBuilder: (ctx, idx) {
                           final cat = _categories[idx];
                           return InkWell(
@@ -1907,10 +1621,29 @@ class _HomeScreenState extends State<HomeScreen> {
                             highlightColor: Colors.transparent,
                             splashColor: AppConstants.primary.withOpacity(0.08),
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (_) => CategoryDetailScreen(category: cat)),
-                              );
+                              final isLeaseRental = cat.id == 'cat_ab5c5cd1' ||
+                                  cat.name.toLowerCase().contains('lease') ||
+                                  cat.name.toLowerCase().contains('rent');
+                              final isShop = cat.id == 'cat_shops' ||
+                                  cat.name.toLowerCase().contains('shop') ||
+                                  cat.name.toLowerCase().contains('kirana');
+
+                              if (isLeaseRental) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (_) => const RentalMarketplaceScreen()),
+                                );
+                              } else if (isShop) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (_) => ShopMarketplaceScreen(category: cat)),
+                                );
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (_) => CategoryDetailScreen(category: cat)),
+                                );
+                              }
                             },
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,

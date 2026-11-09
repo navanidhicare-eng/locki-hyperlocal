@@ -1,11 +1,11 @@
 {
-    "name": "customer_app",
-    "short_name": "customer_app",
+    "name": "Locki Hyperlocal Services",
+    "short_name": "Locki",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#FAF7F2",
+    "theme_color": "#DE4915",
+    "description": "Locki - Verified doorstep home services & fast delivery in minutes",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

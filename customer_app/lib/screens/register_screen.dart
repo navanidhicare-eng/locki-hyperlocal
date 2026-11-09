@@ -15,10 +15,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
   final _emailController = TextEditingController();
-  final _addressController = TextEditingController(text: 'Madhapur, Hyderabad');
+  final _addressController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
   bool _isLoading = false;
   String? _errorMessage;
 
@@ -29,6 +31,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _emailController.dispose();
     _addressController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -55,7 +58,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (res['success'] == true) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Account created! ₹200 Welcome Bonus credited to your wallet 🎉'),
+          content: Text('Account created successfully! Welcome to Locki 🎉'),
           backgroundColor: AppConstants.accentEmerald,
           duration: Duration(seconds: 4),
           behavior: SnackBarBehavior.floating,
@@ -94,19 +97,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Welcome Bonus Banner
+                // Best Quality & Trust Banner (No bonus claims)
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
-                      colors: [Color(0xFF1E293B), Color(0xFFDE4915)],
+                      colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
                     borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: const Color(0xFF334155)),
                     boxShadow: [
                       BoxShadow(
-                        color: AppConstants.primary.withOpacity(0.25),
+                        color: Colors.black.withOpacity(0.08),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
@@ -117,10 +121,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: AppConstants.primary.withOpacity(0.2),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.wallet_giftcard_rounded, color: Colors.white, size: 28),
+                        child: const Icon(Icons.verified_user_rounded, color: AppConstants.primary, size: 28),
                       ),
                       const SizedBox(width: 14),
                       const Expanded(
@@ -128,7 +132,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '₹200 SIGNUP BONUS',
+                              '100% QUALITY GUARANTEED',
                               style: TextStyle(
                                 color: AppConstants.accentGold,
                                 fontWeight: FontWeight.w900,
@@ -138,12 +142,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                             SizedBox(height: 2),
                             Text(
-                              'Instant Cash in Loki Wallet',
+                              'Verified Doorstep Specialists',
                               style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
                             ),
                             SizedBox(height: 2),
                             Text(
-                              'Usable on plumbing, electricians, delivery & repairs',
+                              'Government ID & background-checked experts for your home',
                               style: TextStyle(color: Colors.white70, fontSize: 11),
                             ),
                           ],
@@ -186,7 +190,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 TextFormField(
                   controller: _nameController,
                   decoration: InputDecoration(
-                    hintText: 'Enter your full name',
                     prefixIcon: const Icon(Icons.badge_outlined, color: AppConstants.primary, size: 20),
                     filled: true,
                     fillColor: Colors.white,
@@ -206,7 +209,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   controller: _phoneController,
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
-                    hintText: 'e.g. +91 98765 43210',
                     prefixIcon: const Icon(Icons.phone_outlined, color: AppConstants.primary, size: 20),
                     filled: true,
                     fillColor: Colors.white,
@@ -226,7 +228,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
-                    hintText: 'e.g. name@example.com',
                     prefixIcon: const Icon(Icons.email_outlined, color: AppConstants.primary, size: 20),
                     filled: true,
                     fillColor: Colors.white,
@@ -238,13 +239,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 const SizedBox(height: 14),
 
-                // Delivery / Service Address
+                // Delivery / Service Address (Completely blank)
                 const Text('Service Delivery Address', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppConstants.secondary)),
                 const SizedBox(height: 6),
                 TextFormField(
                   controller: _addressController,
                   decoration: InputDecoration(
-                    hintText: 'Area, Building, Flat No (e.g. Madhapur, Hyderabad)',
                     prefixIcon: const Icon(Icons.home_outlined, color: AppConstants.primary, size: 20),
                     filled: true,
                     fillColor: Colors.white,
@@ -252,19 +252,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: Colors.grey.shade200)),
                     enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: Colors.grey.shade200)),
                   ),
-                  validator: (v) => (v == null || v.trim().isEmpty) ? 'Please enter your address' : null,
+                  validator: (v) => (v == null || v.trim().isEmpty) ? 'Please enter your delivery address' : null,
                 ),
 
                 const SizedBox(height: 14),
 
-                // Password
+                // Create Password
                 const Text('Create Password', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppConstants.secondary)),
                 const SizedBox(height: 6),
                 TextFormField(
                   controller: _passwordController,
                   obscureText: _obscurePassword,
                   decoration: InputDecoration(
-                    hintText: 'Minimum 4 characters',
                     prefixIcon: const Icon(Icons.lock_outline, color: AppConstants.primary, size: 20),
                     suffixIcon: IconButton(
                       icon: Icon(_obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: AppConstants.textDim, size: 20),
@@ -283,6 +282,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                 ),
 
+                const SizedBox(height: 14),
+
+                // Confirm Password
+                const Text('Confirm Password', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppConstants.secondary)),
+                const SizedBox(height: 6),
+                TextFormField(
+                  controller: _confirmPasswordController,
+                  obscureText: _obscureConfirmPassword,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.lock_reset_rounded, color: AppConstants.primary, size: 20),
+                    suffixIcon: IconButton(
+                      icon: Icon(_obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: AppConstants.textDim, size: 20),
+                      onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: Colors.grey.shade200)),
+                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: Colors.grey.shade200)),
+                  ),
+                  validator: (v) {
+                    if (v == null || v.trim().isEmpty) return 'Please confirm your password';
+                    if (v != _passwordController.text) return 'Passwords do not match';
+                    return null;
+                  },
+                ),
+
                 const SizedBox(height: 24),
 
                 // Register Button
@@ -297,7 +323,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   child: _isLoading
                       ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                      : const Text('Register & Get ₹200 Bonus', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                      : const Text('Create Account', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
                 ),
 
                 const SizedBox(height: 16),
@@ -322,4 +348,3 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 }
-

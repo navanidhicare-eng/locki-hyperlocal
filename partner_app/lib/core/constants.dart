@@ -1,11 +1,23 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class PartnerConstants {
   static const String appName = 'Locki Partner';
   static const String appTagline = 'Earn More as a Hyperlocal Specialist';
 
-  // API base url
-  static const String baseUrl = 'http://localhost:5000/api';
+  // API base url (Dynamic: works on PC localhost & Mobile on Wi-Fi IP)
+  static String get baseUrl {
+    if (kIsWeb) {
+      try {
+        final host = Uri.base.host;
+        if (host.isNotEmpty && host != 'localhost' && host != '127.0.0.1') {
+          return 'http://$host:5000/api';
+        }
+      } catch (_) {}
+      return 'http://localhost:5000/api';
+    }
+    return 'http://192.168.1.2:5000/api';
+  }
 
   // Locki Brand Theme Colors
   static const Color primary = Color(0xFFDE4915); // Signature Locki Warm Vermilion / Burnt Orange

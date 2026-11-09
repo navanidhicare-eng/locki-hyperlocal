@@ -1,12 +1,23 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class AppConstants {
   static const String appName = 'Locki Hyperlocal';
   static const String appTagline = 'All Services At Your Doorstep in Minutes';
 
-  // API Configuration
-  // 10.0.2.2 for Android Emulator, localhost for Windows/Web, or local network IP
-  static const String baseUrl = 'http://127.0.0.1:5000/api';
+  // API Configuration (Dynamic: works on PC localhost & Mobile on Wi-Fi IP)
+  static String get baseUrl {
+    if (kIsWeb) {
+      try {
+        final host = Uri.base.host;
+        if (host.isNotEmpty && host != 'localhost' && host != '127.0.0.1') {
+          return 'http://$host:5000/api';
+        }
+      } catch (_) {}
+      return 'http://localhost:5000/api';
+    }
+    return 'http://192.168.1.2:5000/api';
+  }
 
   // Locki Brand Colors (Matching Official Locki Logo)
   static const Color primary = Color(0xFFDE4915); // Locki Warm Vermilion / Burnt Orange

@@ -20,6 +20,9 @@ const adminRoutes = require('./routes/adminRoutes');
 const locationRoutes = require('./routes/locationRoutes');
 const promotionRoutes = require('./routes/promotionRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
+const rentalRoutes = require('./routes/rentalRoutes');
+const productRoutes = require('./routes/productRoutes');
+const appUpdateRoutes = require('./routes/appUpdateRoutes');
 
 const app = express();
 const server = http.createServer(app);
@@ -73,6 +76,9 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/locations', locationRoutes);
 app.use('/api/promotions', promotionRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/rentals', rentalRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/app-updates', appUpdateRoutes);
 
 // 404 handler
 app.use((req, res) => {

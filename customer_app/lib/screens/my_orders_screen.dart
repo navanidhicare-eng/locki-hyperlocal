@@ -96,7 +96,12 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                                   decoration: BoxDecoration(
-                                    color: (isCompleted ? AppConstants.accentEmerald : AppConstants.accentGold).withOpacity(0.15),
+                                    color: (isCompleted
+                                            ? AppConstants.accentEmerald
+                                            : (o.orderStatus.toUpperCase() == 'CANCELLED'
+                                                ? Colors.red
+                                                : AppConstants.accentGold))
+                                        .withOpacity(0.15),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Text(
@@ -104,7 +109,11 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 11,
-                                      color: isCompleted ? AppConstants.accentEmerald : AppConstants.accentGold,
+                                      color: isCompleted
+                                          ? AppConstants.accentEmerald
+                                          : (o.orderStatus.toUpperCase() == 'CANCELLED'
+                                              ? const Color(0xFFDC2626)
+                                              : AppConstants.accentGold),
                                     ),
                                   ),
                                 ),
@@ -117,20 +126,13 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                             ),
                             const SizedBox(height: 4),
                             Text('Specialist: ${o.providerName}', style: const TextStyle(fontSize: 13, color: AppConstants.textMuted)),
-                            const SizedBox(height: 12),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'OTP PIN: ${o.otp}',
-                                  style: const TextStyle(fontWeight: FontWeight.bold, color: AppConstants.accentGold, fontSize: 13),
-                                ),
-                                Text(
-                                  '₹${o.amount.toInt()}',
-                                  style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 17, color: AppConstants.secondary),
-                                ),
-                              ],
-                            ),
+                            if (o.orderStatus.toUpperCase() != 'CANCELLED') ...[
+                              const SizedBox(height: 12),
+                              Text(
+                                'OTP PIN: ${o.otp}',
+                                style: const TextStyle(fontWeight: FontWeight.bold, color: AppConstants.accentGold, fontSize: 13),
+                              ),
+                            ],
                           ],
                         ),
                       ),

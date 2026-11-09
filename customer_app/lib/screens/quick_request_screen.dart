@@ -125,9 +125,7 @@ class _QuickRequestScreenState extends State<QuickRequestScreen> {
       customerName: _nameController.text.trim(),
       providerId: widget.preselectedProvider?['id']?.toString(),
       paymentMethod: _selectedPaymentMethod,
-      amount: (_selectedChildTask?['basePrice'] as num?)?.toDouble() ??
-          (_selectedSubCategory?['basePrice'] as num?)?.toDouble() ??
-          299.0,
+      amount: 0.0,
     );
 
     if (!mounted) return;
@@ -341,10 +339,9 @@ class _QuickRequestScreenState extends State<QuickRequestScreen> {
                       runSpacing: 8,
                       children: childList.map((ch) {
                         final isSelected = _selectedChildTask != null && _selectedChildTask!['id'] == ch['id'];
-                        final price = ch['basePrice'] != null ? ' (₹${ch['basePrice']})' : '';
                         return ChoiceChip(
                           label: Text(
-                            '${ch['name']}$price',
+                            ch['name']?.toString() ?? '',
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
@@ -369,7 +366,7 @@ class _QuickRequestScreenState extends State<QuickRequestScreen> {
                   ],
 
                   // STEP 4: Problem Description
-                  _buildSectionHeader('4. Describe Your Issue (సమస్యను వివరించండి)', Icons.description_rounded),
+                  _buildSectionHeader('4. Describe Your Issue', Icons.description_rounded),
                   const SizedBox(height: 8),
                   Container(
                     decoration: BoxDecoration(
@@ -382,7 +379,7 @@ class _QuickRequestScreenState extends State<QuickRequestScreen> {
                       maxLines: 3,
                       style: const TextStyle(fontSize: 14),
                       decoration: const InputDecoration(
-                        hintText: 'e.g. మా ఇంట్లో నల్లా నుంచి నీరు కారుతోంది / DTH నో-సిగ్నల్ వస్తోంది, వెంటనే అర్జెంట్‌గా సర్వీస్ కావాలి...',
+                        hintText: 'e.g. Water leaking from bathroom tap / DTH no-signal issue, need urgent service...',
                         hintStyle: TextStyle(color: Color(0xFF94A3B8), fontSize: 13),
                         contentPadding: EdgeInsets.all(14),
                         border: InputBorder.none,

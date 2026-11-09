@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:js' as js;
+import '../utils/js_interop.dart' as js_helper;
 import 'package:flutter/material.dart';
 import '../core/constants.dart';
 import '../core/anakapalli_locations.dart';
@@ -956,34 +956,32 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
   // Start Dedicated AI Live Camera Selfie & Liveness Scanner (Strictly Live Camera, No Gallery)
   void _startLiveSelfieScanner() {
     try {
-      js.context.callMethod('lokiOpenLiveSelfieScanner', [
-        js.allowInterop((resultStr) {
-          try {
-            final res = jsonDecode(resultStr.toString());
-            if (res['success'] == true && res['dataUrl'] != null) {
-              setState(() {
-                _livePhotoBase64 = res['dataUrl'].toString();
-                _livePhotoVerified = true;
-              });
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('✅ Live Human Selfie Verified & Captured successfully!'),
-                  backgroundColor: Colors.green,
-                ),
-              );
-            } else if (res['cancelled'] != true && res['message'] != null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Live Camera Error: ${res['message']}'),
-                  backgroundColor: Colors.red,
-                ),
-              );
-            }
-          } catch (e) {
-            debugPrint('Error parsing live selfie result: $e');
+      js_helper.openLiveSelfieScanner((resultStr) {
+        try {
+          final res = jsonDecode(resultStr.toString());
+          if (res['success'] == true && res['dataUrl'] != null) {
+            setState(() {
+              _livePhotoBase64 = res['dataUrl'].toString();
+              _livePhotoVerified = true;
+            });
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('✅ Live Human Selfie Verified & Captured successfully!'),
+                backgroundColor: Colors.green,
+              ),
+            );
+          } else if (res['cancelled'] != true && res['message'] != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Live Camera Error: ${res['message']}'),
+                backgroundColor: Colors.red,
+              ),
+            );
           }
-        }),
-      ]);
+        } catch (e) {
+          debugPrint('Error parsing live selfie result: $e');
+        }
+      });
     } catch (e) {
       debugPrint('Error starting live selfie scanner: $e');
     }
@@ -1139,26 +1137,23 @@ class _PartnerProfileScreenState extends State<PartnerProfileScreen> {
     required Function(String dataUrl, int sizeKb, String fileName) onSuccess,
   }) {
     try {
-      js.context.callMethod('lokiPickAndCompressImage', [
-        sourceType,
-        js.allowInterop((resultStr) {
-          try {
-            final res = jsonDecode(resultStr.toString());
-            if (res['success'] == true && res['dataUrl'] != null) {
-              final dataUrl = res['dataUrl'].toString();
-              final sizeKb = (res['fileSizeKb'] as num?)?.toInt() ?? 100;
-              final fileName = res['fileName']?.toString() ?? 'photo.jpg';
-              onSuccess(dataUrl, sizeKb, fileName);
-            } else if (res['cancelled'] != true && res['message'] != null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Upload failed: ${res['message']}'), backgroundColor: Colors.red),
-              );
-            }
-          } catch (e) {
-            debugPrint('Error parsing upload callback: $e');
+      js_helper.pickAndCompressImage(sourceType, (resultStr) {
+        try {
+          final res = jsonDecode(resultStr.toString());
+          if (res['success'] == true && res['dataUrl'] != null) {
+            final dataUrl = res['dataUrl'].toString();
+            final sizeKb = (res['fileSizeKb'] as num?)?.toInt() ?? 100;
+            final fileName = res['fileName']?.toString() ?? 'photo.jpg';
+            onSuccess(dataUrl, sizeKb, fileName);
+          } else if (res['cancelled'] != true && res['message'] != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Upload failed: ${res['message']}'), backgroundColor: Colors.red),
+            );
           }
-        })
-      ]);
+        } catch (e) {
+          debugPrint('Error parsing upload callback: $e');
+        }
+      });
     } catch (e) {
       debugPrint('Error triggering JS image picker: $e');
     }

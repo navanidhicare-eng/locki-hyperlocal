@@ -1,0 +1,22 @@
+{
+  "customer_app": {
+    "appId": "customer_app",
+    "appName": "Locki Customer",
+    "version": "1.0.0",
+    "buildNumber": 1,
+    "apkFileName": "customer_app.apk",
+    "changelog": "Fast Rental Marketplace, Verified Local Stores & Kirana Shopping",
+    "isForceUpdate": false,
+    "updatedAt": "2026-11-09T08:30:00.000Z"
+  },
+  "partner_app": {
+    "appId": "partner_app",
+    "appName": "Locki Partner",
+    "version": "1.0.0",
+    "buildNumber": 1,
+    "apkFileName": "partner_app.apk",
+    "changelog": "Multi-Business Store Switcher, HTML Compressed Photo Upload & Child Category Inventory",
+    "isForceUpdate": false,
+    "updatedAt": "2026-11-09T08:30:00.000Z"
+  }
+}

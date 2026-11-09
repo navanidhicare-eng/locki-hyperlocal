@@ -18,7 +18,6 @@
           "name": "Taps, Shower & Valves",
           "description": "Fix leaks, new fittings, washbasin pipe fix",
           "hasChildCategories": false,
-          "basePrice": 199,
           "duration": "30 mins",
           "childCategories": [],
           "subscriptionPlans": {
@@ -37,14 +36,12 @@
             {
               "id": "ch_tank_clean",
               "name": "Overhead Tank 5-Stage Chemical Wash",
-              "basePrice": 699,
               "duration": "90 mins",
               "description": "High pressure mud suction & UV disinfection"
             },
             {
               "id": "ch_motor_install",
               "name": "Submersible Pump Installation",
-              "basePrice": 499,
               "duration": "60 mins",
               "description": "Starter box connection & pipeline wiring"
             }
@@ -57,7 +54,8 @@
           }
         }
       ],
-      "iconUrl": "http://localhost:5000/uploads/categories/plumbing_tap.png"
+      "iconUrl": "http://localhost:5000/uploads/categories/plumbing_tap.png",
+      "businessType": "service"
     },
     {
       "id": "cat_electrical",
@@ -77,7 +75,6 @@
           "name": "Switchboard & Short Circuits",
           "description": "MCB tripping, internal wall short circuits, new points",
           "hasChildCategories": false,
-          "basePrice": 149,
           "duration": "25 mins",
           "childCategories": [],
           "subscriptionPlans": {
@@ -96,14 +93,12 @@
             {
               "id": "ch_ceiling_fan",
               "name": "Ceiling Fan Installation / Rewind",
-              "basePrice": 249,
               "duration": "30 mins",
               "description": "Regulator & capacitor replacement"
             },
             {
               "id": "ch_inverter",
               "name": "Heavy Duty Inverter Setup",
-              "basePrice": 599,
               "duration": "60 mins",
               "description": "Dual battery rack wiring & load balance"
             }
@@ -116,7 +111,8 @@
           }
         }
       ],
-      "iconUrl": "http://localhost:5000/uploads/categories/electrician_bolt.png"
+      "iconUrl": "http://localhost:5000/uploads/categories/electrician_bolt.png",
+      "businessType": "service"
     },
     {
       "id": "cat_delivery",
@@ -137,7 +133,6 @@
           "name": "30-Min Instant Courier",
           "description": "Keys, documents, lunchbox & small parcels up to 5kg",
           "hasChildCategories": false,
-          "basePrice": 49,
           "duration": "30 mins",
           "childCategories": [],
           "subscriptionPlans": {
@@ -152,7 +147,6 @@
           "name": "Large Box & Cargo Drop",
           "description": "Medium boxes up to 15kg with backpack carrier",
           "hasChildCategories": false,
-          "basePrice": 120,
           "duration": "45 mins",
           "childCategories": [],
           "subscriptionPlans": {
@@ -163,7 +157,8 @@
           }
         }
       ],
-      "iconUrl": "http://localhost:5000/uploads/categories/instant_delivery.png"
+      "iconUrl": "http://localhost:5000/uploads/categories/instant_delivery.png",
+      "businessType": "service"
     },
     {
       "id": "cat_mechanic",
@@ -187,7 +182,6 @@
             {
               "id": "ch_1609b260",
               "name": "Electric Bike",
-              "basePrice": 299,
               "duration": "30 mins",
               "description": ""
             }
@@ -204,7 +198,6 @@
           "name": "Four-Wheeler Emergency",
           "description": "Battery jumpstart & car breakdown diagnostic",
           "hasChildCategories": false,
-          "basePrice": 399,
           "duration": "30 mins",
           "childCategories": [],
           "subscriptionPlans": {
@@ -215,7 +208,8 @@
           }
         }
       ],
-      "iconUrl": "http://localhost:5000/uploads/categories/mechanic_tools.png"
+      "iconUrl": "http://localhost:5000/uploads/categories/mechanic_tools.png",
+      "businessType": "service"
     },
     {
       "id": "cat_shops",
@@ -235,7 +229,6 @@
           "name": "Daily Essentials & Groceries",
           "description": "Fresh milk, provisions, atta, dal & staples",
           "hasChildCategories": false,
-          "basePrice": 30,
           "duration": "20 mins",
           "childCategories": [],
           "subscriptionPlans": {
@@ -246,7 +239,8 @@
           }
         }
       ],
-      "iconUrl": "http://localhost:5000/uploads/categories/local_shop.png"
+      "iconUrl": "http://localhost:5000/uploads/categories/local_shop.png",
+      "businessType": "shop"
     },
     {
       "id": "cat_cleaning",
@@ -269,14 +263,12 @@
             {
               "id": "ch_1bhk",
               "name": "1 BHK Complete Home Shine",
-              "basePrice": 1499,
               "duration": "3-4 hours",
               "description": "Floor single-disc machine polish & bathroom descaling"
             },
             {
               "id": "ch_bath",
               "name": "Intense Bathroom Tile Scrub",
-              "basePrice": 499,
               "duration": "60 mins",
               "description": "Hard water stain removal & sanitization"
             }
@@ -293,7 +285,6 @@
           "name": "Cockroach & Bug Pest Control",
           "description": "Odorless herbal gel & spray treatment",
           "hasChildCategories": false,
-          "basePrice": 799,
           "duration": "60 mins",
           "childCategories": [],
           "subscriptionPlans": {
@@ -304,7 +295,8 @@
           }
         }
       ],
-      "iconUrl": "http://localhost:5000/uploads/categories/deep_cleaning.png"
+      "iconUrl": "http://localhost:5000/uploads/categories/deep_cleaning.png",
+      "businessType": "service"
     },
     {
       "id": "cat_appliances",
@@ -328,21 +320,18 @@
             {
               "id": "ch_split_ac",
               "name": "Split AC Deep Foam Jet Service",
-              "basePrice": 499,
               "duration": "45 mins",
               "description": "2X cooling booster coil pressure wash"
             },
             {
               "id": "ch_window_ac",
               "name": "Window AC Full Servicing",
-              "basePrice": 399,
               "duration": "30 mins",
               "description": "Filter cleaning, chemical spray & coil wash"
             },
             {
               "id": "ch_gas_refill",
               "name": "AC Gas Refill & Leak Fix",
-              "basePrice": 1499,
               "duration": "60 mins",
               "description": "R32/R410 refrigerant filling with pressure test"
             }
@@ -359,7 +348,6 @@
           "name": "Refrigerator Repair",
           "description": "Single door, double door & inverter fridge cooling issues",
           "hasChildCategories": false,
-          "basePrice": 299,
           "duration": "40 mins",
           "childCategories": [],
           "subscriptionPlans": {
@@ -378,14 +366,12 @@
             {
               "id": "ch_front_load",
               "name": "Front Load Drum & Motor Wash",
-              "basePrice": 449,
               "duration": "50 mins",
               "description": "Deep spin vibration & drum cleaning"
             },
             {
               "id": "ch_top_load",
               "name": "Top Load Pulsator Repair",
-              "basePrice": 349,
               "duration": "40 mins",
               "description": "Drain valve & belt replacement"
             }
@@ -402,7 +388,6 @@
           "name": "TV Repair",
           "description": "",
           "hasChildCategories": true,
-          "basePrice": null,
           "duration": null,
           "childCategories": [],
           "subscriptionPlans": {
@@ -413,11 +398,13 @@
           }
         }
       ],
-      "iconUrl": "http://localhost:5000/uploads/categories/appliance_repairs.png"
+      "iconUrl": "http://localhost:5000/uploads/categories/appliance_repairs.png",
+      "businessType": "service"
     },
     {
       "id": "cat_ab5c5cd1",
       "name": "Lease & Rental",
+      "businessType": "rental",
       "icon": "apartment",
       "color": "#F97316",
       "description": "Houses, apartments, shops & commercial spaces for lease and rent",
@@ -426,34 +413,190 @@
       ],
       "subCategories": [
         {
-          "id": "sub_res_rent",
-          "name": "Residential Rental",
-          "description": "Flats, independent houses, villas for rent",
-          "hasChildCategories": false,
-          "basePrice": 499,
-          "duration": "1-2 days",
-          "childCategories": [],
-          "subscriptionPlans": {
-            "1_month": 219,
-            "3_months": 499,
-            "6_months": 899,
-            "1_year": 1499
-          }
+          "id": "sub_dcab1be7",
+          "name": "Property & Real Estate Rentals",
+          "description": "",
+          "hasChildCategories": true,
+          "basePrice": null,
+          "duration": null,
+          "childCategories": [
+            {
+              "id": "ch_10c50ba4",
+              "name": "Residential",
+              "basePrice": 299,
+              "duration": "30 mins",
+              "description": ""
+            },
+            {
+              "id": "ch_8ba42ac8",
+              "name": "Commercial",
+              "basePrice": 299,
+              "duration": "30 mins",
+              "description": ""
+            },
+            {
+              "id": "ch_9ea97a33",
+              "name": "Function halls",
+              "basePrice": 299,
+              "duration": "30 mins",
+              "description": ""
+            }
+          ]
         },
         {
-          "id": "sub_comm_lease",
-          "name": "Commercial Lease",
-          "description": "Shops, offices, warehouses for lease",
-          "hasChildCategories": false,
-          "basePrice": 999,
-          "duration": "2-3 days",
-          "childCategories": [],
-          "subscriptionPlans": {
-            "1_month": 219,
-            "3_months": 499,
-            "6_months": 899,
-            "1_year": 1499
-          }
+          "id": "sub_422fa86a",
+          "name": "Vehicle Rentals",
+          "description": "",
+          "hasChildCategories": true,
+          "basePrice": null,
+          "duration": null,
+          "childCategories": [
+            {
+              "id": "ch_f529ebf4",
+              "name": "Self-drive cars,/bikes",
+              "basePrice": 299,
+              "duration": "30 mins",
+              "description": ""
+            },
+            {
+              "id": "ch_d73ce9e9",
+              "name": "Commercial / Goods",
+              "basePrice": 299,
+              "duration": "30 mins",
+              "description": ""
+            },
+            {
+              "id": "ch_ef9deb5e",
+              "name": "Agriculture",
+              "basePrice": 299,
+              "duration": "30 mins",
+              "description": ""
+            }
+          ]
+        },
+        {
+          "id": "sub_7e99c1f8",
+          "name": "Event & Party Supplies",
+          "description": "",
+          "hasChildCategories": true,
+          "basePrice": null,
+          "duration": null,
+          "childCategories": [
+            {
+              "id": "ch_ef95861b",
+              "name": "Furniture & Tent",
+              "basePrice": 299,
+              "duration": "30 mins",
+              "description": ""
+            },
+            {
+              "id": "ch_7046f475",
+              "name": "Audio & Visual",
+              "basePrice": 299,
+              "duration": "30 mins",
+              "description": ""
+            },
+            {
+              "id": "ch_eef6e095",
+              "name": "Catering Items",
+              "basePrice": 299,
+              "duration": "30 mins",
+              "description": ""
+            }
+          ]
+        },
+        {
+          "id": "sub_295a5d80",
+          "name": "Construction & Tools Equipment",
+          "description": "",
+          "hasChildCategories": true,
+          "basePrice": null,
+          "duration": null,
+          "childCategories": [
+            {
+              "id": "ch_ba538b5a",
+              "name": "Building Material:",
+              "basePrice": 299,
+              "duration": "30 mins",
+              "description": ""
+            },
+            {
+              "id": "ch_a0309a5c",
+              "name": "Power Tools",
+              "basePrice": 299,
+              "duration": "30 mins",
+              "description": ""
+            },
+            {
+              "id": "ch_8aa3aff8",
+              "name": "Heavy Machinery",
+              "basePrice": 299,
+              "duration": "30 mins",
+              "description": ""
+            }
+          ]
+        },
+        {
+          "id": "sub_c6d2f7f5",
+          "name": "Electronics & Cameras",
+          "description": "",
+          "hasChildCategories": true,
+          "basePrice": null,
+          "duration": null,
+          "childCategories": [
+            {
+              "id": "ch_48adff95",
+              "name": "Photography: DSLR cameras",
+              "basePrice": 299,
+              "duration": "30 mins",
+              "description": ""
+            },
+            {
+              "id": "ch_c33eed72",
+              "name": "Home Appliances",
+              "basePrice": 299,
+              "duration": "30 mins",
+              "description": ""
+            },
+            {
+              "id": "ch_ea67a114",
+              "name": "Office/ Laptops/, printers,",
+              "basePrice": 299,
+              "duration": "30 mins",
+              "description": ""
+            }
+          ]
+        },
+        {
+          "id": "sub_359cf77b",
+          "name": "Clothing & Jewelry",
+          "description": "",
+          "hasChildCategories": true,
+          "basePrice": null,
+          "duration": null,
+          "childCategories": [
+            {
+              "id": "ch_3e281563",
+              "name": "Bridal & Groom",
+              "basePrice": 299,
+              "duration": "30 mins",
+              "description": ""
+            },
+            {
+              "id": "ch_954ba312",
+              "name": "Jewelry",
+              "basePrice": 299,
+              "duration": "30 mins",
+              "description": ""
+            },
+            {
+              "id": "ch_2b1ece4a",
+              "name": "Kids: Fancy dress",
+              "basePrice": 299,
+              "duration": "30 mins",
+              "description": ""
+            }
+          ]
         }
       ],
       "servicesCount": 2,
@@ -475,7 +618,6 @@
           "name": "dth SERVICES",
           "description": "",
           "hasChildCategories": true,
-          "basePrice": null,
           "duration": null,
           "childCategories": [],
           "subscriptionPlans": {
@@ -488,7 +630,8 @@
       ],
       "servicesCount": 0,
       "active": true,
-      "iconUrl": "http://localhost:5000/uploads/categories/icons8-wi-fi-router-94_1793887970416.png"
+      "iconUrl": "http://localhost:5000/uploads/categories/icons8-wi-fi-router-94_1793887970416.png",
+      "businessType": "service"
     },
     {
       "id": "cat_782c9cbd",
@@ -502,7 +645,8 @@
       ],
       "subCategories": [],
       "servicesCount": 0,
-      "active": true
+      "active": true,
+      "businessType": "rental"
     }
   ],
   "services": [
@@ -622,7 +766,7 @@
       "name": "gandepalli prasad",
       "email": "customer@loki.com",
       "phone": "9010737882",
-      "passwordHash": ".7uitW75fEYTBekVlKzk0C.Z4sFgEVf49NwcwbqhOPtpi",
+      "passwordHash": "$2a$10$jFwsbLvh.7uitW75fEYTBekVlKzk0C.Z4sFgEVf49NwcwbqhOPtpi",
       "role": "customer",
       "address": "Station Road, Chodavaram Town",
       "createdAt": "2026-11-05T15:30:35.962Z"
@@ -639,7 +783,7 @@
       "category": "cat_bd22116b",
       "serviceName": "Service Specialist",
       "rating": 4.9,
-      "jobsCompleted": 19,
+      "jobsCompleted": 20,
       "isOnline": true,
       "kycStatus": "approved",
       "isProfileComplete": true,
@@ -694,7 +838,104 @@
       "subCategoryName": "dth SERVICES",
       "selectedChildServices": [],
       "subscriptionStatus": "active",
-      "leadsReceived": 315
+      "leadsReceived": 316,
+      "businesses": [
+        {
+          "id": "biz_prv_76fcc359_primary",
+          "businessType": "service",
+          "name": "sony dth services",
+          "tradeCategory": "cat_bd22116b",
+          "tradeCategoryName": "Cable Technicians",
+          "subCategoryId": "sub_1a3bdbe3",
+          "subCategoryName": "dth SERVICES",
+          "shopAddress": "Bisde rcm charch, Chodavaram Town, Chodavaram, Anakapalli, Chodavaram Town, Chodavaram, Anakapalli",
+          "phone": "9010737882",
+          "status": "approved",
+          "isDefault": true,
+          "isActive": false,
+          "dutyStatus": "ON DUTY",
+          "storeStatus": "OPEN",
+          "createdAt": "2026-11-05T11:13:46.468Z"
+        },
+        {
+          "id": "biz_1794041167366",
+          "businessType": "rental",
+          "name": "Sri Lakshmi Tent House & Event Rentals",
+          "tradeCategory": "rental_events",
+          "tradeCategoryName": "Tent House & Event Rentals",
+          "subCategoryId": "",
+          "subCategoryName": "",
+          "shopAddress": "Station Road, Chodavaram Town",
+          "phone": "9010737882",
+          "shopPhotoUrl": "",
+          "licenseDocUrl": "",
+          "status": "approved",
+          "isActive": false,
+          "dutyStatus": "OFF DUTY",
+          "storeStatus": "OPEN",
+          "createdAt": "2026-11-07T08:46:07.366Z",
+          "updatedAt": "2026-11-07T08:47:30.619Z"
+        },
+        {
+          "id": "biz_1794063393518",
+          "businessType": "shop",
+          "name": "Lakshmi Kirana & General Store",
+          "businessName": "Lakshmi Kirana & General Store",
+          "tradeCategory": "cat_shops",
+          "tradeCategoryName": "Local Shops & Kirana",
+          "subCategoryId": "sub_shops_kirana",
+          "subCategoryName": "Daily Essentials & Groceries",
+          "childCategoryId": "",
+          "childCategoryName": "",
+          "district": "Anakapalli",
+          "mandal": "Chodavaram",
+          "village": "Chodavaram Town",
+          "landmark": "",
+          "shopAddress": "Near RTC Complex, Chodavaram",
+          "phone": "9010737882",
+          "shopTimings": {
+            "open": "07:00 AM",
+            "close": "09:30 PM",
+            "workingDays": "All Days"
+          },
+          "shopPhotoUrl": "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=800&auto=format&fit=crop&q=80",
+          "licenseDocUrl": "",
+          "status": "approved",
+          "isActive": false,
+          "dutyStatus": "OFF DUTY",
+          "storeStatus": "OPEN",
+          "createdAt": "2026-11-07T14:56:33.518Z",
+          "updatedAt": "2026-11-07T14:56:49.409Z"
+        },
+        {
+          "id": "biz_1794107467108",
+          "businessType": "rental",
+          "name": "self driving cars",
+          "businessName": "self driving cars",
+          "tradeCategory": "cat_ab5c5cd1",
+          "tradeCategoryName": "Lease & Rental",
+          "subCategoryId": "sub_422fa86a",
+          "subCategoryName": "Vehicle Rentals",
+          "childCategoryId": "ch_f529ebf4",
+          "childCategoryName": "Self-drive cars,/bikes",
+          "district": "Anakapalli",
+          "mandal": "Chodavaram",
+          "village": "Chodavaram Town",
+          "landmark": "RCM",
+          "shopAddress": "RCM, Chodavaram Town, Chodavaram, Anakapalli",
+          "phone": "9010737882",
+          "shopTimings": "9:00 AM - 9:00 PM",
+          "shopPhotoUrl": "",
+          "licenseDocUrl": "",
+          "status": "approved",
+          "isActive": true,
+          "dutyStatus": "OFF DUTY",
+          "storeStatus": "OPEN",
+          "createdAt": "2026-11-08T03:11:07.108Z",
+          "updatedAt": "2026-11-08T03:24:36.768Z"
+        }
+      ],
+      "activeBusinessId": "biz_1794107467108"
     },
     {
       "id": "prv_plumber_01",
@@ -741,9 +982,140 @@
       "shopName": "Sri Venkateswara Electricals",
       "createdAt": "2026-11-05T14:59:10.197Z",
       "isProfileComplete": true
+    },
+    {
+      "id": "prv_balaji_store",
+      "name": "Sri Balaji Supermarket & Kirana",
+      "phone": "9848022338",
+      "category": "cat_shops",
+      "categoryName": "Local Shops & Kirana",
+      "subCategoryId": "sub_shops_kirana",
+      "subCategoryName": "Daily Essentials & Groceries",
+      "shopName": "Sri Balaji Supermarket & Kirana",
+      "shopAddress": "Main Road, Near Gandhi Statue, Chodavaram",
+      "district": "Anakapalli",
+      "mandal": "Chodavaram",
+      "village": "Chodavaram Town",
+      "rating": 4.8,
+      "jobsCompleted": 35,
+      "isOnline": true,
+      "kycStatus": "approved",
+      "subscriptionStatus": "active",
+      "shopTimings": {
+        "open": "06:30 AM",
+        "close": "10:00 PM",
+        "workingDays": "All Days"
+      },
+      "shopPhotoUrl": "https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=800&auto=format&fit=crop&q=80",
+      "businessType": "shop",
+      "isProfileComplete": true
     }
   ],
   "orders": [
+    {
+      "id": "ORD-800548",
+      "customerId": "cust_1793954785974",
+      "customerName": "Gandepalli Prasad",
+      "customerPhone": "9010737882",
+      "customerAddress": "Station Road, Chodavaram Town",
+      "customerMandal": "Chodavaram",
+      "customerDistrict": "Anakapalli",
+      "categoryId": "cat_electrical",
+      "categoryName": "Electricians",
+      "subCategoryId": "sub_wiring",
+      "subCategoryName": "Switchboard & Short Circuits",
+      "childTaskId": null,
+      "childTaskName": null,
+      "problemDescription": "",
+      "serviceName": "Switchboard & Short Circuits",
+      "amount": 299,
+      "paymentMethod": "Cash on Service / Direct UPI",
+      "paymentStatus": "PENDING",
+      "orderStatus": "PENDING",
+      "providerId": null,
+      "providerName": "Broadcasting to nearby specialists...",
+      "providerPhone": null,
+      "otp": "4538",
+      "createdAt": "2026-11-06T08:46:25.974Z"
+    },
+    {
+      "id": "ORD-273914",
+      "customerId": "cust_1793954672113",
+      "customerName": "Gandepalli Prasad",
+      "customerPhone": "9010737882",
+      "customerAddress": "Station Road, Chodavaram Town",
+      "customerMandal": "Chodavaram",
+      "customerDistrict": "Anakapalli",
+      "categoryId": "cat_bd22116b",
+      "categoryName": "Cable Technicians",
+      "subCategoryId": "sub_1a3bdbe3",
+      "subCategoryName": "dth SERVICES",
+      "childTaskId": null,
+      "childTaskName": null,
+      "problemDescription": "",
+      "serviceName": "dth SERVICES",
+      "amount": 299,
+      "paymentMethod": "Cash on Service / Direct UPI",
+      "paymentStatus": "PENDING",
+      "orderStatus": "CANCELLED",
+      "providerId": null,
+      "providerName": "Broadcasting to nearby specialists...",
+      "providerPhone": null,
+      "otp": "1360",
+      "createdAt": "2026-11-06T08:44:32.113Z"
+    },
+    {
+      "id": "ORD-857115",
+      "customerId": "cust_1793951073544",
+      "customerName": "Gandepalli Prasad",
+      "customerPhone": "9010737882",
+      "customerAddress": "Station Road, Chodavaram Town",
+      "customerMandal": "Chodavaram",
+      "customerDistrict": "Anakapalli",
+      "categoryId": "cat_bd22116b",
+      "categoryName": "Cable Technicians",
+      "subCategoryId": "sub_1a3bdbe3",
+      "subCategoryName": "dth SERVICES",
+      "childTaskId": null,
+      "childTaskName": null,
+      "problemDescription": "ma tv raladu rababu",
+      "serviceName": "dth SERVICES",
+      "amount": 299,
+      "paymentMethod": "Cash on Service / Direct UPI",
+      "paymentStatus": "PAID",
+      "orderStatus": "COMPLETED",
+      "providerId": "prv_76fcc359",
+      "providerName": "gandepalli prasad",
+      "providerPhone": null,
+      "otp": "3147",
+      "createdAt": "2026-11-06T07:44:33.544Z"
+    },
+    {
+      "id": "ORD-732074",
+      "customerId": "cust_1793944187939",
+      "customerName": "Gandepalli Prasad",
+      "customerPhone": "9010737882",
+      "customerAddress": "Station Road, Chodavaram Town",
+      "customerMandal": "Chodavaram",
+      "customerDistrict": "Anakapalli",
+      "categoryId": "cat_bd22116b",
+      "categoryName": "Cable Technicians",
+      "subCategoryId": "sub_1a3bdbe3",
+      "subCategoryName": "dth SERVICES",
+      "childTaskId": null,
+      "childTaskName": null,
+      "problemDescription": "matv ravatam ladu dish signel raladu",
+      "serviceName": "dth SERVICES",
+      "amount": 299,
+      "paymentMethod": "Cash on Service / Direct UPI",
+      "paymentStatus": "PENDING",
+      "orderStatus": "CANCELLED",
+      "providerId": null,
+      "providerName": "Broadcasting to nearby specialists...",
+      "providerPhone": null,
+      "otp": "3445",
+      "createdAt": "2026-11-06T05:49:47.940Z"
+    },
     {
       "id": "ORD-361954",
       "customerId": "cust_prasad_01",
@@ -763,7 +1135,7 @@
       "amount": 299,
       "paymentMethod": "Cash on Service / Direct UPI",
       "paymentStatus": "PENDING",
-      "orderStatus": "PENDING",
+      "orderStatus": "CANCELLED",
       "providerId": null,
       "providerName": "Broadcasting to nearby specialists...",
       "providerPhone": null,
@@ -815,7 +1187,7 @@
       "amount": 299,
       "paymentMethod": "Cash on Service / UPI",
       "paymentStatus": "PENDING",
-      "orderStatus": "PENDING",
+      "orderStatus": "CANCELLED",
       "providerId": null,
       "providerName": "Broadcasting to nearby specialists...",
       "providerPhone": null,
@@ -4949,247 +5321,180 @@
   ],
   "promotions": [
     {
-      "id": "promo_hero_1",
-      "type": "hero",
-      "tag": "100% SATISFACTION GUARANTEE",
-      "title": "Certified & Background Verified",
-      "subtitle": "Government Aadhaar & Police verified skilled technicians",
-      "cta": "Explore Fixes",
-      "badge": "VERIFIED",
-      "imageUrl": "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=900&auto=format&fit=crop&q=80",
-      "colors": [
-        "#064e3b",
-        "#047857",
-        "#10b981"
-      ],
-      "icon": "shield-check",
-      "active": true,
-      "impressions": 1420,
-      "clicks": 312,
-      "priority": 1,
-      "createdAt": "2026-11-05T06:33:06.306Z"
-    },
-    {
-      "id": "promo_hero_2",
-      "type": "hero",
-      "tag": "30-MIN DOORSTEP ARRIVAL",
-      "title": "Emergency Plumbing & Wiring",
-      "subtitle": "Flat 20% OFF on all repair bookings today",
-      "cta": "Book Instant",
-      "badge": "FLAT 20% OFF",
-      "imageUrl": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=900&auto=format&fit=crop&q=80",
-      "colors": [
-        "#7c2d12",
-        "#c2410c",
-        "#f97316"
-      ],
-      "icon": "zap",
-      "active": true,
-      "impressions": 980,
-      "clicks": 194,
-      "priority": 2,
-      "createdAt": "2026-11-05T06:33:06.306Z"
-    },
-    {
-      "id": "promo_hero_3",
-      "type": "hero",
-      "tag": "HYPERLOCAL EXPRESS",
-      "title": "Medicines & Daily Kirana Drop",
-      "subtitle": "Delivered to your doorstep in 15 mins",
-      "cta": "Send Package",
-      "badge": "15 MINS",
-      "imageUrl": "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=900&auto=format&fit=crop&q=80",
-      "colors": [
-        "#1e1b4b",
-        "#4338ca",
-        "#6366f1"
-      ],
-      "icon": "package",
-      "active": true,
-      "impressions": 870,
-      "clicks": 215,
-      "priority": 3,
-      "createdAt": "2026-11-05T06:33:06.306Z"
-    },
-    {
-      "id": "promo_spotlight_1",
+      "id": "promo_spotlight_1793975615292",
       "type": "spotlight",
-      "tag": "🌟 GRAND SHOWROOM OPENING",
-      "title": "Sri Krishna Jewellers",
-      "offer": "Flat 25% OFF on Making Charges + Free Gold Coin!",
-      "description": "Exclusive 916 Hallmark Gold & Diamond Collection. Grand opening celebration live today!",
-      "location": "Main Road, Madhapur (Opp. Metro Pillar 14)",
-      "imageUrl": "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=900&auto=format&fit=crop&q=80",
-      "badge": "GOLD SHOP OPENING",
+      "title": "Ad Banner",
+      "tag": "BANNER",
+      "badge": "ACTIVE",
+      "offer": "",
+      "subtitle": "",
+      "description": "",
+      "location": "Hyderabad (All Localities)",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJNCyzCX_P_8k0Wsgbok3BvpjbeuPwpd8nAIUMWW4lGchVq8j-jds-_zA&s=10",
+      "cta": "View",
       "colors": [
-        "#381A00",
-        "#B45309",
-        "#D97706"
-      ],
-      "cta": "Explore Gold Offers",
-      "icon": "diamond",
-      "active": true,
-      "impressions": 2850,
-      "clicks": 640,
-      "priority": 1,
-      "createdAt": "2026-11-05T06:33:06.306Z"
-    },
-    {
-      "id": "promo_spotlight_2",
-      "type": "spotlight",
-      "tag": "🛍️ MEGA RETAIL LAUNCH",
-      "title": "South India Silk & Fashion Mall",
-      "offer": "Buy 1 Get 1 Free on Designer Silk Sarees",
-      "description": "Celebrity ribbon-cutting & inaugural mega discounts on all wedding collections & ethnic wear.",
-      "location": "Jubilee Hills Checkpost, Road No. 36",
-      "imageUrl": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=900&auto=format&fit=crop&q=80",
-      "badge": "MALL OPENING",
-      "colors": [
-        "#1E1B4B",
-        "#4338CA",
-        "#6366F1"
-      ],
-      "cta": "View Collections",
-      "icon": "shopping-bag",
-      "active": true,
-      "impressions": 2100,
-      "clicks": 480,
-      "priority": 2,
-      "createdAt": "2026-11-05T06:33:06.306Z"
-    },
-    {
-      "id": "promo_spotlight_3",
-      "type": "spotlight",
-      "tag": "🍽️ FOOD MEGA INAUGURATION",
-      "title": "Paradise Royal Dum Biryani",
-      "offer": "Complimentary Dessert & Buy 2 Get 1 Free",
-      "description": "Authentic Nizami flavors, family dining & royal ambience. Inaugural festive feast for all foodies!",
-      "location": "Hitec City, Cyber Towers Road",
-      "imageUrl": "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=900&auto=format&fit=crop&q=80",
-      "badge": "NEW BRANCH OPEN",
-      "colors": [
-        "#310B0B",
-        "#991B1B",
-        "#DC2626"
-      ],
-      "cta": "Reserve Table / Order",
-      "icon": "utensils",
-      "active": true,
-      "impressions": 1950,
-      "clicks": 390,
-      "priority": 3,
-      "createdAt": "2026-11-05T06:33:06.306Z"
-    },
-    {
-      "id": "promo_spotlight_4",
-      "type": "spotlight",
-      "tag": "⚡ SMART TECH SHOWROOM",
-      "title": "Croma Mega Electronics",
-      "offer": "Up to 50% OFF on 4K Smart TVs & Smartphones",
-      "description": "Exclusive inaugural zero-cost EMI + free soundbar with select appliances. Grand opening week!",
-      "location": "Inorbit Mall Road, Mindspace Circle",
-      "imageUrl": "https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=900&auto=format&fit=crop&q=80",
-      "badge": "TECH LAUNCH",
-      "colors": [
-        "#0F172A",
-        "#0284C7",
-        "#0EA5E9"
-      ],
-      "cta": "Grab Electronics Deals",
-      "icon": "tv",
-      "active": true,
-      "impressions": 1620,
-      "clicks": 310,
-      "priority": 4,
-      "createdAt": "2026-11-05T06:33:06.306Z"
-    },
-    {
-      "id": "promo_deal_1",
-      "type": "deal",
-      "tag": "APPLIANCE CARE",
-      "badge": "LIMITED SLOTS",
-      "title": "AC Gas Refill & Jet Foam Service",
-      "subtitle": "Pre-summer discount starts at just ₹399",
-      "offer": "Starts at ₹399",
-      "cta": "Grab Deal",
-      "imageUrl": "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=800&auto=format&fit=crop&q=80",
-      "colors": [
-        "#2A1706",
-        "#9A4A0A",
-        "#D97706"
-      ],
-      "icon": "snowflake",
-      "active": true,
-      "impressions": 1350,
-      "clicks": 290,
-      "priority": 1,
-      "createdAt": "2026-11-05T06:33:06.306Z"
-    },
-    {
-      "id": "promo_deal_2",
-      "type": "deal",
-      "tag": "EMERGENCY FIX",
-      "badge": "FLAT ₹100 OFF",
-      "title": "Bike & Car Breakdown Assistance",
-      "subtitle": "Mechanic reaches in 15 mins with battery jumpstart",
-      "offer": "Flat ₹100 OFF",
-      "cta": "Get Help",
-      "imageUrl": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&auto=format&fit=crop&q=80",
-      "colors": [
-        "#2B1B2A",
-        "#831843",
-        "#BE185D"
-      ],
-      "icon": "car",
-      "active": true,
-      "impressions": 1780,
-      "clicks": 410,
-      "priority": 2,
-      "createdAt": "2026-11-05T06:33:06.306Z"
-    },
-    {
-      "id": "promo_deal_3",
-      "type": "deal",
-      "tag": "INSTANT COURIER",
-      "badge": "FASTEST PICKUP",
-      "title": "Pick & Drop Any Item Across City",
-      "subtitle": "Medicines, keys, food, documents within 20 mins",
-      "offer": "Flat ₹40 OFF",
-      "cta": "Order Drop",
-      "imageUrl": "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=800&auto=format&fit=crop&q=80",
-      "colors": [
-        "#062822",
-        "#065F46",
-        "#059669"
-      ],
-      "icon": "bike",
-      "active": true,
-      "impressions": 940,
-      "clicks": 180,
-      "priority": 3,
-      "createdAt": "2026-11-05T06:33:06.306Z"
-    },
-    {
-      "id": "promo_deal_4",
-      "type": "deal",
-      "tag": "HOME MAKEOVER",
-      "badge": "FLAT ₹300 OFF",
-      "title": "Deep Home Cleaning & Pest Shield",
-      "subtitle": "Full bathroom, kitchen & sofa sanitization",
-      "offer": "Flat ₹300 OFF",
-      "cta": "Book Pro",
-      "imageUrl": "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&auto=format&fit=crop&q=80",
-      "colors": [
-        "#1E1B4B",
-        "#3730A3",
-        "#4F46E5"
+        "#1E293B",
+        "#334155",
+        "#475569"
       ],
       "icon": "sparkles",
+      "promoCode": "",
+      "voucherValue": "",
+      "giftNote": "",
+      "perks": [],
+      "expiryDate": null,
       "active": true,
-      "impressions": 1120,
-      "clicks": 230,
-      "priority": 4,
-      "createdAt": "2026-11-05T06:33:06.306Z"
+      "priority": 1,
+      "impressions": 0,
+      "clicks": 0,
+      "createdAt": "2026-11-06T14:33:35.292Z"
+    },
+    {
+      "id": "promo_deal_1793975565307",
+      "type": "deal",
+      "title": "Ad Banner",
+      "tag": "BANNER",
+      "badge": "ACTIVE",
+      "offer": "",
+      "subtitle": "",
+      "description": "",
+      "location": "Hyderabad (All Localities)",
+      "imageUrl": "https://mnt.com.pk/cdn/shop/articles/biryani-calories-how-many-calories-are-in-1-plate-biryani-chicken-mutton-beef-weight-loss-guide-3718871.webp?v=1786013232",
+      "cta": "View",
+      "colors": [
+        "#1E293B",
+        "#334155",
+        "#475569"
+      ],
+      "icon": "sparkles",
+      "promoCode": "",
+      "voucherValue": "",
+      "giftNote": "",
+      "perks": [],
+      "expiryDate": null,
+      "active": true,
+      "priority": 1,
+      "impressions": 0,
+      "clicks": 0,
+      "createdAt": "2026-11-06T14:32:45.307Z"
+    },
+    {
+      "id": "promo_deal_1793975495868",
+      "type": "deal",
+      "title": "Ad Banner",
+      "tag": "BANNER",
+      "badge": "ACTIVE",
+      "offer": "",
+      "subtitle": "",
+      "description": "",
+      "location": "Hyderabad (All Localities)",
+      "imageUrl": "https://img.staticmb.com/mbcontent/images/crop/uploads/ver2/XIwvQlc61t8ZIpanz4mAnTU30HNM6VMlnOtTPCthv6Hiyg/feature-mop-home_600_900.jpg",
+      "cta": "View",
+      "colors": [
+        "#1E293B",
+        "#334155",
+        "#475569"
+      ],
+      "icon": "sparkles",
+      "promoCode": "",
+      "voucherValue": "",
+      "giftNote": "",
+      "perks": [],
+      "expiryDate": null,
+      "active": true,
+      "priority": 1,
+      "impressions": 0,
+      "clicks": 0,
+      "createdAt": "2026-11-06T14:31:35.868Z"
+    },
+    {
+      "id": "promo_spotlight_1793975388307",
+      "type": "spotlight",
+      "title": "Ad Banner",
+      "tag": "BANNER",
+      "badge": "ACTIVE",
+      "offer": "",
+      "subtitle": "",
+      "description": "",
+      "location": "Hyderabad (All Localities)",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAXCIyZY8lNQt7uOrXJSSE13brzLn3SjnB7G0IqbY-sv97GskuXSIhBtY&s=10",
+      "cta": "View",
+      "colors": [
+        "#1E293B",
+        "#334155",
+        "#475569"
+      ],
+      "icon": "sparkles",
+      "promoCode": "",
+      "voucherValue": "",
+      "giftNote": "",
+      "perks": [],
+      "expiryDate": null,
+      "active": true,
+      "priority": 1,
+      "impressions": 0,
+      "clicks": 0,
+      "createdAt": "2026-11-06T14:29:48.307Z"
+    },
+    {
+      "id": "promo_spotlight_1793975157687",
+      "type": "hero",
+      "title": "Optical fiber cable work",
+      "tag": "BANNER",
+      "badge": "ACTIVE",
+      "offer": "",
+      "subtitle": "",
+      "description": "",
+      "location": "",
+      "imageUrl": "https://www.enet.ie/wp-content/uploads/2025/08/Who-we-are-1200x500.jpeg",
+      "cta": "View",
+      "colors": [
+        "#1E293B",
+        "#334155",
+        "#475569"
+      ],
+      "icon": "sparkles",
+      "promoCode": "",
+      "voucherValue": "",
+      "giftNote": "",
+      "perks": [],
+      "expiryDate": null,
+      "active": true,
+      "priority": 2,
+      "impressions": 0,
+      "clicks": 0,
+      "createdAt": "2026-11-06T14:25:57.687Z",
+      "storeName": "Optical fiber cable work",
+      "updatedAt": "2026-11-06T14:26:39.394Z"
+    },
+    {
+      "id": "promo_hero_1793973374629",
+      "type": "hero",
+      "title": "AI",
+      "tag": "BANNER",
+      "badge": "ACTIVE",
+      "offer": "",
+      "subtitle": "",
+      "description": "",
+      "location": "Hyderabad (All Localities)",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOcglybt0OOJzONULT77celS49uxagPKWohsXMTeFKKj2GAZ3quNESD1Y&s=10",
+      "cta": "View",
+      "colors": [
+        "#1E293B",
+        "#334155",
+        "#475569"
+      ],
+      "icon": "sparkles",
+      "promoCode": "",
+      "voucherValue": "",
+      "giftNote": "",
+      "perks": [],
+      "expiryDate": null,
+      "active": true,
+      "priority": 1,
+      "impressions": 0,
+      "clicks": 0,
+      "createdAt": "2026-11-06T13:56:14.629Z"
     },
     {
       "id": "promo_popup_1",
@@ -5221,6 +5526,427 @@
       "clicks": 980,
       "priority": 1,
       "createdAt": "2026-11-05T06:33:06.306Z"
+    }
+  ],
+  "rentals": [
+    {
+      "id": "rent_1794207410485",
+      "postedBy": "partner",
+      "userId": null,
+      "providerId": "prv_76fcc359",
+      "businessId": "biz_1794107467108",
+      "businessName": "self driving cars",
+      "userName": "gandepalli prasad",
+      "phone": "9010737882",
+      "whatsappPhone": "9010737882",
+      "listingType": "store",
+      "category": "Vehicle Rentals",
+      "categoryName": "Lease & Rental",
+      "subCategory": "Vehicle Rentals",
+      "childCategory": "Commercial / Goods",
+      "title": "tractra",
+      "description": "adksfasl;f;lasf;as;lfl;s;lk;sk;lfskl;sl;fkl;sfl;sl;fklskfl;skfks",
+      "rentPrice": 1000,
+      "rentPeriod": "Day",
+      "deposit": 0,
+      "stockCount": 1,
+      "images": [
+        "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&auto=format&fit=crop"
+      ],
+      "location": "Chodavaram, Anakapalli",
+      "district": "Anakapalli",
+      "mandal": "",
+      "village": "",
+      "landmark": "",
+      "latitude": null,
+      "longitude": null,
+      "specifications": {},
+      "status": "available",
+      "viewsCount": 0,
+      "isApproved": true,
+      "createdAt": "2026-11-09T06:56:50.485Z"
+    },
+    {
+      "id": "rent_1794049453794",
+      "postedBy": "customer",
+      "userId": null,
+      "providerId": null,
+      "businessId": null,
+      "businessName": "",
+      "userName": "Verified User",
+      "phone": "9010737882",
+      "whatsappPhone": "9010737882",
+      "listingType": "owner",
+      "category": "properties",
+      "categoryName": "Properties & Real Estate",
+      "subCategory": "Houses & Flats (1BHK, 2BHK)",
+      "childCategory": "",
+      "title": "Spacious 2BHK House for Rent near Main Road",
+      "description": "chodavram",
+      "rentPrice": 5000,
+      "rentPeriod": "month",
+      "deposit": 10000,
+      "stockCount": 1,
+      "images": [
+        "data:image/jpeg;base64,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",
+        "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5Ojf/2wBDAQoKCg0MDRoPDxo3JR8lNzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzf/wAARCABeAF4DASIAAhEBAxEB/8QAGwAAAgMBAQEAAAAAAAAAAAAAAAYEBQcDAgH/xAA9EAACAQMBBAQLBwIHAAAAAAABAgMABAURBhIhMRNBYXEVIiM0UVRzgZGSsRQyM0JyocEl0TVEYmOCk+H/xAAZAQADAQEBAAAAAAAAAAAAAAAABQYEAwH/xAAyEQABAwIDBAcIAwAAAAAAAAABAAIDBBEFEiExQVGhExUzNFJxkQYUFiKBweHwYdHx/9oADAMBAAIRAxEAPwDDaKKKEIooooQiiiuttbT3cyw20TyyudFRF1JoQuVe0hkdHdI3ZU+8wUkL3+im/F7IRQATZqUEjj9mifl+t+Q7hr3irc5a3tlW3tIdy3X8sK7qD3fm7zWSSraDZguU1psJmlGZ/wAo5+izaini+weNyimazZbebrKDxCe1er3fClXJYq8xraXMXiH7si8VbuNdYqhkmzbwWapoZqfVw04jYoNFFFdljRRRRQhFFFFCFabO42HKX5huZzFGqFjugFm7Brw99OsU1njYWt8VbqgPBip1Lfqfme4cOykDFjeyVqp5GZR+9ajhsGL65aBJAm6pbUrr10vq8xcG30O5UeDMh6J0rhq3eqV1muTrMxI6lHACui2YI4imjJ7OPjbNrhrhHCkDdCac/fXe22XkntophdoodA2nRnhr76zZH3ygJ37zThgeTp9UmPZFG34mKMOsV6F26KY7uMMjcGO7qD3imSLCvLlZsf06hogSX3efLq99fcrs0bOzkuGuFcLp4oTTXU6V5lcRcjYvXywFwZfU/dZ3tDi7CK1N5Zv0Z1A6IHVW19HWO6lumDa+NYri3VQANwn96X6Z05JjBJuo/EmMZUuYwWARRRXuKKSaRY4kZ3bgFUak13WBeK72lpcXswitYXlc9Sjl2n0Cr3H7NbukmTk3AOPQxkb3/JuQ/c1exaRw9BYQIkXoUaKe0nmx76YQYdI/V+g5rFNWsZo3U8kqW+Nu8fl7IXUJQGdNGBBU8RyI4VqmCyMWNvnnnR3UoV0TTXXUemlhXuIPx4wRrrqo1HvFW2Ku8dLOPCIcREaaxk6A+n01wrsIlLg+A3t6/lOMGxqmjifDU6Zt42fhMGd2gtcjjntoYZldmUgvppwNd7PaizgtIYWt5yyIFJG7odB31Fy+LxsOIa9sG3/GUBhIWHE1OsdnrCazgleNizxhj455kUjcyVshBOqpA+jNO02OW5+38qqt8zBFnbm/aKUxyggKNN4cv7V2zO0Ftf4+W2ihmVn00LaacDrXO1xdrJtBdWToTDGCVG8eHL+9SM5hbOzxks8EZV1K6HeJ5nSuYD8p14ruXU3TMFjfS32WU7aed2/sz9aXKY9tPO7f2Z+tLlMKbsgpnFe+Sfu4L6NNRryp2xhtUgC4uIaMNGccz+pv4FJFPuxKBsQTpx6Vv4pzhhHSkWU/iJyxZlMgtA5BndT/AKdRoKs4YEVR90L1HWlQQqSdQOdXN7Epw+PUgEAfxT2xSeaM3AzbVdGCJxugqT2EGq26xsepaJ1R+wio+AiRMmhVVB3G5VBuIUM8p3V132+tGUrnHEWyFodyUwSXVorI2pjb7wXird4pgtNq75LaNEhgCqoUaqSdB76hwxKMKpAHC3P0NMuHjjNrCGRT5NeY7KnMcF3tA0PHf5Kx9mZh0UjnjMAbWvp524peizNzFkZb5ViMso0YFTu9XIa9ldb/AGgvL61e3mSEI2mpVSDwOvpqxx0aHam+TdG6FOg07qm7TQxphpmVACCvEDtFTgY7KTfirJ08XTMbk1NteH+LHts/Orf2Z+tLtMW2XnVv7M/Wl2mFN2QUzi3fZP3cEVoewf8AgxP+830FZ5WhbCn+in2zfQU3wzt/opvFu7/UKzGVxY/IP+j/AMqVLf2cVtDNIPJSfh+T1/bqqk+wXXq0ny1NubaaSwtI1icsg8ZQOI4VQ2SV8UdxYn1U60yVlcziK3HlCCR5Ld4d9c3y2NR2VgN4Eg+R6/hUTGWk8F4skkLooUjUio0ljctK7C3kILEg7vbRlXghjzkXPqryaVJcc8kX4bRErw04aeiotrb5oRo0TzBSoI0l6uqvYVo8V0bAqywkEHq4VeWF5aLbQg3MIIjUEFx6KmcdaDIy53FWXsm90VPLkF/m89yoLZck19KsLy/agD0hD6H4/Cu18mYW2Y3sk5h1G8Hk1HZU7FTwLtHeyPNGsbKd1iwAPEddT9o7q2kw8yxXELuSuiq4J5ip3IMpN1amokEzG5RY23LJNsfObf2Z+tL1MG2HnNv+g/Wl+mFN2QUvi3fZP3cEU57I5OytMYY7m5jifpGO6x46cKTKK3U85gfnAuk9RA2dmRxWn+HcX6/B81ffD2L9fg+asvord1tJ4Ql/U8XiK1EZ7F+vwfNX3w7i/X7f5qy2ijraTwhHU8XiPJafPnMW0Eii/gJKkAb3ZVQmSsB/mofjSPRS2ueaxwLtLcE+wec4WxzIxfMb6/hPYylh63D81HhXH+tw/GkSisHuTOKc/EM/gHP+1dbTXMFzPCYJVkCoQSp5capaKK0sYGNDQk1TOaiUyuFiV//Z"
+      ],
+      "location": "Near RCM charch, Chodavaram Town, Chodavaram",
+      "district": "Anakapalli",
+      "mandal": "Chodavaram",
+      "village": "Chodavaram Town",
+      "landmark": "Near RCM charch",
+      "latitude": 17.829363,
+      "longitude": 82.928413,
+      "specifications": {
+        "bhk": "2 BHK",
+        "furnishing": "Semi-Furnished",
+        "facing": "East",
+        "preferredTenant": "Family Only",
+        "amenities": [
+          "24x7 Water",
+          "Car Parking"
+        ]
+      },
+      "status": "available",
+      "viewsCount": 0,
+      "isApproved": true,
+      "createdAt": "2026-11-07T11:04:13.794Z"
+    },
+    {
+      "id": "rent_1794046042368",
+      "postedBy": "customer",
+      "userId": null,
+      "providerId": null,
+      "businessId": null,
+      "businessName": "",
+      "userName": "Verified User",
+      "phone": "9010737882",
+      "whatsappPhone": "9010737882",
+      "listingType": "owner",
+      "category": "properties",
+      "categoryName": "Properties & Real Estate",
+      "subCategory": "Plots & Open Lands",
+      "childCategory": "",
+      "title": "Prime 250 Sq. Yards Commercial/Residential Plot",
+      "description": "Corner plot with 40ft road, boundary wall and clear title. Ideal for godown, parking or house construction.",
+      "rentPrice": 5000,
+      "rentPeriod": "month",
+      "deposit": 10000,
+      "stockCount": 1,
+      "images": [
+        "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&auto=format&fit=crop&q=80"
+      ],
+      "location": "Near Bypass Road, RTC Colony, Chodavaram Town, Chodavaram",
+      "district": "Anakapalli",
+      "status": "rented",
+      "viewsCount": 0,
+      "isApproved": true,
+      "createdAt": "2026-11-07T10:07:22.368Z"
+    },
+    {
+      "id": "rent_1794044544795",
+      "postedBy": "customer",
+      "userId": null,
+      "providerId": null,
+      "businessId": null,
+      "businessName": "",
+      "userName": "Verified User",
+      "phone": "9010737882",
+      "whatsappPhone": "9010737882",
+      "listingType": "owner",
+      "category": "properties",
+      "categoryName": "Properties & Real Estate",
+      "subCategory": "Houses & Flats (1BHK, 2BHK)",
+      "childCategory": "",
+      "title": "Independent 2BHK Portion near Chodavaram Market",
+      "description": "Ground floor, 24hrs bore water, car parking, east facing, ideal for family.",
+      "rentPrice": 7500,
+      "rentPeriod": "month",
+      "deposit": 15000,
+      "stockCount": 1,
+      "images": [
+        "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=600&auto=format&fit=crop&q=80"
+      ],
+      "location": "Near Rythu Bazaar, Chodavaram",
+      "district": "Anakapalli",
+      "status": "available",
+      "viewsCount": 0,
+      "isApproved": true,
+      "createdAt": "2026-11-07T09:42:24.795Z"
+    },
+    {
+      "id": "rent_sample_1",
+      "postedBy": "customer",
+      "userId": "usr_sample_1",
+      "userName": "K. Satyanarayana",
+      "phone": "9848022334",
+      "whatsappPhone": "9848022334",
+      "listingType": "owner",
+      "category": "properties",
+      "categoryName": "Properties & Real Estate",
+      "subCategory": "Houses & Independent Flats",
+      "childCategory": "2BHK",
+      "title": "Spacious 2BHK House for Rent in Chodavaram",
+      "description": "East facing, 24/7 municipal water, dedicated two-wheeler and car parking. Peaceful residential colony near RCM Church.",
+      "rentPrice": 8500,
+      "rentPeriod": "month",
+      "deposit": 20000,
+      "stockCount": 1,
+      "images": [
+        "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=900&auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=900&auto=format&fit=crop&q=80"
+      ],
+      "location": "Beside RCM Church, Chodavaram Town",
+      "district": "Anakapalli",
+      "status": "available",
+      "viewsCount": 24,
+      "isApproved": true,
+      "createdAt": "2026-11-07T08:45:52.354Z"
+    },
+    {
+      "id": "rent_sample_2",
+      "postedBy": "partner",
+      "providerId": "prv_76fcc359",
+      "businessId": "biz_1794041167366",
+      "businessName": "Sri Lakshmi Tent House & Event Rentals",
+      "userName": "Gandepalli Prasad",
+      "phone": "9010737882",
+      "whatsappPhone": "9010737882",
+      "listingType": "store",
+      "category": "events",
+      "categoryName": "Events & Functions",
+      "subCategory": "Event & Party Supplies",
+      "childCategory": "Furniture & Tent",
+      "title": "VIP Plastic Chairs & Event Shamiana Setup",
+      "description": "500+ Heavy-duty VIP plastic chairs, wedding Shamiana sets, stage lighting, and sound systems for all functions and gatherings.",
+      "rentPrice": 10,
+      "rentPeriod": "day",
+      "deposit": 1000,
+      "stockCount": 500,
+      "images": [
+        "https://images.unsplash.com/photo-1519741497674-611481863552?w=900&auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=900&auto=format&fit=crop&q=80"
+      ],
+      "location": "Station Road, Chodavaram Town",
+      "district": "Anakapalli",
+      "status": "available",
+      "viewsCount": 58,
+      "isApproved": true,
+      "createdAt": "2026-11-07T08:45:52.354Z"
+    },
+    {
+      "id": "rent_sample_3",
+      "postedBy": "partner",
+      "providerId": "prv_76fcc359",
+      "businessId": "biz_1794107467108",
+      "businessName": "self driving cars",
+      "userName": "gandepalli prasad",
+      "phone": "9010737882",
+      "whatsappPhone": "9010737882",
+      "listingType": "store",
+      "category": "vehicles",
+      "categoryName": "Vehicles & Transport",
+      "subCategory": "Vehicle Rentals",
+      "childCategory": "Self-drive cars,/bikes",
+      "title": "Maruti Ertiga 7-Seater (Self Drive / With Driver)",
+      "description": "Clean, sanitized 2023 model Ertiga. Available for outstation trips, family functions, and local travel. Fastag enabled.",
+      "rentPrice": 2200,
+      "rentPeriod": "day",
+      "deposit": 5000,
+      "stockCount": 3,
+      "images": [
+        "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=900&auto=format&fit=crop&q=80"
+      ],
+      "location": "RTC Complex, Chodavaram",
+      "district": "Anakapalli",
+      "status": "available",
+      "viewsCount": 42,
+      "isApproved": true,
+      "createdAt": "2026-11-07T08:45:52.354Z"
+    },
+    {
+      "id": "rent_sample_4",
+      "postedBy": "customer",
+      "userId": "usr_sample_2",
+      "userName": "Ramesh Kumar",
+      "phone": "9848011223",
+      "whatsappPhone": "9848011223",
+      "listingType": "owner",
+      "category": "furniture",
+      "categoryName": "Furniture & Home Living",
+      "subCategory": "Cots & Mattresses",
+      "childCategory": "Teak Wood Double Cot",
+      "title": "Solid Teak Wood Double Cot with Sleepwell Mattress",
+      "description": "Queen size (6x5 ft) durable teak wood bed. Comes with clean spring mattress. Ideal for bachelor or family rent.",
+      "rentPrice": 600,
+      "rentPeriod": "month",
+      "deposit": 2000,
+      "stockCount": 1,
+      "images": [
+        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=900&auto=format&fit=crop&q=80"
+      ],
+      "location": "Kothapeta, Chodavaram",
+      "district": "Anakapalli",
+      "status": "available",
+      "viewsCount": 19,
+      "isApproved": true,
+      "createdAt": "2026-11-07T08:45:52.354Z"
+    },
+    {
+      "id": "rent_sample_5",
+      "postedBy": "customer",
+      "userId": "usr_sample_3",
+      "userName": "V. Lakshmi",
+      "phone": "9848033445",
+      "whatsappPhone": "9848033445",
+      "listingType": "owner",
+      "category": "appliances",
+      "categoryName": "Electronics & Gadgets",
+      "subCategory": "Home Appliances",
+      "childCategory": "1.5 Ton Split AC",
+      "title": "Voltas 1.5 Ton 5-Star Split AC (Summer Rental)",
+      "description": "Power-saving copper condenser 5-star AC. Regular servicing done, super fast cooling with remote.",
+      "rentPrice": 1500,
+      "rentPeriod": "month",
+      "deposit": 3000,
+      "stockCount": 1,
+      "images": [
+        "https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=900&auto=format&fit=crop&q=80"
+      ],
+      "location": "Old Bus Stand Road, Chodavaram",
+      "district": "Anakapalli",
+      "status": "available",
+      "viewsCount": 31,
+      "isApproved": true,
+      "createdAt": "2026-11-07T08:45:52.354Z"
+    },
+    {
+      "id": "rent_sample_6",
+      "postedBy": "partner",
+      "providerId": "prv_cam_1",
+      "businessId": "biz_cam_1",
+      "businessName": "Focus Digital Camera Rentals",
+      "userName": "M. Kiran",
+      "phone": "9848099887",
+      "whatsappPhone": "9848099887",
+      "listingType": "store",
+      "category": "electronics",
+      "categoryName": "Lease & Rental",
+      "subCategory": "Electronics & Cameras",
+      "childCategory": "Photography: DSLR cameras",
+      "title": "Sony Alpha 7 IV 4K Mirrorless Camera + 24-70mm G Master",
+      "description": "33MP full-frame 4K 60p camera with 24-70mm f/2.8 lens, 2 original batteries, dual 128GB high speed cards and bag. ID proof required.",
+      "rentPrice": 1800,
+      "rentPeriod": "day",
+      "deposit": 5000,
+      "stockCount": 2,
+      "images": [
+        "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=900&auto=format&fit=crop&q=80"
+      ],
+      "location": "Near Gandhi Statue, Chodavaram",
+      "district": "Anakapalli",
+      "status": "available",
+      "viewsCount": 31,
+      "isApproved": true,
+      "createdAt": "2026-11-08T02:48:24.061Z"
+    }
+  ],
+  "products": [
+    {
+      "id": "prod_1794063499983",
+      "providerId": "prv_76fcc359",
+      "businessId": "biz_1794063393518",
+      "businessName": "Lakshmi Kirana & General Store",
+      "phone": "9010737882",
+      "name": "Sunfeast Dark Fantasy (Pack of 6)",
+      "price": 120,
+      "unit": "1 Pack",
+      "category": "Biscuits & Snacks",
+      "categoryName": "Local Shops & Kirana",
+      "subCategory": "Biscuits & Snacks",
+      "description": "Choco filled cookies",
+      "inStock": true,
+      "images": [
+        "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&auto=format&fit=crop&q=80"
+      ],
+      "createdAt": "2026-11-07T14:58:19.983Z"
+    },
+    {
+      "id": "prod_1794063428272",
+      "providerId": "prv_76fcc359",
+      "businessId": "biz_1794063393518",
+      "businessName": "Lakshmi Kirana & General Store",
+      "phone": "9010737882",
+      "name": "BPT Premium Rice (25kg Bag)",
+      "price": 1350,
+      "unit": "25 kg",
+      "category": "Rice & Grains",
+      "categoryName": "Local Shops & Kirana",
+      "subCategory": "Rice & Grains",
+      "description": "A-grade polished BPT boiled rice directly from mill",
+      "inStock": true,
+      "images": [
+        "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&auto=format&fit=crop&q=80"
+      ],
+      "createdAt": "2026-11-07T14:57:08.272Z"
+    },
+    {
+      "id": "prod_sample_1",
+      "providerId": "prv_76fcc359",
+      "businessId": "biz_1794063393518",
+      "businessName": "Lakshmi Kirana & General Store",
+      "phone": "9010737882",
+      "name": "Sona Masoori Premium Rice (25kg Bag)",
+      "price": 1350,
+      "unit": "25kg Bag",
+      "category": "Rice & Grains",
+      "categoryName": "Local Shops & Kirana",
+      "subCategory": "Rice & Grains",
+      "description": "1 year aged fine quality Sona Masoori raw rice. Free delivery in town.",
+      "inStock": true,
+      "images": [
+        "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&auto=format&fit=crop&q=80"
+      ],
+      "createdAt": "2026-11-07T14:48:33.631Z"
+    },
+    {
+      "id": "prod_sample_2",
+      "providerId": "prv_76fcc359",
+      "businessId": "biz_1794063393518",
+      "businessName": "Lakshmi Kirana & General Store",
+      "phone": "9010737882",
+      "name": "Freedom Refined Sunflower Oil (1 Litre Pouch)",
+      "price": 135,
+      "unit": "1 Litre Pouch",
+      "category": "Cooking Oils & Ghee",
+      "categoryName": "Local Shops & Kirana",
+      "subCategory": "Cooking Oils & Ghee",
+      "description": "Pure refined sunflower oil with vitamins A & D.",
+      "inStock": true,
+      "images": [
+        "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=600&auto=format&fit=crop&q=80"
+      ],
+      "createdAt": "2026-11-07T14:48:33.631Z"
+    },
+    {
+      "id": "prod_sample_3",
+      "providerId": "prv_76fcc359",
+      "businessId": "biz_1794063393518",
+      "businessName": "Lakshmi Kirana & General Store",
+      "phone": "9010737882",
+      "name": "Aashirvaad Superior MP Sharbati Atta (10kg)",
+      "price": 490,
+      "unit": "10kg Bag",
+      "category": "Atta & Flours",
+      "categoryName": "Local Shops & Kirana",
+      "subCategory": "Atta & Flours",
+      "description": "100% pure whole wheat grain chakki fresh atta.",
+      "inStock": true,
+      "images": [
+        "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&auto=format&fit=crop&q=80"
+      ],
+      "createdAt": "2026-11-07T14:48:33.631Z"
     }
   ]
 }

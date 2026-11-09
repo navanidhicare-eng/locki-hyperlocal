@@ -22,4 +22,8 @@ router.delete('/users/:id', adminController.deleteCustomer);
 
 router.get('/orders', adminController.getAllOrders);
 
+// Multi-Business Approval routes
+router.get('/business-requests', adminController.getAllBusinessRequests);
+router.patch('/business-requests/:partnerId/:bizId/status', adminController.updateBusinessRequestStatus);
+
 module.exports = router;

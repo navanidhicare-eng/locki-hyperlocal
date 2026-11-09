@@ -113,9 +113,13 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     _navTimer = Timer(const Duration(milliseconds: 2400), _navigateNext);
   }
 
-  void _navigateNext() {
+  void _navigateNext() async {
     if (!mounted) return;
     HomeScreen.hasShownLoginPromo = false;
+    if (!ApiService().isLoggedIn) {
+      await ApiService().initAuth();
+    }
+    if (!mounted) return;
     final loggedIn = ApiService().isLoggedIn;
 
     Navigator.pushReplacement(

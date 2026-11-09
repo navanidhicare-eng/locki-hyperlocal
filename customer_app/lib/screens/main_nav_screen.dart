@@ -66,9 +66,9 @@ class _MainNavScreenState extends State<MainNavScreen> {
               label: 'Bookings',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.account_balance_wallet_outlined),
-              activeIcon: Icon(Icons.account_balance_wallet),
-              label: 'Wallet & Profile',
+              icon: Icon(Icons.person_outline),
+              activeIcon: Icon(Icons.person),
+              label: 'Profile',
             ),
           ],
         ),

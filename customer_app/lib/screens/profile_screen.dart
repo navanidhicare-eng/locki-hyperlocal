@@ -12,13 +12,12 @@ class ProfileScreen extends StatelessWidget {
     final userName = user?['name'] ?? 'Prasad';
     final userPhone = user?['phone'] ?? '+91 98765 11111';
     final userEmail = user?['email'] ?? 'customer@loki.com';
-    final walletBal = user?['walletBalance'] ?? 200;
     final initial = (userName.isNotEmpty) ? userName.substring(0, 1).toUpperCase() : 'P';
 
     return Scaffold(
       backgroundColor: AppConstants.backgroundLight,
       appBar: AppBar(
-        title: const Text('My Account & Wallet', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        title: const Text('My Profile', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         backgroundColor: Colors.white,
         foregroundColor: AppConstants.secondary,
         elevation: 0.5,
@@ -59,73 +58,6 @@ class ProfileScreen extends StatelessWidget {
             ),
 
             const SizedBox(height: 20),
-
-            // Locki Wallet Card
-            Container(
-              padding: const EdgeInsets.all(22),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF192338), Color(0xFFDE4915)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(color: AppConstants.primary.withOpacity(0.3), blurRadius: 15, offset: const Offset(0, 6)),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text('LOCKI CASH WALLET', style: TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1.2)),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: const Text('ACTIVE', style: TextStyle(color: AppConstants.accentGold, fontSize: 10, fontWeight: FontWeight.bold)),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Text('₹$walletBal', style: const TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 6),
-                  const Text('Available for all 9 hyperlocal services booking', style: TextStyle(color: Colors.white70, fontSize: 13)),
-                  const SizedBox(height: 18),
-                  Row(
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(Icons.add, size: 16),
-                        label: const Text('Add Money', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: AppConstants.primary,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      OutlinedButton(
-                        onPressed: () {},
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          side: const BorderSide(color: Colors.white54),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        ),
-                        child: const Text('Passbook', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 24),
 
             // Settings List
             Container(

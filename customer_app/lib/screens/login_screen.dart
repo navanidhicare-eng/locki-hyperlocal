@@ -28,14 +28,6 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _fillDemoCredentials() {
-    setState(() {
-      _identifierController.text = 'customer@loki.com';
-      _passwordController.text = '123456';
-      _errorMessage = null;
-    });
-  }
-
   Future<void> _handleLogin() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -97,31 +89,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // App Logo & Greeting
+                  // App Brand Logo (Clear & neat, without circle)
                   Center(
-                    child: Container(
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppConstants.primary.withOpacity(0.18),
-                            blurRadius: 16,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Image.asset(
-                        AppConstants.logoAsset,
-                        width: 60,
-                        height: 60,
-                        fit: BoxFit.contain,
-                        errorBuilder: (_, __, ___) => const Icon(
-                          Icons.flash_on_rounded,
-                          color: AppConstants.primary,
-                          size: 40,
-                        ),
+                    child: Image.asset(
+                      AppConstants.logoAsset,
+                      height: 52,
+                      fit: BoxFit.contain,
+                      errorBuilder: (_, __, ___) => const Icon(
+                        Icons.flash_on_rounded,
+                        color: AppConstants.primary,
+                        size: 44,
                       ),
                     ),
                   ),
@@ -147,37 +124,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
 
                   const SizedBox(height: 24),
-
-                  // Quick Demo Autofill Button
-                  InkWell(
-                    onTap: _fillDemoCredentials,
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: AppConstants.primary.withOpacity(0.08),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: AppConstants.primary.withOpacity(0.25)),
-                      ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.touch_app_rounded, color: AppConstants.primary, size: 18),
-                          SizedBox(width: 8),
-                          Text(
-                            'Quick Demo Fill (customer@loki.com)',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: AppConstants.primary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 20),
 
                   // Error Banner
                   if (_errorMessage != null) ...[
@@ -214,8 +160,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller: _identifierController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                      hintText: 'Enter phone (e.g. 98765 11111) or email',
-                      hintStyle: const TextStyle(fontSize: 13, color: AppConstants.textDim),
                       prefixIcon: const Icon(Icons.person_outline, color: AppConstants.primary, size: 20),
                       filled: true,
                       fillColor: Colors.white,
@@ -253,8 +197,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller: _passwordController,
                     obscureText: _obscurePassword,
                     decoration: InputDecoration(
-                      hintText: 'Enter your password',
-                      hintStyle: const TextStyle(fontSize: 13, color: AppConstants.textDim),
                       prefixIcon: const Icon(Icons.lock_outline, color: AppConstants.primary, size: 20),
                       suffixIcon: IconButton(
                         icon: Icon(
